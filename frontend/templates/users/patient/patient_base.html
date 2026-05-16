@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/patient/layout.css' %}" />
+{% endblock %}
+
+
+{% block main_content %}
+<div id="page-patient" class="patient-shell">
+
+  <!-- Top navbar -->
+  {% include 'users/patient/partials/navbar.html' %}
+
+  <!-- Mobile drawer -->
+  {% include 'users/patient/partials/mobile_nav.html' %}
+
+  <main class="p-main">
+    {% block content %}{% endblock %}
+  </main>
+
+</div><!-- end patient-shell -->
+{% endblock main_content %}
+
+
+{% block extra_js %}
+<!-- Isolated JS for patient portal components -->
+<script src="{% static 'js/patient_base.js' %}"></script>
+{% endblock %}

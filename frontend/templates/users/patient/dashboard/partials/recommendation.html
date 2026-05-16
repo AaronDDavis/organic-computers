@@ -1,0 +1,27 @@
+<!-- ── Next step recommendation ── -->
+{% if latest_result.next_step %}
+<p class="p-section-title" style="margin-top:1.75rem;">Recommended next step</p>
+<div class="card p-next-step-card">
+  <div class="p-next-step-title">
+    {% if latest_assessment.stage == 'S1' %}Complete Stage 2 — Clinical Bloodwork
+    {% elif latest_assessment.stage == 'S2' %}Complete Stage 3 — Imaging
+    {% else %}Assessment complete
+    {% endif %}
+  </div>
+  <p>{{ latest_result.recommendation }}</p>
+  {% if latest_assessment.stage != 'S3' %}
+  <a href="{% url 'journey_details' latest_journey.pk %}" class="p-btn p-btn-primary p-btn-sm" style="margin-top:1rem; display:inline-flex;">
+    Continue journey →
+  </a>
+  {% endif %}
+</div>
+{% endif %}
+
+<!-- ── Specialist recommendation ── -->
+{% if specialist_label %}
+<p class="p-section-title" style="margin-top:1.75rem;">Specialist recommendation</p>
+<div class="card p-next-step-card" style="border-left-color: var(--teal-200);">
+  <div class="p-next-step-title">Referral: {{ specialist_label }}</div>
+  <p>Based on your current profile, this specialist is best placed for your presentation.</p>
+</div>
+{% endif %}

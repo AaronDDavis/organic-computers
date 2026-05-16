@@ -1,0 +1,47 @@
+{# Assessment result — score, risk, recommendation, factors, clinical details #}
+{% if assessment.result %}
+<div class="p-result-block">
+  <div class="p-result-row">
+
+    <!-- Score + risk -->
+    <div>
+      <div class="p-result-score">
+        {{ assessment.result.score|mul:100|floatformat:1 }}<span> / 100</span>
+      </div>
+      <div style="margin-top:6px;">
+        <span class="badge-risk {{ assessment.result.risk|lower }}">
+          {{ assessment.result.get_risk_display }} Risk
+        </span>
+      </div>
+    </div>
+
+    <!-- Meta -->
+    <div class="p-result-meta">
+      <div class="p-recommendation">{{ assessment.result.recommendation }}</div>
+
+      {% if assessment.result.top_factors %}
+      <div class="p-factors">
+        {% for factor in assessment.result.top_factors %}
+        <span class="p-factor-tag">{{ factor|capfirst }}</span>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      {% if assessment.result.clinical_focus %}
+      <div class="p-result-detail">
+        <span class="p-result-detail__label">Clinical focus</span>
+        <span class="p-result-detail__value">{{ assessment.result.clinical_focus }}</span>
+      </div>
+      {% endif %}
+
+      {% if assessment.result.next_step %}
+      <div class="p-result-detail">
+        <span class="p-result-detail__label">Next step</span>
+        <span class="p-result-detail__value">{{ assessment.result.next_step }}</span>
+      </div>
+      {% endif %}
+    </div>
+
+  </div>
+</div>
+{% endif %}

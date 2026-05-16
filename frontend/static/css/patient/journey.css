@@ -1,0 +1,420 @@
+/* ── Journey list ─────────────────────────────────────── */
+.p-journey-list { display: flex; flex-direction: column; gap: 0.875rem; }
+
+.p-journey-item {
+  padding: 1.25rem 1.5rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem;
+}
+
+.p-journey-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--teal-200);
+}
+
+.p-journey-item__left { flex: 1; min-width: 0; }
+
+.p-journey-item__date {
+  font-size: 0.75rem; color: var(--slate-400); margin-bottom: 4px;
+}
+
+.p-journey-item__title {
+  font-size: 0.975rem; font-weight: 600; color: var(--slate-700);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.p-journey-item__meta {
+  display: flex; align-items: center; gap: 8px; margin-top: 6px; flex-wrap: wrap;
+}
+.p-journey-item__arrow {
+  color: var(--slate-300); font-size: 1.1rem; flex-shrink: 0;
+}
+
+/* ── Journey detail — VERSION A: Vertical timeline ───── */
+.p-timeline { position: relative; padding-left: 2rem; }
+
+.p-timeline::before {
+  content: '';
+  position: absolute;
+  left: -23px; top: 12px;
+  width: 2px; bottom: 12px;
+  background: linear-gradient(to bottom, var(--teal-400), var(--slate-200));
+  border-radius: 2px;
+}
+
+.p-timeline-item { position: relative; margin-bottom: 2rem; }
+
+.p-timeline-dot {
+  position: absolute; left: -2rem; top: 14px;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--teal-500); border: 3px solid #fff;
+  box-shadow: 0 0 0 2px var(--teal-400);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1;
+}
+
+.p-timeline-dot.locked {
+  background: var(--slate-200); box-shadow: 0 0 0 2px var(--slate-300);
+}
+
+.p-timeline-dot svg { width: 8px; height: 8px; fill: #fff; }
+
+.p-timeline-card { padding: 1.25rem 1.5rem; }
+
+.p-timeline-card.locked { opacity: 0.55; pointer-events: none; }
+
+.p-stage-label {
+  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--teal-600); margin-bottom: 4px;
+}
+
+.p-stage-label.locked { color: var(--slate-400); }
+
+.p-stage-title {
+  font-size: 1rem; font-weight: 600; color: var(--slate-800); margin-bottom: 0.75rem;
+}
+
+.p-stage-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem 1.5rem;
+}
+
+.p-stage-field label {
+  font-size: 0.72rem; color: var(--slate-400); font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+
+.p-stage-field span {
+  display: block; font-size: 0.9rem; color: var(--slate-700); font-weight: 500;
+  margin-top: 2px;
+}
+
+/* Result section inside timeline card */
+.p-result-block {
+  margin-top: 1rem; padding-top: 1rem;
+  border-top: 1px solid var(--slate-200);
+}
+
+.p-result-row {
+  display: flex; align-items: flex-start; gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.p-result-score {
+  font-size: 2rem; font-weight: 700; letter-spacing: -0.03em;
+  color: var(--slate-800); line-height: 1;
+}
+
+.p-result-score span { font-size: 0.85rem; color: var(--slate-400); font-weight: 400; }
+
+.p-result-meta { flex: 1; }
+
+.p-result-meta .p-recommendation {
+  font-size: 0.875rem; color: var(--slate-600); line-height: 1.6; margin-top: 6px;
+}
+
+.p-factors { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 0.75rem; }
+
+.p-factor-tag {
+  font-size: 0.75rem; background: var(--teal-50); color: var(--teal-700);
+  border: 1px solid var(--teal-200); border-radius: 99px; padding: 2px 10px;
+}
+
+/* ── ClinicalNote (doctor cards on patient side) ──────── */
+.p-note-list { display: flex; flex-direction: column; gap: 1rem; }
+
+.p-note-card {
+  padding: 1.25rem 1.5rem;
+  border-left: 3px solid var(--slate-300);
+}
+
+.p-note-card.accepted { border-left-color: var(--teal-400); }
+
+.p-note-card__header {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;
+}
+
+.p-note-card__doctor { font-size: 0.9rem; font-weight: 600; color: var(--slate-700); }
+
+.p-note-card__spec   { font-size: 0.75rem; color: var(--slate-400); margin-top: 1px; }
+
+.p-note-card__accepted-badge {
+  font-size: 0.68rem; font-weight: 600; letter-spacing: 0.04em;
+  text-transform: uppercase; background: var(--teal-50);
+  color: var(--teal-700); border: 1px solid var(--teal-200);
+  border-radius: 99px; padding: 2px 8px;
+}
+
+.p-note-card p {
+  font-size: 0.875rem; color: var(--slate-600); line-height: 1.65;
+}
+
+.p-note-card__date { font-size: 0.72rem; color: var(--slate-400); margin-top: 8px; }
+
+/* ── Journey list — doctor tag ────────────────────────── */
+.p-journey-current-tag {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: var(--teal-50);
+  color: var(--teal-700);
+  border: 1px solid var(--teal-200);
+  border-radius: 99px;
+  padding: 1px 7px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+.p-journey-doctor-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--slate-500);
+  background: var(--slate-100);
+  border-radius: 99px;
+  padding: 2px 8px;
+}
+
+.p-journey-doctor-tag--detail {
+  font-size: 0.78rem;
+  padding: 4px 10px;
+  background: var(--teal-50);
+  color: var(--teal-700);
+  border: 1px solid var(--teal-200);
+}
+
+/* ── Notes accordion ──────────────────────────────────── */
+.p-notes-accordion {
+  margin-top: 1.25rem;
+  border-top: 1px solid var(--slate-200);
+  padding-top: 1rem;
+}
+
+.p-notes-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--slate-500);
+  background: var(--slate-100);
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-sm);
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.p-notes-toggle:hover {
+  background: var(--slate-200);
+  color: var(--slate-700);
+}
+
+.p-notes-toggle.open {
+  background: var(--teal-50);
+  color: var(--teal-700);
+  border-color: var(--teal-200);
+}
+
+.p-notes-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--slate-300);
+  color: var(--slate-700);
+  font-size: 0.65rem;
+  font-weight: 600;
+}
+
+.p-notes-toggle.open .p-notes-count {
+  background: var(--teal-200);
+  color: var(--teal-800);
+}
+
+.p-notes-panel {
+  margin-top: 0.875rem;
+  animation: smoothFadeIn 0.22s ease forwards;
+}
+
+/* note card inside accordion */
+.p-notes-panel .p-note-card {
+  padding: 1rem 1.25rem;
+  border-left: 3px solid var(--slate-200);
+  background: var(--slate-50);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+.p-note-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.6rem;
+}
+
+.p-note-card__doctor {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--slate-700);
+}
+
+.p-note-card__spec {
+  font-size: 0.72rem;
+  color: var(--slate-400);
+  margin-top: 1px;
+}
+
+.p-note-card__date {
+  font-size: 0.7rem;
+  color: var(--slate-400);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.p-notes-panel p {
+  font-size: 0.875rem;
+  color: var(--slate-600);
+  line-height: 1.65;
+}
+
+.p-notes-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.p-notes-arrow {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--slate-200);
+  background: #fff;
+  color: var(--slate-500);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.12s, color 0.12s;
+}
+
+.p-notes-arrow:hover {
+  background: var(--slate-100);
+  color: var(--slate-700);
+}
+
+.p-notes-counter {
+  font-size: 0.75rem;
+  color: var(--slate-400);
+  min-width: 36px;
+  text-align: center;
+}
+
+/* ── Result detail rows (clinical focus, next step) ─────────────────── */
+.p-result-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 10px;
+}
+
+.p-result-detail__label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.5;
+}
+
+.p-result-detail__value {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  opacity: 0.85;
+}
+
+/* ── Doctor confirmation accordion ───────────────────── */
+.p-doctor-confirm-accordion {
+  margin-top: 1.25rem;
+  border-top: 1px solid var(--slate-200);
+  padding-top: 1rem;
+}
+
+.p-doctor-confirm-prompt {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--teal-700);
+  background: var(--teal-50);
+  border: 1px solid var(--teal-200);
+  border-radius: var(--radius-sm);
+  padding: 6px 12px;
+  margin-bottom: 0.875rem;
+}
+
+.p-doctor-confirm-panel {
+  animation: smoothFadeIn 0.22s ease forwards;
+}
+
+.p-doctor-confirm-card {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.875rem 1rem;
+  background: var(--slate-50);
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-md);
+  margin-bottom: 0.75rem;
+}
+
+.p-doctor-confirm-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--teal-100);
+  color: var(--teal-700);
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.p-doctor-confirm-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--slate-800);
+}
+
+.p-doctor-confirm-spec {
+  font-size: 0.75rem;
+  color: var(--slate-400);
+  margin-top: 2px;
+}
+
+.p-doctor-confirm-text {
+  font-size: 0.82rem;
+  color: var(--slate-500);
+  line-height: 1.6;
+  margin-bottom: 0.875rem;
+}
+
+.p-doctor-confirm-actions {
+  display: flex;
+  gap: 0.625rem;
+  flex-wrap: wrap;
+}

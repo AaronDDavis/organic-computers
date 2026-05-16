@@ -1,0 +1,230 @@
+/* ── Overview page ────────────────────────────────────── */
+.p-overview-banner {
+  background: linear-gradient(135deg, var(--teal-500) 0%, var(--teal-700) 100%);
+  border-radius: var(--radius-xl);
+  padding: 2rem;
+  color: #fff;
+  margin-bottom: 1.5rem;
+  position: relative; overflow: hidden;
+}
+.p-overview-banner::after {
+  content: '';
+  position: absolute; top: -40px; right: -40px;
+  width: 180px; height: 180px; border-radius: 50%;
+  background: rgba(255,255,255,0.07);
+}
+.p-overview-banner h2 {
+  font-size: 1.2rem; font-weight: 500; opacity: 0.85; margin-bottom: 4px;
+}
+.p-overview-banner .p-banner-name {
+  font-size: 1.65rem; font-weight: 700; letter-spacing: -0.02em;
+}
+.p-overview-banner .p-banner-sub {
+  font-size: 0.82rem; opacity: 0.7; margin-top: 0.4rem;
+}
+.p-overview-banner .p-banner-risk {
+  margin-top: 1.25rem; display: flex; align-items: center; gap: 10px;
+}
+.p-banner-risk-pill {
+  background: rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 99px; padding: 4px 14px;
+  font-size: 0.8rem; font-weight: 600; color: #fff;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.p-banner-risk-label { font-size: 0.82rem; opacity: 0.75; }
+
+.p-stat-row {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.p-stat-card {
+  padding: 1.1rem 1.25rem;
+}
+.p-stat-card .label {
+  font-size: 0.75rem; font-weight: 500; color: var(--slate-400);
+  text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;
+}
+.p-stat-card .value {
+  font-size: 1.5rem; font-weight: 700; color: var(--slate-800);
+  letter-spacing: -0.02em;
+}
+.p-stat-card .sub {
+  font-size: 0.78rem; color: var(--slate-400); margin-top: 3px;
+}
+
+.p-section-title {
+  font-size: 0.8rem; font-weight: 600; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--slate-400); margin-bottom: 0.75rem;
+}
+
+.p-next-step-card {
+  padding: 1.25rem 1.5rem;
+  border-left: 3px solid var(--teal-400);
+  margin-bottom: 1.5rem;
+}
+.p-next-step-card .p-next-step-title {
+  font-size: 0.95rem; font-weight: 600; color: var(--slate-700); margin-bottom: 4px;
+}
+.p-next-step-card p { font-size: 0.875rem; color: var(--slate-500); line-height: 1.6; }
+
+/* ── Dashboard — revised banner ───────────────────────── */
+.p-overview-banner {
+  border-radius: var(--radius-xl);
+  padding: 1.75rem 2rem;
+  margin-bottom: 1.75rem;
+  background: linear-gradient(135deg, var(--teal-500) 0%, var(--teal-700) 100%);
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+.p-overview-banner::after {
+  content: '';
+  position: absolute;
+  top: -50px; right: -50px;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+  pointer-events: none;
+}
+
+.p-overview-banner--high {
+  background: linear-gradient(135deg, #c0393a 0%, #8b1e1e 100%);
+}
+
+.p-overview-banner--medium {
+  background: linear-gradient(135deg, #c07918 0%, #7a4c00 100%);
+}
+
+.p-overview-banner--low {
+  background: linear-gradient(135deg, var(--teal-500) 0%, var(--teal-700) 100%);
+}
+
+.p-banner-greeting {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  margin-bottom: 0.6rem;
+}
+
+.p-banner-risk-display {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.p-banner-risk-pill {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.p-banner-score {
+  font-size: 0.85rem;
+  opacity: 0.65;
+  font-variant-numeric: tabular-nums;
+}
+
+.p-banner-meta {
+  font-size: 0.78rem;
+  opacity: 0.6;
+  margin-top: 0.6rem;
+}
+
+/* ── Stage progress indicator on dashboard ────────────── */
+.p-stage-progress-card {
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 0;
+}
+
+.p-stage-pips {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.p-stage-pip-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.p-stage-pip-item span {
+  font-size: 0.72rem;
+  color: var(--slate-400);
+  font-weight: 500;
+}
+
+.p-stage-pip-item.done span {
+  color: var(--teal-600);
+}
+
+.p-stage-pip-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--slate-200);
+  border: 2.5px solid #fff;
+  box-shadow: 0 0 0 1.5px var(--slate-300);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--slate-400);
+}
+
+.p-stage-pip-item.done .p-stage-pip-dot {
+  background: var(--teal-500);
+  box-shadow: 0 0 0 1.5px var(--teal-400);
+  color: #fff;
+}
+
+.p-stage-pip-dot svg {
+  width: 10px;
+  height: 10px;
+}
+
+.p-stage-pip-line {
+  flex: 1;
+  height: 2px;
+  background: var(--slate-200);
+  margin: 0 4px;
+  margin-bottom: 22px; /* align with dot centres */
+  border-radius: 2px;
+  min-width: 24px;
+}
+
+.p-stage-pip-line.done {
+  background: var(--teal-400);
+}
+
+/* ── Profile page ─────────────────────────────────────── */
+.p-profile-header {
+  display: flex; align-items: center; gap: 1.25rem; margin-bottom: 2rem;
+}
+.p-profile-avatar {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: var(--teal-100); color: var(--teal-700);
+  font-size: 1.5rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.p-profile-name { font-size: 1.3rem; font-weight: 700; color: var(--slate-800); }
+.p-profile-role { font-size: 0.82rem; color: var(--slate-400); margin-top: 3px; }
+
+.p-field-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 2rem;
+}
+.p-field label {
+  font-size: 0.75rem; font-weight: 500; color: var(--slate-400);
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.p-field span {
+  display: block; font-size: 0.9rem; font-weight: 500;
+  color: var(--slate-700); margin-top: 3px;
+}
+

@@ -1,0 +1,91 @@
+{% extends 'doctor_base.html' %}
+
+{% block content %}
+<!-- ── Doctor Dashboard ── -->
+<section id="dsec-dashboard">
+    <div class="d-stat-grid">
+        <div class="d-stat-card">
+        <div class="d-stat-label">Total Patients</div>
+        <div class="d-stat-value">12</div>
+        <div class="d-stat-sub">In your queue</div>
+        </div>
+        <div class="d-stat-card accent-high">
+        <div class="d-stat-label">High Risk</div>
+        <div class="d-stat-value">4</div>
+        <div class="d-stat-sub">Require attention</div>
+        </div>
+        <div class="d-stat-card">
+        <div class="d-stat-label">Awaiting Stage 3</div>
+        <div class="d-stat-value">5</div>
+        <div class="d-stat-sub">Imaging pending</div>
+        </div>
+        <div class="d-stat-card accent-teal">
+        <div class="d-stat-label">Delayed Diagnosis</div>
+        <div class="d-stat-value">2</div>
+        <div class="d-stat-sub">Flag: &gt;60 days</div>
+        </div>
+    </div>
+
+    <div class="d-section-header">
+        <span class="d-section-title">Priority Patient Queue</span>
+        <button class="d-btn d-btn-ghost d-btn-sm" onclick="dNav('patients')">View all</button>
+    </div>
+
+    <div class="d-table-wrap">
+        <table class="d-table">
+        <thead>
+            <tr>
+            <th>Patient</th>
+            <th>Stage</th>
+            <th>Risk</th>
+            <th>Score</th>
+            <th>Last Updated</th>
+            <th>Flag</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr onclick="dNav('patient-detail')">
+            <td class="patient-name">Sarah Patel</td>
+            <td><div class="d-stage-pip"><span class="done"></span><span class="done"></span><span></span></div></td>
+            <td><span class="badge-risk high">High</span></td>
+            <td>0.8340</td>
+            <td class="muted">3 days ago</td>
+            <td></td>
+            </tr>
+            <tr>
+            <td class="patient-name">Priya Nair</td>
+            <td><div class="d-stage-pip"><span class="done"></span><span class="done"></span><span class="done"></span></div></td>
+            <td><span class="badge-risk high">High</span></td>
+            <td>0.8120</td>
+            <td class="muted">1 day ago</td>
+            <td><span class="d-flag-badge">⚑ Delayed</span></td>
+            </tr>
+            <tr>
+            <td class="patient-name">Meera Iyer</td>
+            <td><div class="d-stage-pip"><span class="done"></span><span class="done"></span><span></span></div></td>
+            <td><span class="badge-risk medium">Medium</span></td>
+            <td>0.6250</td>
+            <td class="muted">1 week ago</td>
+            <td></td>
+            </tr>
+            <tr>
+            <td class="patient-name">Ling Xiao</td>
+            <td><div class="d-stage-pip"><span class="done"></span><span></span><span></span></div></td>
+            <td><span class="badge-risk medium">Medium</span></td>
+            <td>0.5490</td>
+            <td class="muted">5 days ago</td>
+            <td></td>
+            </tr>
+            <tr>
+            <td class="patient-name">Fatimah Aziz</td>
+            <td><div class="d-stage-pip"><span class="done"></span><span class="done"></span><span></span></div></td>
+            <td><span class="badge-risk low">Low</span></td>
+            <td>0.2310</td>
+            <td class="muted">2 weeks ago</td>
+            <td></td>
+            </tr>
+        </tbody>
+        </table>
+    </div>
+</section>
+{% endblock content %}

@@ -1,0 +1,35 @@
+{# Doctor confirmation panel — shown on Stage 2 before patient confirms their assigned doctor #}
+{% if stage.show_doctor_confirm and assigned_doctor %}
+<div class="p-doctor-confirm-accordion" id="doctor-confirm-accordion">
+  <div class="p-doctor-confirm-prompt">
+    <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+      <circle cx="8" cy="5" r="3"/>
+      <path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/>
+    </svg>
+    A doctor has been assigned to your journey
+  </div>
+  <div class="p-doctor-confirm-panel">
+    <div class="p-doctor-confirm-card">
+      <div class="p-doctor-confirm-avatar">
+        {{ assigned_doctor.user.first_name.0 }}{{ assigned_doctor.user.last_name.0 }}
+      </div>
+      <div>
+        <div class="p-doctor-confirm-name">Dr. {{ assigned_doctor.user.get_full_name }}</div>
+        <div class="p-doctor-confirm-spec">{{ assigned_doctor.get_specialty_display }} &middot; {{ assigned_doctor.hospital }}</div>
+      </div>
+    </div>
+    <p class="p-doctor-confirm-text">
+      Based on your assessment results, this specialist has been recommended for your profile. You can confirm this doctor or search for another.
+    </p>
+    <div class="p-doctor-confirm-actions">
+      <form method="post" action="{% url 'confirm_doctor' journey.pk %}" style="display:inline;">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="confirm_doctor">
+        <input type="hidden" name="doctor_id" value="{{ assigned_doctor.user.pk }}">
+        <button type="submit" class="p-btn p-btn-primary p-btn-sm">Confirm this doctor</button>
+      </form>
+      <a href="{% url 'search_doctor' journey.pk %}" class="p-btn p-btn-ghost p-btn-sm">Search for another</a>
+    </div>
+  </div>
+</div>
+{% endif %}

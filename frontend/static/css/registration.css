@@ -1,0 +1,397 @@
+/* ── Login page ── */
+
+.login-shell {
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh; display: flex;
+    background: linear-gradient(135deg, var(--teal-900) 0%, var(--slate-900) 100%);
+}
+
+.login-left {
+    flex: 1; display: flex; flex-direction: column;
+    justify-content: center; padding: 3rem;
+}
+
+.login-brand {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 3rem;
+}
+
+.login-logo {
+    width: 42px; height: 42px; border-radius: 10px;
+    background: var(--teal-500);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 1rem; font-weight: 700;
+}
+
+.login-brand-name {
+    font-size: 1.4rem; font-weight: 700; color: #fff; letter-spacing: -0.02em;
+}
+
+.login-brand-tagline {
+    font-size: 0.75rem; color: rgba(255,255,255,0.4); margin-top: 1px;
+}
+
+.login-headline {
+    font-size: 2rem; font-weight: 700; color: #fff;
+    letter-spacing: -0.03em; line-height: 1.2; margin-bottom: 0.75rem;
+    max-width: 340px;
+}
+
+.login-sub {
+    font-size: 0.9rem; color: rgba(255,255,255,0.45);
+    max-width: 320px; line-height: 1.6;
+}
+
+.login-right {
+    width: 420px; display: flex; align-items: center;
+    justify-content: center; padding: 2rem;
+    background: rgba(255,255,255,0.03);
+    border-left: 1px solid rgba(255,255,255,0.07);
+}
+
+.login-card {
+    width: 100%; max-width: 360px;
+    background: #fff; border-radius: var(--radius-xl);
+    padding: 2rem; box-shadow: var(--shadow-lg);
+}
+
+.login-card h2 {
+    font-size: 1.15rem; font-weight: 600; color: var(--slate-800);
+    margin-bottom: 0.25rem;
+}
+
+.login-card .login-card-sub {
+    font-size: 0.82rem; color: var(--slate-400); margin-bottom: 1.5rem;
+}
+
+.login-field { margin-bottom: 1rem; }
+
+.login-field label {
+    display: block; font-size: 0.78rem; font-weight: 500;
+    color: var(--slate-500); margin-bottom: 6px; letter-spacing: 0.02em;
+}
+
+.login-field .login-form-control {
+    width: 100%; font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem; color: var(--slate-800);
+    border: 1px solid var(--slate-200); border-radius: var(--radius-md);
+    padding: 10px 14px; outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    background: var(--slate-50);
+}
+
+.login-field .login-form-control:focus {
+    border-color: var(--teal-400); background: #fff;
+    box-shadow: 0 0 0 3px rgba(61,184,184,0.12);
+}
+
+.login-submit {
+    width: 100%; font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem; font-weight: 600; color: #fff;
+    background: var(--teal-500); border: none; border-radius: var(--radius-md);
+    padding: 11px; cursor: pointer; transition: background 0.15s;
+    margin-top: 0.25rem;
+}
+
+.login-submit:hover { background: var(--teal-600); }
+
+.login-card .signup-login-link {
+    margin-top: 1.25rem;
+    margin-bottom: -0.25rem;
+}
+
+.login-error {
+    font-size: 0.8rem;
+    color: var(--risk-high);
+    background: var(--risk-high-bg);
+    border-radius: var(--radius-sm);
+    padding: 8px 12px;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.login-hints {
+    margin-top: 1.5rem; padding-top: 1.25rem;
+    border-top: 1px solid var(--slate-100);
+}
+
+.login-hints p {
+    font-size: 0.72rem; color: var(--slate-400); margin-bottom: 6px;
+    text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500;
+}
+
+.login-hint-row {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.78rem; color: var(--slate-500);
+    background: var(--slate-50); border-radius: var(--radius-sm);
+    padding: 6px 10px; margin-bottom: 4px; cursor: pointer;
+    transition: background 0.12s; gap: 8px;
+}
+
+.login-hint-row:hover { background: var(--teal-50); color: var(--teal-700); }
+
+.login-hint-row .hint-role {
+    font-size: 0.68rem; font-weight: 600; letter-spacing: 0.05em;
+    text-transform: uppercase; color: var(--slate-400);
+}
+
+.login-hint-row:hover .hint-role { color: var(--teal-600); }
+
+
+/* ── Signup Page ── */
+
+/* ── Signup role selector ── */
+.signup-role-group {
+  margin-bottom: 1.25rem;
+}
+
+.signup-role-label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--slate-500);
+  margin-bottom: 8px;
+  letter-spacing: 0.02em;
+}
+
+.signup-role-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.625rem;
+}
+
+.signup-role-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--slate-200);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  background: var(--slate-50);
+}
+
+.signup-role-card:hover {
+  border-color: var(--teal-300);
+  background: var(--teal-50);
+}
+
+.signup-role-card.selected {
+  border-color: var(--teal-500);
+  background: var(--teal-50);
+}
+
+.signup-role-radio {
+  display: none;
+}
+
+.signup-role-card__icon {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  background: var(--slate-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--slate-400);
+  transition: background 0.15s, color 0.15s;
+}
+
+.signup-role-card__icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.signup-role-card.selected .signup-role-card__icon {
+  background: var(--teal-100);
+  color: var(--teal-600);
+}
+
+.signup-role-card__title {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--slate-700);
+}
+
+.signup-role-card__sub {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--slate-400);
+  margin-top: 1px;
+  line-height: 1.3;
+}
+
+.signup-name-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.signup-login-link {
+  margin-top: 1.25rem;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--slate-400);
+}
+
+.signup-login-link a {
+  color: var(--teal-600);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.signup-login-link a:hover {
+  text-decoration: underline;
+}
+
+/* ── Signup step dots ── */
+.login-steps {
+    display: flex; gap: 6px; margin-bottom: 24px;
+}
+
+.login-step {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--slate-200);
+    transition: background 0.2s;
+}
+
+.login-step.active {
+    background: var(--teal-500);
+}
+
+/* ── Signup back button ── */
+.login-back {
+    background: none; border: none; padding: 0;
+    margin-bottom: 16px; font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem; color: var(--slate-400); cursor: pointer;
+    transition: color 0.15s;
+}
+
+.login-back:hover { color: var(--slate-600); }
+
+/* ── "Almost done, X." personalised sub ── */
+.login-card-sub--user { margin-bottom: 1.5rem; }
+.login-card-sub--user strong { color: var(--slate-700); }
+
+/* ── Sign-in link at bottom of step 1 ── */
+.signup-login-link {
+    font-size: 0.78rem; color: var(--slate-400);
+    text-align: center; margin-top: 1rem;
+}
+
+.signup-login-link a { color: var(--teal-600); text-decoration: none; font-weight: 500; }
+
+.signup-login-link a:hover { text-decoration: underline; }
+
+/* ── Field error text ── */
+.field-error {
+  font-size: 0.75rem;
+  color: var(--risk-high);
+  margin-top: 4px;
+}
+
+
+/* ── Setup / onboarding shell ─────────────────────────── */
+.setup-shell {
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--teal-900) 0%, var(--slate-900) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+}
+
+.setup-card {
+  background: #fff;
+  border-radius: var(--radius-xl);
+  padding: 2.25rem 2rem;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: var(--shadow-lg);
+}
+
+.setup-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 1.75rem;
+}
+
+.setup-header {
+  margin-bottom: 1.5rem;
+}
+
+.setup-header h1 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--slate-800);
+  margin-bottom: 0.3rem;
+}
+
+.setup-header p {
+  font-size: 0.82rem;
+  color: var(--slate-400);
+  line-height: 1.55;
+}
+
+.setup-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%2373829e' stroke-width='1.4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 10px;
+  padding-right: 2.25rem;
+  cursor: pointer;
+}
+
+
+@media (max-width: 700px) {
+    .login-left { display: none; }
+    
+    .login-right {
+        width: 100%;
+        border: none;
+        background: transparent;
+        padding: 2rem 1.5rem;
+        align-items: flex-start;
+        padding-top: 3rem;
+    }
+    
+    .login-card {
+        box-shadow: none;
+        background: transparent;
+        padding: 0;
+    }
+    
+    .login-card h2 { color: #fff; }
+    .login-card .login-card-sub { color: rgba(255,255,255,0.4); }
+    
+    .login-field label { color: rgba(255,255,255,0.6); }
+    .login-field .login-form-control { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.12); color: #fff; }
+    .login-field .login-form-control::placeholder { color: rgba(255,255,255,0.25); }
+    
+    .login-card .signup-login-link {color: rgba(255, 255, 255, 0.5); }
+    .login-card .signup-login-link a {color: var(--teal-300); }
+    
+    .login-hints { border-top-color: rgba(255,255,255,0.1); }
+    .login-hints p { color: rgba(255,255,255,0.3); }
+    
+    .login-step { background: rgba(255,255,255,0.2); }
+    .login-step.active { background: var(--teal-400); }
+    
+    .login-back { color: rgba(255,255,255,0.4); }
+    .login-back:hover { color: rgba(255,255,255,0.75); }
+    
+    .login-card-sub--user strong { color: #fff; }
+    
+    .signup-login-link { color: rgba(255,255,255,0.35); }
+    .signup-login-link a { color: var(--teal-400); }
+    .signup-role-cards { grid-template-columns: 1fr; }
+    .signup-name-row { grid-template-columns: 1fr; }
+    .setup-card { padding: 1.75rem 1.25rem; }
+}

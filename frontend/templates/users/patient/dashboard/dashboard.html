@@ -1,0 +1,22 @@
+{% extends 'users/patient/patient_base.html' %}
+{% load static %}
+
+{% with active_tab='dashboard' %}
+
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/patient/profile.css' %}" />
+{% endblock %}
+
+
+{% block content %}
+    {% if latest_result %}
+        {% include 'users/patient/dashboard/partials/risk_banner.html' %}
+        {% include 'users/patient/dashboard/partials/stage_progress.html' %}
+        {% include 'users/patient/dashboard/partials/recommendation_card.html' %}
+    {% else %}
+        {% include 'users/patient/partials/empty_state.html' %}
+    {% endif %}
+{% endblock content %}
+
+{% endwith %}
