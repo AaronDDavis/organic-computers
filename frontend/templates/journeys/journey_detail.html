@@ -1,0 +1,46 @@
+{% extends 'users/patient/patient_base.html' %}
+{% load static %}
+{% with active_tab='journeys' %}
+
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/patient/journey.css' %}" />
+{% endblock %}
+
+
+{% block content %}
+<!-- ── Page header ── -->
+<div class="p-page-header" style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+  <a href="{% url 'journey_list' %}" class="p-btn p-btn-ghost p-btn-sm">← Back</a>
+  <div style="flex:1;">
+    <h1 style="margin:0;">Journey #{{ journey.number }}</h1>
+    <p style="margin:0;">Started {{ journey.created_on|date:"d M Y" }} &middot; Stage {{ num_completed_stages }} of 3 complete</p>
+  </div>
+  <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+    <span class="badge-status {{ journey.status|lower }}">{{ journey.get_status_display }}</span>
+
+    {% if journey.doctor %}
+    <span class="p-journey-doctor-tag p-journey-doctor-tag--detail" id="doctor-confirmed-tag">
+      <svg viewBox="0 0 12 12" fill="currentColor" width="10" height="10">
+        <circle cx="6" cy="4" r="2.2"/>
+        <path d="M1 11c0-2.8 2.2-5 5-5s5 2.2 5 5"/>
+      </svg>
+      Dr. {{ journey.doctor.user.get_full_name }} &middot; {{ journey.doctor.get_specialty_display }}
+    </span>
+    {% endif %}
+  </div>
+</div>
+
+<!-- ── Vertical timeline ── -->
+<div class="p-timeline">
+  {% for stage in stages %}
+    {% include "journeys/partials/_stage_card.html" with stage=stage journey=journey assigned_doctor=assigned_doctor forloop_counter=forloop.counter %}
+  {% endfor %}
+</div>
+
+{% endblock content %}
+{% endwith %}
+
+{% block extra_js %}
+<script src="{% static 'js/journey_detail.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,6 @@
+  <!-- Mobile drawer -->
+  <div class="p-mobile-nav" id="p-mobile-nav">
+    <a href="{% url 'dashboard' %}" {% if active_tab == 'dashboard' %}class="active"{% endif %}>Overview</a>
+    <a href="{% url 'journey_list' %}" {% if active_tab == 'journeys' %}class="active"{% endif %}>My Journeys</a>
+    <a href="{% url 'profile' %}" {% if active_tab == 'profile' %}class="active"{% endif %}>Profile</a>
+  </div>

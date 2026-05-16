@@ -1,0 +1,20 @@
+{
+    "risk_bands": {
+        "High": {
+            "criteria": "Rotterdam >= 2",
+            "action": "Immediate Specialist Referral"
+        },
+        "Moderate": {
+            "criteria": "Rotterdam == 1 OR BMI > 25",
+            "action": "Primary Care Follow-up"
+        },
+        "Low": {
+            "criteria": "Default",
+            "action": "Routine Monitoring"
+        }
+    },
+    "referral_logic": {
+        "Endocrinologist": "Metabolic Score > Reproductive Score (Indicators: BMI, RBS, Acanthosis)",
+        "Gynecologist": "Reproductive Score >= Metabolic Score (Indicators: Cycles, Follicles, AMH)"
+    }
+}

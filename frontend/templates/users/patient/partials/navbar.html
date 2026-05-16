@@ -1,0 +1,24 @@
+  <!-- Top navbar -->
+  <nav class="p-navbar">
+    <a href="{% url 'dashboard' %}" class="p-navbar__brand">
+      <div class="p-navbar__logo">PS</div>
+      PCOSense
+    </a>
+    <ul class="p-navbar__links">
+      <li><a href="{% url 'dashboard' %}" {% if active_tab == 'dashboard' %}class="active"{% endif %}>Overview</a></li>
+      <li><a href="{% url 'journey_list' %}" {% if active_tab == 'journeys' %}class="active"{% endif %}>My Journeys</a></li>
+      <li><a href="{% url 'profile' %}" {% if active_tab == 'profile' %}class="active"{% endif %}>Profile</a></li>
+    </ul>
+    <div class="p-navbar__user">
+      <div class="p-avatar" title="{{ request.user.get_full_name }}">
+        {{ request.user.first_name.0 }}{{ request.user.last_name.0 }}
+      </div>
+      <form method="post" action="{% url 'logout' %}" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" class="p-logout-btn">Sign out</button>
+      </form>
+      <button class="p-navbar__hamburger" id="p-hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>

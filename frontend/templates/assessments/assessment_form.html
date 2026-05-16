@@ -1,0 +1,60 @@
+{% extends 'users/patient/patient_base.html' %}
+{% load widget_tweaks %}
+{% load static %}
+
+
+{% with active_tab='journeys' %}
+
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/patient/assessment_form.css' %}" />
+{% endblock %}
+
+
+{% block content %}
+<div class="p-page-header" style="display:flex; align-items:center; gap:1rem;">
+  <a href="{% url '' journey.pk %}" class="p-btn p-btn-ghost p-btn-sm">← Back</a>
+  <div>
+    <h1 style="margin:0;">
+      {% if stage == 'Stage_1' %}Stage 1 — Symptomatic Assessment
+      {% elif stage == 'Stage_2' %}Stage 2 — Clinical Assessment
+      {% endif %}
+    </h1>
+    <p style="margin:0;">Journey #{{ journey.number }}</p>
+  </div>
+</div>
+
+<div class="card p-assessment-form-card">
+  <div class="p-form-intro">
+    {% if stage == 'Stage_1' %}
+      <p>Answer the questions below based on what you know about your symptoms.</p>
+    {% elif stage == 'Stage_2' %}
+      <p>Enter your bloodwork results from a recent GP visit.</p>
+    {% endif %}
+  </div>
+
+  <form method="post">
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+      <div class="login-error">{{ form.non_field_errors.0 }}</div>
+    {% endif %}
+
+    {% for field in form %}
+      <div class="p-form-field">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field|add_class:"p-form-control" }}
+        {% if field.errors %}<div class="field-error">{{ field.errors.0 }}</div>{% endif %}
+        {% if field.help_text %}<div class="p-form-hint">{{ field.help_text }}</div>{% endif %}
+      </div>
+    {% endfor %}
+
+    <div class="p-form-actions">
+      <button type="submit" class="p-btn p-btn-primary">Submit assessment</button>
+      <a href="{% url '' journey.pk %}" class="p-btn p-btn-ghost">Cancel</a>
+    </div>
+  </form>
+</div>
+
+{% endblock content %}
+{% endwith %}

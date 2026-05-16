@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block main_content %}
+<!-- ═══════════════════════════════════════════════════════
+     DOCTOR SHELL
+═══════════════════════════════════════════════════════ -->
+<div id="page-doctor" class="doctor-shell">
+
+  <!-- Sidebar -->
+  <aside class="d-sidebar">
+    <div class="d-sidebar__brand">
+      <div class="d-sidebar__logo">PS</div>
+      <div>
+        <div class="d-sidebar__name">PCOSense</div>
+        <span class="d-sidebar__role-tag">Clinical Portal</span>
+      </div>
+    </div>
+    <nav class="d-sidebar__nav">
+      <span class="d-sidebar__section-label">Main</span>
+      <a href="#" id="dnav-dashboard" class="active" onclick="dNav('dashboard'); return false;">
+        <svg viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
+        <span>Dashboard</span>
+      </a>
+      <a href="#" id="dnav-patients" onclick="dNav('patients'); return false;">
+        <svg viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+        <span>Patient Queue</span>
+      </a>
+      <span class="d-sidebar__section-label">Account</span>
+      <a href="#" id="dnav-profile" onclick="dNav('d-profile'); return false;">
+        <svg viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="6" r="3.5"/><path d="M1 14c0-3 3-5.5 7-5.5s7 2.5 7 5.5"/></svg>
+        <span>My Profile</span>
+      </a>
+    </nav>
+    <div class="d-sidebar__footer">
+      <div class="d-sidebar__doctor-info">
+        <div class="d-sidebar__avatar">WC</div>
+        <div>
+          <div class="d-sidebar__doctor-name">Dr. Wei Chen</div>
+          <div class="d-sidebar__doctor-spec">Endocrinology</div>
+        </div>
+      </div>
+      <button class="d-logout-btn" onclick="handleLogout()">Sign out</button>
+    </div>
+  </aside>
+
+  <!-- Main area -->
+  <div class="d-main">
+    <header class="d-topbar">
+      <span class="d-topbar__title" id="d-topbar-title">Dashboard</span>
+      <div class="d-topbar__actions">
+        <span class="text-xs text-muted">Thu, 14 May 2026</span>
+      </div>
+    </header>
+
+    <div class="d-content">
+      {% block content %}
+      {% endblock %}
+    </div><!-- end d-content -->
+  </div><!-- end d-main -->
+</div><!-- end doctor-shell -->
+{% endblock main_content %}

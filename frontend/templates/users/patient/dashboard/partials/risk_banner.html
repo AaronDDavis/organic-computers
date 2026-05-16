@@ -1,0 +1,13 @@
+<!-- ── Latest risk result banner ── -->
+<div class="p-overview-banner p-overview-banner--{{ latest_result.risk|lower }}">
+  <div class="p-banner-greeting">Hello, {{ request.user.first_name }}.</div>
+  <div class="p-banner-risk-display">
+    <div class="p-banner-risk-pill p-banner-risk-pill--{{ latest_result.risk|lower }}">
+      {{ latest_result.get_risk_display }} Risk
+    </div>
+    <div class="p-banner-score">{{ latest_result.score }}</div>
+  </div>
+  <div class="p-banner-meta">
+    Journey #{{ latest_journey.number }} &middot; {{ latest_assessment.get_stage_display }} complete &middot; Updated {{ latest_result.created_on }}
+  </div>
+</div>

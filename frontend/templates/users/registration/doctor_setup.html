@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/registration.css' %}" />
+{% endblock %}
+
+
+{% block main_content %}
+<div class="setup-shell">
+  <div class="setup-card">
+
+    <div class="setup-brand">
+      <div class="login-logo">PS</div>
+      <div>
+        <div class="login-brand-name">PCOSense</div>
+      </div>
+    </div>
+
+    <div class="setup-header">
+      <h1>Set up your clinical profile</h1>
+      <p>Your specialty and hospital will be shown to patients when they are matched to you.</p>
+    </div>
+
+    <form method="post">
+      {% csrf_token %}
+
+      {% if form.non_field_errors %}
+      <div class="login-error">{{ form.non_field_errors.0 }}</div>
+      {% endif %}
+
+      <div class="login-field">
+        <label for="id_specialty">Specialty</label>
+        {{ form.specialty|add_class:"login-form-control setup-select"|attr:"id:id_specialty" }}
+        {% if form.specialty.errors %}<div class="field-error">{{ form.specialty.errors.0 }}</div>{% endif %}
+      </div>
+
+      <div class="login-field">
+        <label for="id_hospital">Hospital / Clinic</label>
+        {{ form.hospital|add_class:"login-form-control"|attr:"id:id_hospital"|attr:"placeholder:e.g. City General Hospital" }}
+        {% if form.hospital.errors %}<div class="field-error">{{ form.hospital.errors.0 }}</div>{% endif %}
+      </div>
+
+      <button type="submit" class="login-submit" style="margin-top:0.5rem;">Continue to dashboard</button>
+    </form>
+
+  </div>
+</div>
+{% endblock main_content %}

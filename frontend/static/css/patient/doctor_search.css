@@ -1,0 +1,68 @@
+/* ── Doctor search page ───────────────────────────────── */
+.p-doctor-search-context {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: var(--teal-800);
+  background: var(--teal-50);
+  border: 1px solid var(--teal-100);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.25rem;
+  line-height: 1.5;
+}
+
+.p-doctor-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.p-doctor-card {
+  padding: 1.1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.p-doctor-card__left {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.p-doctor-card__avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--teal-100);
+  color: var(--teal-700);
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.p-doctor-card__name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--slate-800);
+}
+
+.p-doctor-card__spec {
+  font-size: 0.75rem;
+  color: var(--teal-600);
+  margin-top: 1px;
+}
+
+.p-doctor-card__hospital {
+  font-size: 0.72rem;
+  color: var(--slate-400);
+  margin-top: 1px;
+}

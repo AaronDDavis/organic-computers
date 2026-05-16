@@ -1,0 +1,35 @@
+{# Doctor notes accordion — paginated with prev/next arrows #}
+{% if assessment.doctor_notes.exists %}
+<div class="p-notes-accordion" id="notes-accordion-{{ stage.key }}">
+  <button class="p-notes-toggle" onclick="toggleNotes('{{ stage.key }}')">
+    <svg viewBox="0 0 14 14" fill="none" width="13" height="13">
+      <path d="M1 3h12M1 7h8M1 11h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    View doctor notes
+    <span class="p-notes-count">{{ assessment.doctor_notes.count }}</span>
+  </button>
+  <div class="p-notes-panel" id="notes-panel-{{ stage.key }}" hidden>
+    {% for note in assessment.doctor_notes.all %}
+    <div class="p-note-slide" data-index="{{ forloop.counter0 }}" {% if not forloop.first %}style="display:none;"{% endif %}>
+      <div class="p-note-card">
+        <div class="p-note-card__header">
+          <div>
+            <div class="p-note-card__doctor">Dr. {{ journey.doctor.user.get_full_name }}</div>
+            <div class="p-note-card__spec">{{ journey.doctor.get_specialty_display }}</div>
+          </div>
+          <div class="p-note-card__date">{{ note.updated_on|date:"d M Y" }}</div>
+        </div>
+        <p>{{ note.content }}</p>
+      </div>
+    </div>
+    {% endfor %}
+    {% if assessment.doctor_notes.count > 1 %}
+    <div class="p-notes-nav">
+      <button class="p-notes-arrow" onclick="prevNote('{{ stage.key }}')" aria-label="Previous note">‹</button>
+      <span class="p-notes-counter" id="notes-counter-{{ stage.key }}">1 / {{ assessment.doctor_notes.count }}</span>
+      <button class="p-notes-arrow" onclick="nextNote('{{ stage.key }}', {{ assessment.doctor_notes.count }})" aria-label="Next note">›</button>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endif %}

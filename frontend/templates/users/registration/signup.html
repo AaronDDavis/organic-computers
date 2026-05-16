@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/registration.css' %}" />
+{% endblock %}
+
+
+{% block main_content %}
+<div id="page-signup" class="login-shell">
+  <div class="login-left">
+    <div class="login-brand">
+      <div class="login-logo">PS</div>
+      <div>
+        <div class="login-brand-name">PCOSense</div>
+        <div class="login-brand-tagline">Progressive Diagnostic Triage</div>
+      </div>
+    </div>
+    <h1 class="login-headline">Begin your diagnostic journey.</h1>
+    <p class="login-sub">Create an account to track your symptoms, receive staged risk assessments, and connect with the right specialist.</p>
+  </div>
+
+  <div class="login-right">
+    <div class="login-card">
+
+      <!-- Step dots -->
+      <div class="login-steps">
+        <div class="login-step active" id="step-dot-1"></div>
+        <div class="login-step" id="step-dot-2"></div>
+      </div>
+
+      <form method="post" id="signup-form"
+      data-has-step1-error="{% if form.username.errors or form.email.errors or form.first_name.errors or form.last_name.errors or form.role.errors %}true{% else %}false{% endif %}"
+      data-has-step2-error="{% if form.password1.errors or form.password2.errors %}true{% else %}false{% endif %}">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+        <div class="login-error">{{ form.non_field_errors.0 }}</div>
+        {% endif %}
+
+        <!-- ── Step 1: Who you are ── -->
+        <div id="signup-step-1">
+          <h2>Create account</h2>
+          <p class="login-card-sub">Choose your role to get started.</p>
+
+          <!-- Role selector -->
+          <div class="signup-role-group">
+            <label class="signup-role-label">I am a</label>
+            <div class="signup-role-cards">
+              <label class="signup-role-card" id="role-card-patient">
+                <input type="radio" name="{{ form.role.html_name }}" value="PT" id="role-PT" class="signup-role-radio" checked>
+                <div class="signup-role-card__icon">
+                  <svg viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="6" r="3.5"/><path d="M3 18c0-3.9 3.1-7 7-7s7 3.1 7 7"/></svg>
+                </div>
+                <div class="signup-role-card__text">
+                  <span class="signup-role-card__title">Patient</span>
+                  <span class="signup-role-card__sub">Track symptoms &amp; get assessed</span>
+                </div>
+              </label>
+              <label class="signup-role-card" id="role-card-doctor">
+                <input type="radio" name="{{ form.role.html_name }}" value="DR" id="role-DR" class="signup-role-radio">
+                <div class="signup-role-card__icon">
+                  <svg viewBox="0 0 20 20" fill="currentColor"><rect x="8" y="2" width="4" height="7" rx="1"/><rect x="2" y="8" width="7" height="4" rx="1"/><rect x="11" y="8" width="7" height="4" rx="1"/><rect x="8" y="11" width="4" height="7" rx="1"/></svg>
+                </div>
+                <div class="signup-role-card__text">
+                  <span class="signup-role-card__title">Doctor</span>
+                  <span class="signup-role-card__sub">Manage &amp; prioritise patients</span>
+                </div>
+              </label>
+            </div>
+            {% if form.role.errors %}<div class="login-error" style="margin-top:0.5rem;">{{ form.role.errors.0 }}</div>{% endif %}
+          </div>
+
+          <div class="login-field">
+            <label for="id_username">Username</label>
+            {{ form.username|add_class:"login-form-control"|attr:"id:id_username"|attr:"placeholder:Choose a username"|attr:"autocomplete:username" }}
+            {% if form.username.errors %}<div class="field-error">{{ form.username.errors.0 }}</div>{% endif %}
+          </div>
+
+          <div class="login-field">
+            <label for="id_email">Email</label>
+            {{ form.email|add_class:"login-form-control"|attr:"id:id_email"|attr:"placeholder:you@example.com"|attr:"autocomplete:email" }}
+            {% if form.email.errors %}<div class="field-error">{{ form.email.errors.0 }}</div>{% endif %}
+          </div>
+
+          <div class="signup-name-row">
+            <div class="login-field">
+              <label for="id_first_name">First name</label>
+              {{ form.first_name|add_class:"login-form-control"|attr:"id:id_first_name"|attr:"placeholder:First" }}
+              {% if form.first_name.errors %}<div class="field-error">{{ form.first_name.errors.0 }}</div>{% endif %}
+            </div>
+            <div class="login-field">
+              <label for="id_last_name">Last name</label>
+              {{ form.last_name|add_class:"login-form-control"|attr:"id:id_last_name"|attr:"placeholder:Last" }}
+              {% if form.last_name.errors %}<div class="field-error">{{ form.last_name.errors.0 }}</div>{% endif %}
+            </div>
+          </div>
+
+          <button type="button" class="login-submit" onclick="goToStep2()">Next →</button>
+          <p class="signup-login-link">Already have an account? <a href="{% url 'login' %}">Sign in</a></p>
+        </div>
+
+        <!-- ── Step 2: Set password ── -->
+        <div id="signup-step-2" style="display:none">
+          <button type="button" class="login-back" onclick="goToStep1()">← Back</button>
+          <h2>Set a password</h2>
+          <p class="login-card-sub">Almost done, <strong id="firstname-display"></strong>.</p>
+
+          <div class="login-field">
+            <label for="id_password1">Password</label>
+            {{ form.password1|add_class:"login-form-control"|attr:"id:id_password1"|attr:"placeholder:Create a password"|attr:"autocomplete:new-password" }}
+            {% if form.password1.errors %}<div class="field-error">{{ form.password1.errors.0 }}</div>{% endif %}
+          </div>
+
+          <div class="login-field">
+            <label for="id_password2">Confirm password</label>
+            {{ form.password2|add_class:"login-form-control"|attr:"id:id_password2"|attr:"placeholder:Repeat password"|attr:"autocomplete:new-password" }}
+            {% if form.password2.errors %}<div class="field-error">{{ form.password2.errors.0 }}</div>{% endif %}
+          </div>
+
+          <button type="submit" class="login-submit">Create account</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock main_content %}
+
+
+{% block extra_js %}
+<script src="{% static 'js/registration.js' %}"></script>
+{% endblock %}

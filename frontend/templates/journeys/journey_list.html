@@ -1,0 +1,81 @@
+{% extends 'users/patient/patient_base.html' %}
+{% load static %}
+
+{% with active_tab='journeys' %}
+
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/patient/journey.css' %}" />
+{% endblock %}
+
+
+{% block content %}
+<div class="p-page-header" style="display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+  <div>
+    <h1>My Diagnostic Journeys</h1>
+    <p>Each journey is a separate screening episode.</p>
+  </div>
+  <a href="{% url 'create_journey' %}" class="p-btn p-btn-primary">
+    <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+      <path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+    </svg>
+    New journey
+  </a>
+</div>
+
+{% if journeys %}
+<div class="p-journey-list">
+  {% for journey in journeys %}
+  <a href="{% url 'journey_details' journey.pk %}" class="card p-journey-item" style="text-decoration:none;">
+    <div class="p-journey-item__left">
+      <div class="p-journey-item__date">
+        {% if journey.status == 'COMP' %}Completed{% else %}Started{% endif %}
+        {{ journey.created_on|date:"d M Y" }}
+      </div>
+      <div class="p-journey-item__title">
+        Journey #{{ journey.number }}
+        {% if forloop.first %}<span class="p-journey-current-tag">Current</span>{% endif %}
+      </div>
+      <div class="p-journey-item__meta">
+        {% if journey.latest_assessment %}
+        <span class="badge-risk {{ journey.latest_assessment.result.risk|lower }}">
+          {{ journey.latest_assessment.result.get_risk_display }} Risk
+        </span>
+        {% endif %}
+        <span class="badge-status {{ journey.status|lower }}">{{ journey.get_status_display }}</span>
+        <span class="text-xs text-muted">
+          Stage {{ journey.assessments.count }} of 3 complete
+        </span>
+        {% if journey.doctor %}
+        <span class="p-journey-doctor-tag">
+          <svg viewBox="0 0 12 12" fill="currentColor" width="10" height="10">
+            <circle cx="6" cy="4" r="2.2"/>
+            <path d="M1 11c0-2.8 2.2-5 5-5s5 2.2 5 5"/>
+          </svg>
+          Dr. {{ journey.doctor.user.last_name }}
+        </span>
+        {% endif %}
+      </div>
+    </div>
+    <div class="p-journey-item__arrow">›</div>
+  </a>
+  {% endfor %}
+</div>
+
+{% else %}
+<!-- Empty state -->
+<div class="p-empty-state">
+  <div class="p-empty-icon">
+    <svg viewBox="0 0 40 40" fill="none">
+      <rect x="8" y="6" width="24" height="28" rx="3" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M13 14h14M13 20h10M13 26h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <h2>No journeys yet</h2>
+  <p>Start your first diagnostic journey to begin tracking your symptoms and receive a risk assessment.</p>
+  <a href="{% url 'create_journey' %}" class="p-btn p-btn-primary">Start first journey</a>
+</div>
+{% endif %}
+
+{% endblock content %}
+{% endwith %}

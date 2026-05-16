@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/registration.css' %}" />
+{% endblock %}
+
+
+{% block main_content %}
+<div class="setup-shell">
+  <div class="setup-card">
+
+    <div class="setup-brand">
+      <div class="login-logo">PS</div>
+      <div>
+        <div class="login-brand-name">PCOSense</div>
+      </div>
+    </div>
+
+    <div class="setup-header">
+      <h1>Set up your profile</h1>
+      <p>A few details to complete your account. This information is encrypted and only visible to you and your assigned doctor.</p>
+    </div>
+
+    <form method="post">
+      {% csrf_token %}
+
+      {% if form.non_field_errors %}
+      <div class="login-error">{{ form.non_field_errors.0 }}</div>
+      {% endif %}
+
+      <div class="login-field">
+        <label for="id_dob">Date of birth</label>
+        {{ form.dob|add_class:"login-form-control"|attr:"id:id_dob"|attr:"type:date" }}
+        {% if form.dob.errors %}<div class="field-error">{{ form.dob.errors.0 }}</div>{% endif %}
+      </div>
+
+      <div class="login-field">
+        <label for="id_blood_group">Blood group</label>
+        {{ form.blood_group|add_class:"login-form-control setup-select"|attr:"id:id_blood_group" }}
+        {% if form.blood_group.errors %}<div class="field-error">{{ form.blood_group.errors.0 }}</div>{% endif %}
+      </div>
+
+      <button type="submit" class="login-submit" style="margin-top:0.5rem;">Continue to dashboard</button>
+    </form>
+
+  </div>
+</div>
+{% endblock main_content %}

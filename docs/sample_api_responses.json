@@ -1,0 +1,53 @@
+{
+    "stage1_response": {
+        "stage": "stage1",
+        "risk": "High",
+        "confidence": 0.777,
+        "top_factors": [
+            "BMI",
+            "Age",
+            "Skin darkening"
+        ],
+        "specialist": "Gynecologist",
+        "clinical_focus": "Reproductive Focus",
+        "next_step": "Your symptom profile suggests elevated PCOS risk. A clinical blood test panel including AMH, LH, FSH, glucose, thyroid markers, and prolactin would help clarify your risk profile.",
+        "recommendation_text": "Your profile shows multiple markers associated with PCOS. Given the reproductive focus, we recommend consultation with a Gynecologist.",
+        "missing_fields_imputed": [],
+        "differential": null
+    },
+    "stage2_response": {
+        "stage": "stage2",
+        "risk": "Moderate",
+        "confidence": 0.643,
+        "top_factors": [
+            "Excess hair growth",
+            "AMH level",
+            "Skin darkening"
+        ],
+        "specialist": "Gynecologist",
+        "clinical_focus": "Reproductive Focus",
+        "next_step": "Clinical results show some PCOS-associated markers. Follow-up with a Gynecologist may help clarify whether imaging is needed.",
+        "recommendation_text": "Your profile shows some markers associated with PCOS. Follow-up with a Gynecologist may help clarify your risk.",
+        "missing_fields_imputed": [],
+        "differential": null
+    },
+    "stage3_response": {
+        "stage": "stage3",
+        "risk": "High",
+        "confidence": 0.74,
+        "top_factors": [
+            "Right ovary follicle count",
+            "Left ovary follicle count",
+            "Excess hair growth"
+        ],
+        "specialist": "Gynecologist",
+        "clinical_focus": "Reproductive Focus",
+        "next_step": "Ultrasound and clinical findings suggest elevated PCOS risk with a reproductive focus. Priority consultation with a Gynecologist is recommended.",
+        "recommendation_text": "Your profile shows multiple markers associated with PCOS. Given the reproductive focus, we recommend consultation with a Gynecologist.",
+        "missing_fields_imputed": [],
+        "differential": {
+            "possible_endometriosis_overlap": null,
+            "note": "Endometriosis differential layer pending integration."
+        }
+    }
+}

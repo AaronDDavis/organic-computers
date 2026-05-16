@@ -1,0 +1,53 @@
+{% load mathfilters %}
+{% with assessment=stage.assessment %}
+
+<div class="p-timeline-item">
+
+  <!-- Dot -->
+  <div class="p-timeline-dot {% if not assessment %}locked{% endif %}">
+    {% if assessment %}
+    <svg viewBox="0 0 10 10"><polyline points="1,5 4,8 9,2" stroke="#fff" stroke-width="1.8" fill="none"/></svg>
+    {% endif %}
+  </div>
+
+  <!-- Card -->
+  <div class="card p-timeline-card {% if not assessment %}locked{% endif %}">
+    <div class="p-stage-label {% if not assessment %}locked{% endif %}">Stage {{ forloop_counter }} — {{ stage.label }}</div>
+    <div class="p-stage-title">{{ stage.label }} Assessment</div>
+
+    {% if assessment %}
+      <div class="p-stage-grid">
+        {% for key, value in assessment.data.items %}
+        <div class="p-stage-field">
+          <label>{{ key|title }}</label>
+          <span>{{ value }}</span>
+        </div>
+        {% endfor %}
+      </div>
+
+      {% include "journeys/partials/stage_result.html" %}
+      {% include "journeys/partials/stage_notes.html" %}
+      {% include "journeys/partials/stage_doctor_confirm.html" %}
+    {% else %}
+      
+      {# Locked stage — shown when assessment hasn't been started yet #}
+      <p class="text-muted text-sm" style="margin-top:0.5rem;">
+        {% if stage.prev_done %}
+          {{ stage.locked_message }}
+          {% if stage.begin_url %}
+          <br>
+          <a href="{{ stage.begin_url }}" class="p-btn p-btn-primary p-btn-sm" style="margin-top:0.75rem; display:inline-flex;">
+            Begin {{ stage.label }} assessment →
+          </a>
+          {% endif %}
+        {% else %}
+          Complete the previous stage first.
+        {% endif %}
+      </p>
+      
+    {% endif %}
+
+  </div>
+</div>
+
+{% endwith %}
