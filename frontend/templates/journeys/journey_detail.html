@@ -34,7 +34,7 @@
 <!-- ── Vertical timeline ── -->
 <div class="p-timeline">
   {% for stage in stages %}
-    {% include "journeys/partials/_stage_card.html" with stage=stage journey=journey assigned_doctor=assigned_doctor forloop_counter=forloop.counter %}
+    {% include "journeys/partials/stage_card.html" with stage=stage journey=journey assigned_doctor=assigned_doctor forloop_counter=forloop.counter %}
   {% endfor %}
 </div>
 

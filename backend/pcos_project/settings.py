@@ -31,7 +31,10 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'mathfilters',
     'users',
+    'patients',
+    'doctors',
     'journeys',
+    'assessments',
     'api',
 ]
 

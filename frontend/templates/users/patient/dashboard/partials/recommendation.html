@@ -3,13 +3,13 @@
 <p class="p-section-title" style="margin-top:1.75rem;">Recommended next step</p>
 <div class="card p-next-step-card">
   <div class="p-next-step-title">
-    {% if latest_assessment.stage == 'STAGE1' %}Complete Stage 2 — Clinical Bloodwork
-    {% elif latest_assessment.stage == 'STAGE2' %}Complete Stage 3 — Imaging
+    {% if latest_assessment.stage == 'S1' %}Complete Stage 2 — Clinical Bloodwork
+    {% elif latest_assessment.stage == 'S2' %}Complete Stage 3 — Imaging
     {% else %}Assessment complete
     {% endif %}
   </div>
   <p>{{ latest_result.recommendation }}</p>
-  {% if latest_assessment.stage != 'STAGE3' %}
+  {% if latest_assessment.stage != 'S3' %}
   <a href="{% url 'journey_details' latest_journey.pk %}" class="p-btn p-btn-primary p-btn-sm" style="margin-top:1rem; display:inline-flex;">
     Continue journey →
   </a>

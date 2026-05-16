@@ -55,7 +55,7 @@ class DoctorConfirmView(LoginRequiredMixin, View):
         doctor_id = request.POST.get('doctor_id')
         journey.doctor = get_object_or_404(DoctorProfile, user__pk = doctor_id)
         journey.save()
-        return redirect('journey_detail', pk=journey.pk)
+        return redirect('journey_details', pk=journey.pk)
 
 
 class DoctorSearchView(LoginRequiredMixin, ListView):
@@ -63,5 +63,10 @@ class DoctorSearchView(LoginRequiredMixin, ListView):
     template_name = 'journeys/doctor_search.html'
 
     def get_queryset(self):
-        assessment = get_object_or_404(Assessment, journey__pk = self.kwargs['pk'], patient__user = self.request.user, stage = Assessment.Stage.STAGE_2)
-        return DoctorProfile.objects.filter(specialty = assessment.result.recommendation)
+        self.assessment = get_object_or_404(Assessment, journey__pk = self.kwargs['pk'], journey__patient = self.request.user.profile, stage = Assessment.Stage.STAGE_2)
+        return DoctorProfile.objects.filter(specialty = self.assessment.result.specialist)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['journey'] = self.assessment.journey
+        return context

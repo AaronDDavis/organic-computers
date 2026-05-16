@@ -13,7 +13,7 @@
 
 {% block content %}
 <div class="p-page-header" style="display:flex; align-items:center; gap:1rem;">
-  <a href="{% url '' journey.pk %}" class="p-btn p-btn-ghost p-btn-sm">← Back</a>
+  <a href="{% url 'journey_details' journey.pk %}" class="p-btn p-btn-ghost p-btn-sm">← Back</a>
   <div>
     <h1 style="margin:0;">
       {% if stage == 'Stage_1' %}Stage 1 — Symptomatic Assessment

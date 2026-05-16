@@ -9,7 +9,6 @@ from . import forms
 
 # Need to add user passes test mixin: to ensure only patients call views like patientprofileview and similarly for doctors
 
-@login_required
 class DoctorSetupView(LoginRequiredMixin, CreateView):
     form_class = forms.DoctorSetupForm
     template_name = 'users/registration/doctor_setup.html'
@@ -19,7 +18,6 @@ class DoctorSetupView(LoginRequiredMixin, CreateView):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
-@login_required
 class DoctorProfileView(LoginRequiredMixin, TemplateView):
     template_name = 'users/doctor/profile.html'
 

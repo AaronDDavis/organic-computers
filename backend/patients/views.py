@@ -8,7 +8,6 @@ from . import forms
 
 # Need to add user passes test mixin: to ensure only patients call views like patientprofileview and similarly for doctors
 
-@login_required
 class PatientSetupView(LoginRequiredMixin, CreateView):
     form_class = forms.PatientSetupForm
     template_name = 'users/registration/patient_setup.html'
@@ -19,9 +18,9 @@ class PatientSetupView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-@login_required
 class PatientDashboardView(LoginRequiredMixin, TemplateView):
-    template_name = 'users/patient/dashboard.html'
+    template_name = 'users/patient/dashboard/dashboard.html'
+    # Not an error. File structure is this way, because of many partial files for dashboard
 
     def get_context_data(self, **kwargs):
         context_data =  super().get_context_data(**kwargs)
@@ -38,7 +37,6 @@ class PatientDashboardView(LoginRequiredMixin, TemplateView):
         return context_data
 
 
-@login_required
 class PatientProfileView(LoginRequiredMixin, TemplateView):
     template_name = 'users/patient/profile.html'
 

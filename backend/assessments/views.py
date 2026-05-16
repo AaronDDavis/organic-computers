@@ -6,13 +6,12 @@ import requests
 
 from .models import Assessment, AssessmentResult
 from journeys.models import DiagnosticJourney
-from doctors.models import DoctorProfile
 from . import forms
 from .utils import map_to_backend
 
 
 class AssessmentCreateView(LoginRequiredMixin, FormView):
-    template_name = 'journeys/assessment_form.hmtl'
+    template_name = 'assessments/assessment_form.html'
 
     def dispatch(self, request, *args, **kwargs):
         self.journey = get_object_or_404(
@@ -24,7 +23,7 @@ class AssessmentCreateView(LoginRequiredMixin, FormView):
         return super().dispatch(request, *args, **kwargs)
     
     def get_form_class(self):
-            return forms.StageOneForm if self.stage == 'Stage_1' else forms.StageTwoForm
+        return forms.StageOneForm if self.stage == 'Stage_1' else forms.StageTwoForm
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)

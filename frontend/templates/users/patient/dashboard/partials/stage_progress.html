@@ -2,27 +2,27 @@
 <p class="p-section-title" style="margin-top:1.75rem;">Diagnostic stage</p>
 <div class="card p-stage-progress-card">
   <div class="p-stage-pips">
-    <div class="p-stage-pip-item {% if latest_assessment.stage >= 'STAGE1' %}done{% endif %}">
+    <div class="p-stage-pip-item {% if latest_assessment.stage >= 'S1' %}done{% endif %}">
       <div class="p-stage-pip-dot">
-        {% if latest_assessment.stage >= 'STAGE1' %}
+        {% if latest_assessment.stage >= 'S1' %}
         <svg viewBox="0 0 10 10"><polyline points="1,5 4,8 9,2" stroke="#fff" stroke-width="1.8" fill="none"/></svg>
         {% else %}1{% endif %}
       </div>
       <span>Symptomatic</span>
     </div>
-    <div class="p-stage-pip-line {% if latest_assessment.stage >= 'STAGE2' %}done{% endif %}"></div>
-    <div class="p-stage-pip-item {% if latest_assessment.stage >= 'STAGE2' %}done{% endif %}">
+    <div class="p-stage-pip-line {% if latest_assessment.stage >= 'S2' %}done{% endif %}"></div>
+    <div class="p-stage-pip-item {% if latest_assessment.stage >= 'S2' %}done{% endif %}">
       <div class="p-stage-pip-dot">
-        {% if latest_assessment.stage >= 'STAGE2' %}
+        {% if latest_assessment.stage >= 'S2' %}
         <svg viewBox="0 0 10 10"><polyline points="1,5 4,8 9,2" stroke="#fff" stroke-width="1.8" fill="none"/></svg>
         {% else %}2{% endif %}
       </div>
       <span>Clinical</span>
     </div>
-    <div class="p-stage-pip-line {% if latest_assessment.stage == 'STAGE3' %}done{% endif %}"></div>
-    <div class="p-stage-pip-item {% if latest_assessment.stage == 'STAGE3' %}done{% endif %}">
+    <div class="p-stage-pip-line {% if latest_assessment.stage == 'S3' %}done{% endif %}"></div>
+    <div class="p-stage-pip-item {% if latest_assessment.stage == 'S3' %}done{% endif %}">
       <div class="p-stage-pip-dot">
-        {% if latest_assessment.stage == 'STAGE3' %}
+        {% if latest_assessment.stage == 'S3' %}
         <svg viewBox="0 0 10 10"><polyline points="1,5 4,8 9,2" stroke="#fff" stroke-width="1.8" fill="none"/></svg>
         {% else %}3{% endif %}
       </div>

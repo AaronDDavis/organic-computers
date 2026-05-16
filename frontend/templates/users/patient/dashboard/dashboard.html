@@ -11,9 +11,9 @@
 
 {% block content %}
     {% if latest_result %}
-        {% include 'users/patient/partials/risk_banner.html' %}
-        {% include 'users/patient/partials/stage_progress.html' %}
-        {% include 'users/patient/partials/recommendation_card.html' %}
+        {% include 'users/patient/dashboard/partials/risk_banner.html' %}
+        {% include 'users/patient/dashboard/partials/stage_progress.html' %}
+        {% include 'users/patient/dashboard/partials/recommendation_card.html' %}
     {% else %}
         {% include 'users/patient/partials/empty_state.html' %}
     {% endif %}
