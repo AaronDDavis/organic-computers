@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from users.models import User
-
+from patients.models import PatientProfile
 
 class DoctorProfile(models.Model):
     class Specialty(models.TextChoices):
@@ -12,3 +12,7 @@ class DoctorProfile(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE, primary_key = True)
     specialty = models.CharField(max_length = 3, choices = Specialty.choices)
     hospital = models.CharField(max_length = 128)
+
+    @property
+    def patients(self):
+        return PatientProfile.objects.filter(journeys__doctor = self).distinct()

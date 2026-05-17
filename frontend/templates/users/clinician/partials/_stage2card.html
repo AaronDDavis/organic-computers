@@ -1,0 +1,199 @@
+<!-- partials/clinician/_stage2card.html -->
+<!-- Stage 2 lab values are entered by the clinician. -->
+
+<div class="c-section-header" style="margin-top:0.25rem;">
+  <span class="c-section-title">Stage 2 — Hormonal &amp; Lab Values</span>
+  {% if stage2_data %}
+    <span class="text-xs text-muted">Submitted {{ stage2_data.submitted_at|timesince }} ago</span>
+  {% elif not stage1_data %}
+    <span class="text-xs text-muted" style="color:var(--slate-300);">Awaiting Stage 1 completion</span>
+  {% else %}
+    <span class="text-xs" style="color:var(--risk-med); font-weight:500;">Pending entry</span>
+  {% endif %}
+</div>
+
+<div class="c-detail-card">
+  <h3>Lab Results</h3>
+
+  {% if stage2_data %}
+  <!-- ── Read-only view ──────────────────────────── -->
+  <div class="c-two-col" style="margin-bottom:1rem;">
+    <div>
+      <div class="c-kv-list">
+        <div class="c-kv"><span class="k">FSH</span>
+          <span class="v">{{ stage2_data.fsh }} mIU/mL</span>
+        </div>
+        <div class="c-kv"><span class="k">LH</span>
+          <span class="v {% if stage2_data.lh > 10 %}flagged{% endif %}">
+            {{ stage2_data.lh }} mIU/mL{% if stage2_data.lh > 10 %} ↑{% endif %}
+          </span>
+        </div>
+        <div class="c-kv"><span class="k">FSH/LH Ratio</span>
+          <span class="v {% if stage2_data.fsh_lh_ratio < 1 %}flagged{% endif %}">
+            {{ stage2_data.fsh_lh_ratio|floatformat:2 }}{% if stage2_data.fsh_lh_ratio < 1 %} ↓{% endif %}
+          </span>
+        </div>
+        <div class="c-kv"><span class="k">AMH</span>
+          <span class="v {% if stage2_data.amh > 4.5 %}flagged{% endif %}">
+            {{ stage2_data.amh }} ng/mL{% if stage2_data.amh > 4.5 %} ↑{% endif %}
+          </span>
+        </div>
+        <div class="c-kv"><span class="k">TSH</span>
+          <span class="v {% if stage2_data.tsh > 4.5 or stage2_data.tsh < 0.4 %}elevated{% endif %}">
+            {{ stage2_data.tsh }} mIU/L
+          </span>
+        </div>
+        <div class="c-kv"><span class="k">Prolactin</span>
+          <span class="v {% if stage2_data.prolactin > 25 %}elevated{% endif %}">
+            {{ stage2_data.prolactin }} ng/mL
+          </span>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="c-kv-list">
+        <div class="c-kv"><span class="k">Vitamin D3</span>
+          <span class="v {% if stage2_data.vit_d3 < 20 %}flagged{% elif stage2_data.vit_d3 < 30 %}elevated{% endif %}">
+            {{ stage2_data.vit_d3 }} ng/mL{% if stage2_data.vit_d3 < 30 %} ↓{% endif %}
+          </span>
+        </div>
+        <div class="c-kv"><span class="k">Random Blood Sugar</span>
+          <span class="v {% if stage2_data.rbs > 140 %}flagged{% elif stage2_data.rbs > 110 %}elevated{% endif %}">
+            {{ stage2_data.rbs }} mg/dL{% if stage2_data.rbs > 110 %} ~{% endif %}
+          </span>
+        </div>
+        <div class="c-kv"><span class="k">Haemoglobin</span>
+          <span class="v {% if stage2_data.hb < 11 %}flagged{% elif stage2_data.hb < 12 %}elevated{% endif %}">
+            {{ stage2_data.hb }} g/dL
+          </span>
+        </div>
+        <div class="c-kv"><span class="k">BP Systolic</span>
+          <span class="v {% if stage2_data.bp_systolic > 130 %}elevated{% endif %}">
+            {{ stage2_data.bp_systolic }} mmHg
+          </span>
+        </div>
+        <div class="c-kv"><span class="k">BP Diastolic</span>
+          <span class="v {% if stage2_data.bp_diastolic > 85 %}elevated{% endif %}">
+            {{ stage2_data.bp_diastolic }} mmHg
+          </span>
+        </div>
+        {% if stage2_result %}
+        <div class="divider"></div>
+        <div class="c-kv"><span class="k">Stage 2 Score</span>
+          <span class="v {% if stage2_result.score > 0.65 %}flagged{% elif stage2_result.score > 0.45 %}elevated{% endif %}">
+            {{ stage2_result.score|floatformat:4 }}
+          </span>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <div style="display:flex; gap:0.65rem;">
+    <a href="{% url 'clinician_stage2_edit' journey.id %}" class="c-btn c-btn-ghost c-btn-sm">Edit values</a>
+  </div>
+
+  {% elif stage1_data %}
+  <!-- ── Entry form ──────────────────────────────── -->
+  <p style="font-size:0.82rem; color:var(--slate-400); margin-bottom:1.1rem; line-height:1.6;">
+    Enter the patient's lab results below. All values are required to trigger the Stage 2 prediction.
+  </p>
+  <form method="post" action="{% url 'clinician_stage2_submit' journey.id %}" id="c-stage2-form">
+    {% csrf_token %}
+    <div class="c-form-grid">
+
+      <span class="c-form-section">Reproductive Hormones</span>
+
+      <div class="c-form-group">
+        <label class="c-form-label" for="fsh">FSH <span class="c-unit">mIU/mL</span></label>
+        <input type="number" id="fsh" name="fsh" class="c-form-input"
+               placeholder="e.g. 5.8" min="0" max="200" step="0.1" required />
+      </div>
+      <div class="c-form-group">
+        <label class="c-form-label" for="lh">LH <span class="c-unit">mIU/mL</span></label>
+        <input type="number" id="lh" name="lh" class="c-form-input"
+               placeholder="e.g. 11.2" min="0" max="200" step="0.1" required />
+      </div>
+      <div class="c-form-group">
+        <label class="c-form-label" for="fsh_lh_ratio">FSH/LH Ratio</label>
+        <input type="number" id="fsh_lh_ratio" name="fsh_lh_ratio" class="c-form-input"
+               placeholder="e.g. 0.52" min="0" max="20" step="0.01" required />
+      </div>
+      <div class="c-form-group">
+        <label class="c-form-label" for="amh">AMH <span class="c-unit">ng/mL</span></label>
+        <input type="number" id="amh" name="amh" class="c-form-input"
+               placeholder="e.g. 5.4" min="0" max="50" step="0.1" required />
+      </div>
+      <div class="c-form-group">
+        <label class="c-form-label" for="tsh">TSH <span class="c-unit">mIU/L</span></label>
+        <input type="number" id="tsh" name="tsh" class="c-form-input"
+               placeholder="e.g. 2.1" min="0" max="100" step="0.01" required />
+      </div>
+      <div class="c-form-group">
+        <label class="c-form-label" for="prolactin">Prolactin <span class="c-unit">ng/mL</span></label>
+        <input type="number" id="prolactin" name="prolactin" class="c-form-input"
+               placeholder="e.g. 18.0" min="0" max="500" step="0.1" required />
+      </div>
+
+      <span class="c-form-section">Metabolic &amp; Haematology</span>
+
+      <div class="c-form-group">
+        <label class="c-form-label" for="vit_d3">Vitamin D3 <span class="c-unit">ng/mL</span></label>
+        <input type="number" id="vit_d3" name="vit_d3" class="c-form-input"
+               placeholder="e.g. 21.5" min="0" max="150" step="0.1" required />
+      </div>
+      <div class="c-form-group">
+        <label class="c-form-label" for="rbs">Random Blood Sugar <span class="c-unit">mg/dL</span></label>
+        <input type="number" id="rbs" name="rbs" class="c-form-input"
+               placeholder="e.g. 135" min="0" max="600" step="1" required />
+      </div>
+      <div class="c-form-group">
+        <label class="c-form-label" for="hb">Haemoglobin <span class="c-unit">g/dL</span></label>
+        <input type="number" id="hb" name="hb" class="c-form-input"
+               placeholder="e.g. 12.8" min="0" max="25" step="0.1" required />
+      </div>
+      <div class="c-form-group">
+        <!-- Placeholder for future field -->
+      </div>
+
+      <span class="c-form-section">Blood Pressure</span>
+
+      <div class="c-form-group">
+        <label class="c-form-label" for="bp_systolic">Systolic <span class="c-unit">mmHg</span></label>
+        <input type="number" id="bp_systolic" name="bp_systolic" class="c-form-input"
+               placeholder="e.g. 118" min="60" max="250" step="1" required />
+      </div>
+      <div class="c-form-group">
+        <label class="c-form-label" for="bp_diastolic">Diastolic <span class="c-unit">mmHg</span></label>
+        <input type="number" id="bp_diastolic" name="bp_diastolic" class="c-form-input"
+               placeholder="e.g. 76" min="40" max="150" step="1" required />
+      </div>
+
+    </div><!-- end c-form-grid -->
+
+    <div class="c-form-actions">
+      <button type="submit" class="c-btn c-btn-primary">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M13 5L6.5 11.5 3 8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Submit &amp; Run Prediction
+      </button>
+      <button type="button" class="c-btn c-btn-ghost" data-clear-form="c-stage2-form">Clear</button>
+    </div>
+  </form>
+
+  {% else %}
+  <!-- Stage 1 not done yet -->
+  <div class="c-empty-state" style="padding:2rem 1rem;">
+    <div class="c-empty-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M12 22C6.48 22 2 17.52 2 12S6.48 2 12 2s10 4.48 10 10-4.48 10-10 10z"/>
+        <path d="M12 8v4M12 16h.01" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <p style="font-size:0.82rem; color:var(--slate-400); text-align:center; line-height:1.6; max-width:280px;">
+      Stage 2 entry is available after the patient completes Stage 1.
+    </p>
+  </div>
+  {% endif %}
+
+</div>

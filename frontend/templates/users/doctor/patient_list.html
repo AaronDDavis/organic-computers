@@ -1,81 +1,79 @@
-{% extends 'doctor_base.html' %}
+{% extends 'users/doctor/doctor_base.html' %}
+
+{% block page_title %}Patient Queue{% endblock %}
 
 {% block content %}
-<!-- ── Patient queue (full) ── -->
-<section id="dsec-patients" style="display:none;">
-    <div class="d-section-header" style="margin-bottom:1rem;">
-        <span class="d-section-title">All Patients</span>
+<div class="animate-fade">
+
+  <div class="d-page-header">
+    <h1>All Patients</h1>
+    <p>{{ patients.count }} patient{{ patients.count|pluralize }} in your queue</p>
+  </div>
+
+  <div class="d-table-wrap">
+
+    <!-- Search & filter toolbar -->
+    <div class="d-table-toolbar">
+      <input
+        type="search"
+        id="d-patient-search"
+        class="d-search-input"
+        placeholder="Search by patient name…"
+        autocomplete="off"
+      />
+      <select id="d-risk-filter" class="d-filter-select">
+        <option value="">All risk levels</option>
+        <option value="high">High</option>
+        <option value="medium">Medium</option>
+        <option value="low">Low</option>
+      </select>
     </div>
-    <div class="d-table-wrap">
-        <table class="d-table">
-        <thead>
-            <tr>
-            <th>Patient</th>
-            <th>Stage</th>
-            <th>Risk</th>
-            <th>Score</th>
-            <th>Journey Status</th>
-            <th>Last Updated</th>
-            <th>Flag</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr onclick="dNav('patient-detail')">
-            <td class="patient-name">Sarah Patel</td>
-            <td><div class="d-stage-pip"><span class="done"></span><span class="done"></span><span></span></div></td>
-            <td><span class="badge-risk high">High</span></td>
-            <td>0.8340</td>
-            <td><span class="badge-status in-progress">In Progress</span></td>
-            <td class="muted">3 days ago</td>
-            <td></td>
-            </tr>
-            <tr>
-            <td class="patient-name">Priya Nair</td>
-            <td><div class="d-stage-pip"><span class="done"></span><span class="done"></span><span class="done"></span></div></td>
-            <td><span class="badge-risk high">High</span></td>
-            <td>0.8120</td>
-            <td><span class="badge-status validated">Validated</span></td>
-            <td class="muted">1 day ago</td>
-            <td><span class="d-flag-badge">⚑ Delayed</span></td>
-            </tr>
-            <tr>
-            <td class="patient-name">Meera Iyer</td>
-            <td><div class="d-stage-pip"><span class="done"></span><span class="done"></span><span></span></div></td>
-            <td><span class="badge-risk medium">Medium</span></td>
-            <td>0.6250</td>
-            <td><span class="badge-status in-progress">In Progress</span></td>
-            <td class="muted">1 week ago</td>
-            <td></td>
-            </tr>
-            <tr>
-            <td class="patient-name">Ling Xiao</td>
-            <td><div class="d-stage-pip"><span class="done"></span><span></span><span></span></div></td>
-            <td><span class="badge-risk medium">Medium</span></td>
-            <td>0.5490</td>
-            <td><span class="badge-status in-progress">In Progress</span></td>
-            <td class="muted">5 days ago</td>
-            <td></td>
-            </tr>
-            <tr>
-            <td class="patient-name">Fatimah Aziz</td>
-            <td><div class="d-stage-pip"><span class="done"></span><span class="done"></span><span></span></div></td>
-            <td><span class="badge-risk low">Low</span></td>
-            <td>0.2310</td>
-            <td><span class="badge-status in-progress">In Progress</span></td>
-            <td class="muted">2 weeks ago</td>
-            <td></td>
-            </tr>
-            <tr>
-            <td class="patient-name">Aisha Rahmat</td>
-            <td><div class="d-stage-pip"><span class="done"></span><span class="done"></span><span class="done"></span></div></td>
-            <td><span class="badge-risk low">Low</span></td>
-            <td>0.1840</td>
-            <td><span class="badge-status complete">Complete</span></td>
-            <td class="muted">3 weeks ago</td>
-            <td></td>
-            </tr>
-        </tbody>
-        </table>
-    </div>
-</section>
+
+    <table class="d-table d-patient-table">
+      <thead>
+        <tr>
+          <th>Patient</th>
+          <th>Stage</th>
+          <th>Risk</th>
+          <th>Score</th>
+          <th>Journey Status</th>
+          <th>Last Updated</th>
+          <th>Flag</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for journey in journeys %}
+        <tr data-href="{% url 'patient_detail' journey.patient.id %}"
+            data-patient="{{ journey.patient.user.get_full_name|lower }}"
+            data-risk="{{ journey.risk_label|lower }}">
+          <td class="d-td-name">{{ journey.patient.user.get_full_name }}</td>
+          <td>
+            <div class="d-stage-pip" title="Stage {{ journey.current_stage }} of 3">
+              <span class="{% if journey.current_stage >= 1 %}done{% endif %}"></span>
+              <span class="{% if journey.current_stage >= 2 %}done{% endif %}"></span>
+              <span class="{% if journey.current_stage >= 3 %}done{% endif %}"></span>
+            </div>
+          </td>
+          <td><span class="badge-risk {{ journey.risk_label|lower }}">{{ journey.risk_label }}</span></td>
+          <td>{{ journey.latest_score|floatformat:4 }}</td>
+          <td><span class="badge-status {{ journey.status|lower|cut:' ' }}">{{ journey.status }}</span></td>
+          <td class="d-td-muted">{{ journey.updated_at|timesince }} ago</td>
+          <td>
+            {% if journey.is_delayed %}
+              <span class="d-flag-badge">⚑ Delayed</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="7" style="text-align:center; padding:2.5rem; color:var(--slate-400); font-size:0.84rem;">
+            No patients assigned to you yet.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</div>
 {% endblock content %}

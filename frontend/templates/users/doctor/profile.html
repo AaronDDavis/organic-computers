@@ -1,25 +1,64 @@
-{% extends 'doctor_base.html' %}
+{% extends 'users/doctor/doctor_base.html' %}
+
+{% block page_title %}My Profile{% endblock %}
 
 {% block content %}
-<!-- ── Doctor profile ── -->
-<section id="dsec-d-profile" style="display:none;">
-    <div class="d-profile-card">
-        <div class="d-profile-header">
-        <div class="d-profile-avatar">WC</div>
-        <div>
-            <div class="d-profile-name">Dr. Wei Chen</div>
-            <div class="d-profile-spec">Endocrinology</div>
-            <div class="d-profile-hospital">Raffles Hospital</div>
-        </div>
-        </div>
-        <div class="divider"></div>
-        <div class="d-kv-list">
-        <div class="d-kv"><span class="k">Username</span><span class="v">dr_chen</span></div>
-        <div class="d-kv"><span class="k">Email</span><span class="v">w.chen@raffleshospital.sg</span></div>
-        <div class="d-kv"><span class="k">Specialty</span><span class="v">Endocrinology</span></div>
-        <div class="d-kv"><span class="k">Hospital</span><span class="v">Raffles Hospital</span></div>
-        <div class="d-kv"><span class="k">Patients</span><span class="v">12</span></div>
-        </div>
+<div class="animate-fade">
+
+  <div class="d-page-header">
+    <h1>My Profile</h1>
+    <p>Your account and practice details</p>
+  </div>
+
+  <div class="d-profile-card">
+    <div class="d-profile-header">
+      <div class="d-profile-avatar">
+        {{ request.user.first_name.0 }}{{ request.user.last_name.0 }}
+      </div>
+      <div>
+        <div class="d-profile-name">Dr. {{ request.user.get_full_name }}</div>
+          <div class="d-profile-spec">{{ request.user.profile.specialty }}</div>
+          <div class="d-profile-hospital">{{ request.user.profile.hospital }}</div>
+      </div>
     </div>
-</section>
+
+    <div class="divider"></div>
+
+    <div class="d-kv-list">
+      <div class="d-kv">
+        <span class="k">Username</span>
+        <span class="v">{{ request.user.username }}</span>
+      </div>
+      <div class="d-kv">
+        <span class="k">Email</span>
+        <span class="v">{{ request.user.email }}</span>
+      </div>
+      <div class="d-kv">
+        <span class="k">Specialty</span>
+        <span class="v">{{ request.user.profile.specialty }}</span>
+      </div>
+      <div class="d-kv">
+        <span class="k">Hospital / Clinic</span>
+        <span class="v">{{ request.user.profile.hospital }}</span>
+      </div>
+      <div class="d-kv">
+        <span class="k">Patients Assigned</span>
+        <span class="v">{{ request.user.profile.patients.count }}</span>
+      </div>
+      <div class="d-kv">
+        <span class="k">Member Since</span>
+        <span class="v">{{ request.user.date_joined|date:"M Y" }}</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!--
+    <div style="display:flex; gap:0.65rem;">
+      <a href="{% url 'doctor_profile_edit' %}" class="d-btn d-btn-ghost d-btn-sm">Edit Profile</a>
+    </div>
+    -->
+  </div>
+
+</div>
 {% endblock content %}

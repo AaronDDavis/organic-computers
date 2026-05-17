@@ -1,0 +1,104 @@
+<!-- partials/clinician/_stage1card.html -->
+<!-- Stage 1 is patient-entered. Clinician view is read-only. -->
+
+<div class="c-section-header" style="margin-top:0.25rem;">
+  <span class="c-section-title">Stage 1 — Symptomatic &amp; Lifestyle</span>
+  <span class="text-xs text-muted">Patient-reported</span>
+</div>
+
+{% if stage1_data %}
+<div class="c-two-col" style="margin-bottom:1.1rem;">
+
+  <div class="c-detail-card" style="margin-bottom:0;">
+    <h3>Symptoms</h3>
+    <div class="c-kv-list">
+      <div class="c-kv">
+        <span class="k">Age</span>
+        <span class="v">{{ stage1_data.age }} yrs</span>
+      </div>
+      <div class="c-kv">
+        <span class="k">BMI</span>
+        <span class="v {% if stage1_data.bmi > 30 %}flagged{% elif stage1_data.bmi > 25 %}elevated{% endif %}">
+          {{ stage1_data.bmi }}
+        </span>
+      </div>
+      <div class="c-kv">
+        <span class="k">Cycle Regularity</span>
+        <span class="v {% if stage1_data.cycle_irregular %}flagged{% endif %}">
+          {{ stage1_data.cycle_regularity_display }}
+        </span>
+      </div>
+      <div class="c-kv">
+        <span class="k">Cycle Length</span>
+        <span class="v {% if stage1_data.cycle_length > 35 %}flagged{% elif stage1_data.cycle_length > 30 %}elevated{% endif %}">
+          {{ stage1_data.cycle_length }} days
+        </span>
+      </div>
+      <div class="c-kv">
+        <span class="k">Excess Hair Growth</span>
+        <span class="v">{{ stage1_data.hair_growth|yesno:"Yes,No" }}</span>
+      </div>
+      <div class="c-kv">
+        <span class="k">Skin Darkening</span>
+        <span class="v">{{ stage1_data.skin_darkening|yesno:"Yes,No" }}</span>
+      </div>
+      <div class="c-kv">
+        <span class="k">Hair Loss</span>
+        <span class="v">{{ stage1_data.hair_loss|yesno:"Yes,No" }}</span>
+      </div>
+      <div class="c-kv">
+        <span class="k">Acne / Pimples</span>
+        <span class="v">{{ stage1_data.pimples|yesno:"Yes,No" }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="c-detail-card" style="margin-bottom:0;">
+    <h3>Lifestyle</h3>
+    <div class="c-kv-list">
+      <div class="c-kv">
+        <span class="k">Weight Gain</span>
+        <span class="v {% if stage1_data.weight_gain %}elevated{% endif %}">
+          {{ stage1_data.weight_gain|yesno:"Yes,No" }}
+        </span>
+      </div>
+      <div class="c-kv">
+        <span class="k">Regular Fast Food</span>
+        <span class="v {% if stage1_data.fast_food %}elevated{% endif %}">
+          {{ stage1_data.fast_food|yesno:"Yes,No" }}
+        </span>
+      </div>
+      <div class="c-kv">
+        <span class="k">Regular Exercise</span>
+        <span class="v {% if not stage1_data.regular_exercise %}elevated{% endif %}">
+          {{ stage1_data.regular_exercise|yesno:"Yes,No" }}
+        </span>
+      </div>
+      {% if stage1_result %}
+      <div class="divider"></div>
+      <div class="c-kv">
+        <span class="k">Stage 1 Score</span>
+        <span class="v {% if stage1_result.score > 0.65 %}flagged{% elif stage1_result.score > 0.45 %}elevated{% endif %}">
+          {{ stage1_result.score|floatformat:4 }}
+        </span>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+</div>
+{% else %}
+<div class="c-detail-card" style="margin-bottom:1.1rem;">
+  <div class="c-empty-state" style="padding:2rem 1rem;">
+    <div class="c-empty-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M12 8v4M12 16h.01" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <p style="font-size:0.82rem; color:var(--slate-400); text-align:center; line-height:1.6; max-width:260px;">
+      Patient has not completed Stage 1 yet.
+    </p>
+  </div>
+</div>
+{% endif %}

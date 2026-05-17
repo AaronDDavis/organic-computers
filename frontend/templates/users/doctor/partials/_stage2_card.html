@@ -1,0 +1,90 @@
+<div class="d-section-header">
+  <span class="d-section-title">Stage 2 — Hormonal &amp; Lab Values</span>
+  <span class="text-xs text-muted">Patient-reported (lab results)</span>
+</div>
+<div class="d-two-col" style="margin-bottom:1.1rem;">
+  <div class="d-detail-card" style="margin-bottom:0;">
+    <h3>Reproductive Hormones</h3>
+    <div class="d-kv-list">
+      <div class="d-kv">
+        <span class="k">FSH</span>
+        <span class="v">{{ stage2_data.fsh }} mIU/mL</span>
+      </div>
+      <div class="d-kv">
+        <span class="k">LH</span>
+        <span class="v {% if stage2_data.lh > 10 %}flagged{% endif %}">
+          {{ stage2_data.lh }} mIU/mL{% if stage2_data.lh > 10 %} ↑{% endif %}
+        </span>
+      </div>
+      <div class="d-kv">
+        <span class="k">FSH/LH Ratio</span>
+        <span class="v {% if stage2_data.fsh_lh_ratio < 1 %}flagged{% endif %}">
+          {{ stage2_data.fsh_lh_ratio|floatformat:2 }}
+          {% if stage2_data.fsh_lh_ratio < 1 %} ↓{% endif %}
+        </span>
+      </div>
+      <div class="d-kv">
+        <span class="k">AMH</span>
+        <span class="v {% if stage2_data.amh > 4.5 %}flagged{% endif %}">
+          {{ stage2_data.amh }} ng/mL{% if stage2_data.amh > 4.5 %} ↑{% endif %}
+        </span>
+      </div>
+      <div class="d-kv">
+        <span class="k">TSH</span>
+        <span class="v {% if stage2_data.tsh > 4.5 or stage2_data.tsh < 0.4 %}elevated{% endif %}">
+          {{ stage2_data.tsh }} mIU/L
+        </span>
+      </div>
+      <div class="d-kv">
+        <span class="k">Prolactin</span>
+        <span class="v {% if stage2_data.prolactin > 25 %}elevated{% endif %}">
+          {{ stage2_data.prolactin }} ng/mL
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="d-detail-card" style="margin-bottom:0;">
+    <h3>Metabolic &amp; Haematology</h3>
+    <div class="d-kv-list">
+      <div class="d-kv">
+        <span class="k">Random Blood Sugar</span>
+        <span class="v {% if stage2_data.rbs > 140 %}flagged{% elif stage2_data.rbs > 110 %}elevated{% endif %}">
+          {{ stage2_data.rbs }} mg/dL{% if stage2_data.rbs > 110 %} ~{% endif %}
+        </span>
+      </div>
+      <div class="d-kv">
+        <span class="k">Haemoglobin</span>
+        <span class="v {% if stage2_data.hb < 11 %}flagged{% elif stage2_data.hb < 12 %}elevated{% endif %}">
+          {{ stage2_data.hb }} g/dL
+        </span>
+      </div>
+      <div class="d-kv">
+        <span class="k">Vitamin D3</span>
+        <span class="v {% if stage2_data.vit_d3 < 20 %}flagged{% elif stage2_data.vit_d3 < 30 %}elevated{% endif %}">
+          {{ stage2_data.vit_d3 }} ng/mL{% if stage2_data.vit_d3 < 30 %} ↓{% endif %}
+        </span>
+      </div>
+      <div class="d-kv">
+        <span class="k">BP Systolic</span>
+        <span class="v {% if stage2_data.bp_systolic > 130 %}elevated{% endif %}">
+          {{ stage2_data.bp_systolic }} mmHg
+        </span>
+      </div>
+      <div class="d-kv">
+        <span class="k">BP Diastolic</span>
+        <span class="v {% if stage2_data.bp_diastolic > 85 %}elevated{% endif %}">
+          {{ stage2_data.bp_diastolic }} mmHg
+        </span>
+      </div>
+      {% if stage2_result %}
+      <div class="divider"></div>
+      <div class="d-kv">
+        <span class="k">Stage 2 Score</span>
+        <span class="v {% if stage2_result.score > 0.65 %}flagged{% elif stage2_result.score > 0.45 %}elevated{% endif %}">
+          {{ stage2_result.score|floatformat:4 }}
+        </span>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>

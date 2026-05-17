@@ -1,0 +1,24 @@
+<div class="d-patient-header">
+  <div class="d-patient-avatar">
+    {{ patient.user.first_name.0 }}{{ patient.user.last_name.0 }}
+  </div>
+  <div style="flex:1;">
+    <div class="d-patient-name">{{ patient.user.get_full_name }}</div>
+    <div class="d-patient-meta">
+      {% if patient.date_of_birth %}DOB: {{ patient.date_of_birth|date:"d M Y" }} · {% endif %}
+      {{ patient.user.username }}
+    </div>
+    <div class="d-patient-header__badges">
+      {% if journey.risk_label %}
+        <span class="badge-risk {{ journey.risk_label|lower }}">{{ journey.risk_label }} Risk</span>
+      {% endif %}
+      {% if journey.status %}
+        <span class="badge-status {{ journey.status|lower|cut:' ' }}">{{ journey.status }}</span>
+      {% endif %}
+      <span class="text-xs text-muted">Stage {{ journey.current_stage }} of 3 complete</span>
+      {% if journey.is_delayed %}
+        <span class="d-flag-badge">⚑ Delayed &gt;60 days</span>
+      {% endif %}
+    </div>
+  </div>
+</div>

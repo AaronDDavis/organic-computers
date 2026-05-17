@@ -1,0 +1,58 @@
+<!-- partials/doctor/_stage3card.html -->
+<!-- Stage 3 data is entered by the clinician. This view is read-only for the doctor. -->
+
+<div class="d-section-header" style="margin-top:0.25rem;">
+  <span class="d-section-title">Stage 3 — Ultrasound Findings</span>
+  {% if stage3_data %}
+    <span class="text-xs text-muted">Submitted {{ stage3_data.submitted_at|timesince }} ago</span>
+  {% else %}
+    <span class="text-xs" style="color:var(--risk-med); font-weight:500;">Awaiting clinician entry</span>
+  {% endif %}
+</div>
+
+<div class="d-detail-card">
+  <h3>Pelvic Ultrasound Data</h3>
+
+  {% if stage3_data %}
+  <div class="d-kv-list">
+    <div class="d-kv">
+      <span class="k">Left Ovary — Follicle Count</span>
+      <span class="v {% if stage3_data.follicle_no_l >= 12 %}flagged{% endif %}">
+        {{ stage3_data.follicle_no_l }}{% if stage3_data.follicle_no_l >= 12 %} ↑{% endif %}
+      </span>
+    </div>
+    <div class="d-kv">
+      <span class="k">Right Ovary — Follicle Count</span>
+      <span class="v {% if stage3_data.follicle_no_r >= 12 %}flagged{% endif %}">
+        {{ stage3_data.follicle_no_r }}{% if stage3_data.follicle_no_r >= 12 %} ↑{% endif %}
+      </span>
+    </div>
+    <div class="d-kv">
+      <span class="k">Left Ovary — Avg. Follicle Size</span>
+      <span class="v">{{ stage3_data.avg_f_size_l }} mm</span>
+    </div>
+    <div class="d-kv">
+      <span class="k">Right Ovary — Avg. Follicle Size</span>
+      <span class="v">{{ stage3_data.avg_f_size_r }} mm</span>
+    </div>
+    <div class="d-kv">
+      <span class="k">Endometrial Thickness</span>
+      <span class="v {% if stage3_data.endometrium < 7 or stage3_data.endometrium > 14 %}elevated{% endif %}">
+        {{ stage3_data.endometrium }} mm
+      </span>
+    </div>
+  </div>
+
+  {% else %}
+  <div class="d-empty-state" style="padding:2rem 1rem;">
+    <div class="d-empty-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <p style="font-size:0.82rem; color:var(--slate-400); text-align:center; line-height:1.6; max-width:260px;">
+      Ultrasound data has not been entered yet. The assigned clinician will submit this once imaging is complete.
+    </p>
+  </div>
+  {% endif %}
+</div>

@@ -1,19 +1,22 @@
-/* doctor.css — PCOSense doctor side */
-/* Font: IBM Plex Sans — structured, clinical, data-dense */
+/* doctor.css — PCOSense Clinical Portal */
+/* Font: IBM Plex Sans — structured, data-dense, clinical */
+/* Design language mirrors patient side: same tokens, same card system, same teal palette */
 
-/* ── Layout ───────────────────────────────────────────── */
+/* ── Shell layout ─────────────────────────────────────── */
 .doctor-shell {
   font-family: 'IBM Plex Sans', sans-serif;
   min-height: 100vh;
-  background: var(--slate-100);
+  background: var(--slate-50);
   display: flex;
   flex-direction: row;
   width: 100%;
 }
 
-/* ── Sidebar ──────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════
+   SIDEBAR
+══════════════════════════════════════════════════════ */
 .d-sidebar {
-  width: 228px;
+  width: 232px;
   min-height: 100vh;
   background: var(--slate-800);
   display: flex;
@@ -21,157 +24,335 @@
   position: fixed;
   top: 0; left: 0;
   z-index: 200;
-  transition: width 0.2s;
+  transition: width 0.22s cubic-bezier(0.4, 0, 0.2, 1);
   flex-shrink: 0;
+  overflow: hidden;
 }
 
+/* Collapsed state */
+.doctor-shell.sidebar-collapsed .d-sidebar {
+  width: 60px;
+}
+.doctor-shell.sidebar-collapsed .d-sidebar__brand-text,
+.doctor-shell.sidebar-collapsed .d-sidebar__section-label,
+.doctor-shell.sidebar-collapsed .d-sidebar__doctor-text,
+.doctor-shell.sidebar-collapsed .d-nav-link span,
+.doctor-shell.sidebar-collapsed .d-logout-btn span {
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.doctor-shell.sidebar-collapsed .d-sidebar__brand {
+  justify-content: center;
+  padding: 1.1rem 0;
+}
+.doctor-shell.sidebar-collapsed .d-nav-link {
+  justify-content: center;
+  padding: 10px;
+}
+.doctor-shell.sidebar-collapsed .d-sidebar__doctor-info {
+  justify-content: center;
+}
+.doctor-shell.sidebar-collapsed .d-logout-btn {
+  justify-content: center;
+  padding: 8px;
+}
+.doctor-shell.sidebar-collapsed .d-main {
+  margin-left: 60px;
+}
+
+/* ── Brand ──────────────────────────────────────────── */
 .d-sidebar__brand {
   display: flex; align-items: center; gap: 10px;
-  padding: 1.25rem 1.25rem 1rem;
+  padding: 1.2rem 1.1rem 1rem;
   border-bottom: 1px solid rgba(255,255,255,0.07);
+  flex-shrink: 0;
+  transition: padding 0.22s, justify-content 0.22s;
 }
 .d-sidebar__logo {
   width: 32px; height: 32px; border-radius: 8px;
   background: var(--teal-500);
   display: flex; align-items: center; justify-content: center;
-  color: #fff; font-size: 0.85rem; font-weight: 700;
+  color: #fff; font-size: 0.82rem; font-weight: 700;
   flex-shrink: 0;
+  letter-spacing: 0.02em;
+}
+.d-sidebar__brand-text {
+  transition: opacity 0.15s, width 0.22s;
+  white-space: nowrap;
+  overflow: hidden;
 }
 .d-sidebar__name {
-  font-size: 1rem; font-weight: 600; color: #fff;
+  font-size: 0.95rem; font-weight: 600; color: #fff;
   letter-spacing: -0.01em;
 }
 .d-sidebar__role-tag {
-  font-size: 0.62rem; font-weight: 500; letter-spacing: 0.08em;
+  font-size: 0.6rem; font-weight: 500; letter-spacing: 0.09em;
   text-transform: uppercase; color: var(--teal-400);
   display: block; margin-top: 1px;
 }
 
+/* ── Nav ────────────────────────────────────────────── */
 .d-sidebar__nav {
-  flex: 1; padding: 1rem 0.75rem; display: flex; flex-direction: column; gap: 2px;
+  flex: 1; padding: 0.85rem 0.65rem;
+  display: flex; flex-direction: column; gap: 1px;
 }
-.d-sidebar__nav a {
-  display: flex; align-items: center; gap: 10px;
-  font-size: 0.85rem; font-weight: 400; color: rgba(255,255,255,0.55);
-  text-decoration: none; padding: 8px 12px; border-radius: var(--radius-sm);
-  transition: background 0.15s, color 0.15s;
-  white-space: nowrap;
-}
-.d-sidebar__nav a:hover  { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.85); }
-.d-sidebar__nav a.active { background: rgba(255,255,255,0.10); color: #fff; font-weight: 500; }
-.d-sidebar__nav a svg    { width: 16px; height: 16px; flex-shrink: 0; opacity: 0.7; }
-.d-sidebar__nav a.active svg { opacity: 1; }
-
 .d-sidebar__section-label {
-  font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em;
-  text-transform: uppercase; color: rgba(255,255,255,0.25);
-  padding: 1rem 12px 0.35rem; margin-top: 0.5rem;
+  font-size: 0.62rem; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; color: rgba(255,255,255,0.22);
+  padding: 0.85rem 10px 0.3rem;
+  white-space: nowrap; overflow: hidden;
+  transition: opacity 0.15s;
+}
+.d-nav-link {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 0.84rem; font-weight: 400;
+  color: rgba(255,255,255,0.5);
+  text-decoration: none; padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  transition: background 0.14s, color 0.14s;
+  white-space: nowrap;
+  position: relative;
+}
+.d-nav-link:hover {
+  background: rgba(255,255,255,0.07);
+  color: rgba(255,255,255,0.85);
+}
+.d-nav-link.active {
+  background: rgba(255,255,255,0.10);
+  color: #fff; font-weight: 500;
+}
+.d-nav-link svg {
+  width: 16px; height: 16px; flex-shrink: 0;
+  opacity: 0.6; transition: opacity 0.14s;
+}
+.d-nav-link:hover svg,
+.d-nav-link.active svg { opacity: 1; }
+
+/* Collapsed tooltip */
+.doctor-shell.sidebar-collapsed .d-nav-link[data-tooltip]:hover::after {
+  content: attr(data-tooltip);
+  position: absolute; left: calc(100% + 12px); top: 50%;
+  transform: translateY(-50%);
+  background: var(--slate-700);
+  color: #fff; font-size: 0.78rem; font-weight: 500;
+  padding: 5px 10px; border-radius: var(--radius-sm);
+  white-space: nowrap; pointer-events: none;
+  box-shadow: var(--shadow-md); z-index: 300;
 }
 
+/* ── Sidebar footer ─────────────────────────────────── */
 .d-sidebar__footer {
-  padding: 0.75rem; border-top: 1px solid rgba(255,255,255,0.07);
+  padding: 0.65rem; border-top: 1px solid rgba(255,255,255,0.07);
+  flex-shrink: 0;
 }
 .d-sidebar__doctor-info {
-  display: flex; align-items: center; gap: 10px;
-  padding: 8px 10px; border-radius: var(--radius-sm);
+  display: flex; align-items: center; gap: 9px;
+  padding: 7px 8px; border-radius: var(--radius-sm);
+  overflow: hidden;
+  transition: justify-content 0.22s;
 }
 .d-sidebar__avatar {
-  width: 32px; height: 32px; border-radius: 50%;
+  width: 30px; height: 30px; border-radius: 50%;
   background: var(--teal-600); color: #fff;
-  font-size: 0.75rem; font-weight: 600;
+  font-size: 0.72rem; font-weight: 600;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
-.d-sidebar__doctor-name { font-size: 0.82rem; font-weight: 500; color: rgba(255,255,255,0.8); }
-.d-sidebar__doctor-spec { font-size: 0.72rem; color: rgba(255,255,255,0.35); }
+.d-sidebar__doctor-text {
+  overflow: hidden; transition: opacity 0.15s, width 0.22s;
+}
+.d-sidebar__doctor-name {
+  font-size: 0.8rem; font-weight: 500;
+  color: rgba(255,255,255,0.75);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  max-width: 140px;
+}
+.d-sidebar__doctor-spec {
+  font-size: 0.7rem; color: rgba(255,255,255,0.3);
+  white-space: nowrap;
+}
 .d-logout-btn {
   font-family: 'IBM Plex Sans', sans-serif;
-  font-size: 0.78rem; color: rgba(255,255,255,0.3);
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.78rem; color: rgba(255,255,255,0.28);
   background: none; border: none; cursor: pointer;
-  padding: 4px 10px; margin-top: 4px; border-radius: var(--radius-sm);
-  transition: background 0.15s, color 0.15s; display: block; width: 100%;
-  text-align: left;
+  padding: 7px 10px; margin-top: 2px;
+  border-radius: var(--radius-sm);
+  transition: background 0.14s, color 0.14s;
+  width: 100%; text-align: left;
+  white-space: nowrap; overflow: hidden;
 }
-.d-logout-btn:hover { background: rgba(255,0,0,0.1); color: #ff8080; }
+.d-logout-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+.d-logout-btn:hover { background: rgba(232,69,69,0.12); color: #ff8888; }
 
-/* ── Main content ─────────────────────────────────────── */
+
+/* ══════════════════════════════════════════════════════
+   MAIN AREA
+══════════════════════════════════════════════════════ */
 .d-main {
-  margin-left: 228px;
+  margin-left: 232px;
   flex: 1;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  transition: margin-left 0.22s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ── Topbar ─────────────────────────────────────────── */
 .d-topbar {
   background: #fff;
   border-bottom: 1px solid var(--slate-200);
-  padding: 0 2rem;
-  height: 56px;
+  padding: 0 1.75rem;
+  height: 54px;
   display: flex; align-items: center; justify-content: space-between;
   position: sticky; top: 0; z-index: 100;
+  flex-shrink: 0;
+}
+.d-topbar__left {
+  display: flex; align-items: center; gap: 0.85rem;
+}
+.d-topbar__right {
+  display: flex; align-items: center; gap: 0.85rem;
 }
 .d-topbar__title {
-  font-size: 0.95rem; font-weight: 600; color: var(--slate-700);
+  font-size: 0.9rem; font-weight: 600; color: var(--slate-700);
+  letter-spacing: -0.01em;
 }
-.d-topbar__actions { display: flex; align-items: center; gap: 0.75rem; }
+.d-topbar__date { color: var(--slate-400); font-size: 0.78rem; }
+.d-topbar__avatar {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--teal-100); color: var(--teal-700);
+  font-size: 0.72rem; font-weight: 600;
+  display: flex; align-items: center; justify-content: center;
+  cursor: default; flex-shrink: 0;
+}
 
-.d-content { padding: 1.75rem 2rem; }
+/* Sidebar toggle button */
+.d-sidebar-toggle {
+  background: none; border: none; cursor: pointer;
+  padding: 5px; border-radius: var(--radius-sm);
+  color: var(--slate-400); display: flex;
+  transition: background 0.14s, color 0.14s;
+}
+.d-sidebar-toggle:hover { background: var(--slate-100); color: var(--slate-700); }
+.d-sidebar-toggle svg { width: 16px; height: 16px; }
 
-/* ── Dashboard stats ──────────────────────────────────── */
+/* Breadcrumb */
+.d-breadcrumb {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 0.78rem; color: var(--slate-400);
+}
+.d-breadcrumb a {
+  color: var(--slate-400); text-decoration: none;
+  transition: color 0.14s;
+}
+.d-breadcrumb a:hover { color: var(--teal-600); }
+.d-breadcrumb__sep { color: var(--slate-300); font-size: 0.7rem; }
+.d-breadcrumb__current { color: var(--slate-600); font-weight: 500; }
+
+/* ── Content area ───────────────────────────────────── */
+.d-content {
+  padding: 1.75rem 2rem;
+  flex: 1;
+}
+
+/* ── Page header ────────────────────────────────────── */
+.d-page-header {
+  margin-bottom: 1.5rem;
+}
+.d-page-header h1 {
+  font-size: 1.35rem; font-weight: 600;
+  color: var(--slate-800); letter-spacing: -0.02em;
+}
+.d-page-header p {
+  font-size: 0.875rem; color: var(--slate-400); margin-top: 3px;
+}
+
+
+/* ══════════════════════════════════════════════════════
+   DASHBOARD — STAT GRID
+══════════════════════════════════════════════════════ */
 .d-stat-grid {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;
-  margin-bottom: 1.75rem;
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 1rem; margin-bottom: 1.75rem;
 }
 .d-stat-card {
-  background: #fff; border-radius: var(--radius-md);
+  background: #fff;
+  border-radius: var(--radius-md);
   border: 1px solid var(--slate-200);
   padding: 1.1rem 1.25rem;
+  position: relative; overflow: hidden;
+  transition: box-shadow 0.15s;
 }
-.d-stat-card .d-stat-label {
-  font-size: 0.72rem; font-weight: 500; color: var(--slate-400);
-  text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px;
+.d-stat-card:hover { box-shadow: var(--shadow-md); }
+
+/* Left accent bar */
+.d-stat-card::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 3px; border-radius: 3px 0 0 3px;
+  background: var(--slate-200);
 }
-.d-stat-card .d-stat-value {
-  font-size: 1.6rem; font-weight: 600; color: var(--slate-800);
-  letter-spacing: -0.02em; line-height: 1;
+.d-stat-card.accent-high::before { background: var(--risk-high); }
+.d-stat-card.accent-med::before  { background: var(--risk-med); }
+.d-stat-card.accent-teal::before { background: var(--teal-400); }
+
+.d-stat-label {
+  font-size: 0.7rem; font-weight: 600; letter-spacing: 0.07em;
+  text-transform: uppercase; color: var(--slate-400);
+  margin-bottom: 6px;
 }
-.d-stat-card .d-stat-sub {
-  font-size: 0.75rem; color: var(--slate-400); margin-top: 4px;
+.d-stat-value {
+  font-size: 1.65rem; font-weight: 600;
+  color: var(--slate-800); letter-spacing: -0.03em; line-height: 1;
+}
+.d-stat-sub {
+  font-size: 0.74rem; color: var(--slate-400); margin-top: 5px;
 }
 .d-stat-card.accent-high .d-stat-value { color: var(--risk-high); }
+.d-stat-card.accent-med  .d-stat-value { color: var(--risk-med); }
 .d-stat-card.accent-teal .d-stat-value { color: var(--teal-500); }
 
-/* ── Section header ───────────────────────────────────── */
+
+/* ══════════════════════════════════════════════════════
+   SECTION HEADER
+══════════════════════════════════════════════════════ */
 .d-section-header {
   display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 1rem;
+  margin-bottom: 0.85rem;
 }
 .d-section-title {
-  font-size: 0.82rem; font-weight: 600; letter-spacing: 0.06em;
+  font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em;
   text-transform: uppercase; color: var(--slate-400);
 }
 
-/* ── Patient queue table ──────────────────────────────── */
+
+/* ══════════════════════════════════════════════════════
+   PATIENT QUEUE TABLE
+══════════════════════════════════════════════════════ */
 .d-table-wrap {
   background: #fff;
   border-radius: var(--radius-lg);
   border: 1px solid var(--slate-200);
+  box-shadow: var(--shadow-sm);
   overflow: hidden;
   margin-bottom: 1.75rem;
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch; 
+  -webkit-overflow-scrolling: touch;
 }
 .d-table {
-  width: 100%;
-  min-width: 650px;
+  width: 100%; min-width: 640px;
   border-collapse: collapse;
 }
 .d-table thead tr {
-  border-bottom: 1px solid var(--slate-200);
+  border-bottom: 1px solid var(--slate-100);
+  background: var(--slate-50);
 }
 .d-table thead th {
-  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em;
+  font-size: 0.7rem; font-weight: 600; letter-spacing: 0.07em;
   text-transform: uppercase; color: var(--slate-400);
   padding: 10px 16px; text-align: left; white-space: nowrap;
 }
@@ -181,112 +362,216 @@
   cursor: pointer;
 }
 .d-table tbody tr:last-child { border-bottom: none; }
-.d-table tbody tr:hover { background: var(--slate-50); }
+.d-table tbody tr:hover { background: var(--teal-50); }
 .d-table td {
-  padding: 12px 16px; font-size: 0.85rem; color: var(--slate-700);
+  padding: 11px 16px; font-size: 0.84rem; color: var(--slate-600);
 }
-.d-table td.patient-name { font-weight: 500; color: var(--slate-800); }
-.d-table td.muted        { color: var(--slate-400); font-size: 0.8rem; }
+.d-table td.d-td-name {
+  font-weight: 500; color: var(--slate-800);
+}
+.d-table td.d-td-muted { color: var(--slate-400); font-size: 0.78rem; }
 
-.d-flag-badge {
-  display: inline-flex; align-items: center; gap: 4px;
-  font-size: 0.68rem; font-weight: 600; letter-spacing: 0.04em;
-  text-transform: uppercase; padding: 2px 8px; border-radius: 99px;
-  background: #fff8ec; color: #b06010; border: 1px solid #f0c070;
-}
-
-.d-stage-pip {
-  display: inline-flex; gap: 3px;
-}
+/* Stage pips */
+.d-stage-pip { display: inline-flex; gap: 3px; align-items: center; }
 .d-stage-pip span {
-  width: 8px; height: 8px; border-radius: 2px;
+  width: 9px; height: 9px; border-radius: 2px;
   background: var(--slate-200);
+  transition: background 0.14s;
 }
 .d-stage-pip span.done { background: var(--teal-400); }
 
-/* ── Patient detail page ──────────────────────────────── */
+/* Flag badge */
+.d-flag-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 0.67rem; font-weight: 600; letter-spacing: 0.04em;
+  text-transform: uppercase; padding: 2px 8px; border-radius: 99px;
+  background: #fff8ec; color: #b06010; border: 1px solid #f0c070;
+  white-space: nowrap;
+}
+
+/* Search / filter bar */
+.d-table-toolbar {
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--slate-100);
+  background: #fff;
+}
+.d-search-input {
+  flex: 1; font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.84rem; color: var(--slate-700);
+  border: 1px solid var(--slate-200); border-radius: var(--radius-sm);
+  padding: 7px 12px; outline: none; background: var(--slate-50);
+  transition: border-color 0.15s, background 0.15s;
+  min-width: 0;
+}
+.d-search-input::placeholder { color: var(--slate-300); }
+.d-search-input:focus { border-color: var(--teal-400); background: #fff; }
+
+.d-filter-select {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.82rem; color: var(--slate-600);
+  border: 1px solid var(--slate-200); border-radius: var(--radius-sm);
+  padding: 7px 10px; outline: none; background: #fff;
+  cursor: pointer; transition: border-color 0.15s;
+}
+.d-filter-select:focus { border-color: var(--teal-400); }
+
+
+/* ══════════════════════════════════════════════════════
+   PATIENT DETAIL
+══════════════════════════════════════════════════════ */
 .d-back-btn {
   display: inline-flex; align-items: center; gap: 6px;
-  font-size: 0.82rem; color: var(--slate-400); background: none; border: none;
-  cursor: pointer; padding: 4px 0; margin-bottom: 1.25rem;
-  font-family: 'IBM Plex Sans', sans-serif; transition: color 0.15s;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.82rem; color: var(--slate-400);
+  background: none; border: none; cursor: pointer;
+  padding: 4px 0; margin-bottom: 1.25rem;
+  transition: color 0.14s; text-decoration: none;
 }
-.d-back-btn:hover { color: var(--slate-700); }
+.d-back-btn:hover { color: var(--teal-600); }
+.d-back-btn svg { width: 14px; height: 14px; }
 
+/* Patient header banner */
 .d-patient-header {
   background: #fff; border-radius: var(--radius-lg);
-  border: 1px solid var(--slate-200);
-  padding: 1.5rem; margin-bottom: 1.25rem;
+  border: 1px solid var(--slate-200); box-shadow: var(--shadow-sm);
+  padding: 1.4rem 1.5rem; margin-bottom: 1.25rem;
   display: flex; align-items: center; gap: 1.25rem;
 }
 .d-patient-avatar {
-  width: 52px; height: 52px; border-radius: 50%;
+  width: 50px; height: 50px; border-radius: 50%;
   background: var(--teal-100); color: var(--teal-700);
-  font-size: 1.1rem; font-weight: 600;
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  font-size: 1.05rem; font-weight: 600;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
 }
-.d-patient-name { font-size: 1.1rem; font-weight: 600; color: var(--slate-800); }
-.d-patient-meta { font-size: 0.8rem; color: var(--slate-400); margin-top: 3px; }
-.d-patient-header__badges { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+.d-patient-name { font-size: 1.05rem; font-weight: 600; color: var(--slate-800); }
+.d-patient-meta { font-size: 0.79rem; color: var(--slate-400); margin-top: 3px; }
+.d-patient-header__badges {
+  display: flex; gap: 7px; flex-wrap: wrap; margin-top: 8px;
+  align-items: center;
+}
 
+/* Two-column grid */
 .d-two-col {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;
-  margin-bottom: 1.25rem;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 1.1rem; margin-bottom: 1.1rem;
 }
 
+/* Detail cards */
 .d-detail-card {
   background: #fff; border-radius: var(--radius-lg);
-  border: 1px solid var(--slate-200); padding: 1.25rem;
+  border: 1px solid var(--slate-200); box-shadow: var(--shadow-sm);
+  padding: 1.2rem 1.25rem;
+  margin-bottom: 1.1rem;
 }
-.d-detail-card h3 {
-  font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em;
-  text-transform: uppercase; color: var(--slate-400); margin-bottom: 1rem;
+.d-detail-card:last-child { margin-bottom: 0; }
+.d-detail-card > h3 {
+  font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--slate-400);
+  margin-bottom: 1rem; padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--slate-100);
 }
 
-.d-kv-list { display: flex; flex-direction: column; gap: 0.6rem; }
-.d-kv { display: flex; justify-content: space-between; align-items: baseline; }
-.d-kv .k { font-size: 0.8rem; color: var(--slate-400); }
-.d-kv .v { font-size: 0.85rem; font-weight: 500; color: var(--slate-700); text-align: right; }
-.d-kv .v.flagged { color: var(--risk-high); }
+/* Key-value rows */
+.d-kv-list { display: flex; flex-direction: column; gap: 0.55rem; }
+.d-kv {
+  display: flex; justify-content: space-between; align-items: baseline;
+  gap: 0.5rem;
+}
+.d-kv .k { font-size: 0.8rem; color: var(--slate-400); white-space: nowrap; }
+.d-kv .v {
+  font-size: 0.84rem; font-weight: 500; color: var(--slate-700);
+  text-align: right;
+}
+.d-kv .v.flagged  { color: var(--risk-high); }
 .d-kv .v.elevated { color: var(--risk-med); }
+.d-kv .v.normal   { color: var(--risk-low); }
 
+/* Rotterdam criteria */
 .d-rotterdam-grid {
-  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem;
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.7rem;
 }
 .d-rotterdam-item {
   border-radius: var(--radius-sm); padding: 10px 12px;
-  border: 1px solid var(--slate-200);
+  border: 1px solid var(--slate-200); background: var(--slate-50);
 }
-.d-rotterdam-item.met   { border-color: var(--risk-low); background: var(--risk-low-bg); }
-.d-rotterdam-item.unmet { border-color: var(--slate-200); background: var(--slate-50); }
+.d-rotterdam-item.met {
+  border-color: var(--risk-low); background: var(--risk-low-bg);
+}
+.d-rotterdam-item.unmet {
+  border-color: var(--slate-200); background: var(--slate-50);
+}
 .d-rotterdam-item .criterion {
-  font-size: 0.72rem; font-weight: 600; text-transform: uppercase;
-  letter-spacing: 0.04em; color: var(--slate-400); margin-bottom: 4px;
+  font-size: 0.68rem; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.05em; color: var(--slate-400); margin-bottom: 4px;
 }
 .d-rotterdam-item.met .criterion { color: var(--risk-low); }
 .d-rotterdam-item .criterion-val {
-  font-size: 0.82rem; font-weight: 500; color: var(--slate-600);
+  font-size: 0.81rem; font-weight: 500; color: var(--slate-600);
 }
 
-/* Doctor note textarea */
+/* ── Stage 3 form ───────────────────────────────────── */
+.d-stage3-form {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem;
+}
+.d-form-group { display: flex; flex-direction: column; gap: 5px; }
+.d-form-label {
+  font-size: 0.76rem; font-weight: 500; color: var(--slate-500);
+  letter-spacing: 0.01em;
+}
+.d-form-label .d-unit {
+  font-size: 0.7rem; color: var(--slate-400); font-weight: 400;
+  margin-left: 3px;
+}
+.d-form-input {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.875rem; color: var(--slate-800);
+  border: 1px solid var(--slate-200); border-radius: var(--radius-sm);
+  padding: 8px 12px; outline: none; background: var(--slate-50);
+  transition: border-color 0.15s, background 0.15s;
+  width: 100%;
+}
+.d-form-input::placeholder { color: var(--slate-300); }
+.d-form-input:focus { border-color: var(--teal-400); background: #fff; }
+.d-form-input:disabled {
+  background: var(--slate-100); color: var(--slate-400); cursor: not-allowed;
+}
+.d-form-actions {
+  display: flex; gap: 0.65rem; margin-top: 0.25rem;
+}
+/* Full-width submit sits outside the 2-col grid */
+.d-stage3-form + .d-form-actions {
+  margin-top: 1rem;
+}
+
+/* ── Clinical notes ─────────────────────────────────── */
 .d-note-area {
   width: 100%; font-family: 'IBM Plex Sans', sans-serif;
-  font-size: 0.875rem; color: var(--slate-700);
+  font-size: 0.875rem; color: var(--slate-700); line-height: 1.6;
   border: 1px solid var(--slate-200); border-radius: var(--radius-md);
-  padding: 10px 14px; resize: vertical; min-height: 100px;
-  background: var(--slate-50); transition: border-color 0.15s;
+  padding: 10px 14px; resize: vertical; min-height: 110px;
+  background: var(--slate-50); transition: border-color 0.15s, background 0.15s;
   outline: none;
 }
 .d-note-area:focus { border-color: var(--teal-400); background: #fff; }
+.d-note-area::placeholder { color: var(--slate-300); }
 
-/* ── Buttons ──────────────────────────────────────────── */
+.d-note-meta {
+  font-size: 0.74rem; color: var(--slate-400);
+  margin-top: 6px; display: flex; justify-content: space-between;
+  align-items: center;
+}
+
+/* ── Buttons ────────────────────────────────────────── */
 .d-btn {
   display: inline-flex; align-items: center; gap: 6px;
   font-family: 'IBM Plex Sans', sans-serif;
   font-size: 0.82rem; font-weight: 500;
   padding: 8px 16px; border-radius: var(--radius-sm);
-  border: none; cursor: pointer; transition: all 0.15s;
+  border: none; cursor: pointer; transition: all 0.14s;
   text-decoration: none; letter-spacing: 0.01em;
+  white-space: nowrap;
 }
 .d-btn-primary { background: var(--teal-500); color: #fff; }
 .d-btn-primary:hover { background: var(--teal-600); }
@@ -294,45 +579,107 @@
   background: transparent; color: var(--slate-500);
   border: 1px solid var(--slate-200);
 }
-.d-btn-ghost:hover { background: var(--slate-100); }
-.d-btn-sm { font-size: 0.75rem; padding: 5px 11px; }
+.d-btn-ghost:hover { background: var(--slate-100); color: var(--slate-700); }
+.d-btn-danger {
+  background: transparent; color: var(--risk-high);
+  border: 1px solid #fdc5c5;
+}
+.d-btn-danger:hover { background: var(--risk-high-bg); }
+.d-btn-sm { font-size: 0.76rem; padding: 5px 11px; }
+.d-btn svg { width: 13px; height: 13px; flex-shrink: 0; }
 
-/* ── Profile page ─────────────────────────────────────── */
+/* ── Toast notification ─────────────────────────────── */
+.d-toast {
+  position: fixed; bottom: 1.5rem; right: 1.5rem;
+  background: var(--slate-800); color: #fff;
+  font-size: 0.82rem; font-weight: 500;
+  padding: 10px 16px; border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg); z-index: 9999;
+  display: flex; align-items: center; gap: 8px;
+  opacity: 0; transform: translateY(8px);
+  transition: opacity 0.2s, transform 0.2s;
+  pointer-events: none;
+}
+.d-toast.show { opacity: 1; transform: translateY(0); }
+.d-toast.success { background: var(--teal-700); }
+.d-toast.error   { background: var(--risk-high); }
+
+
+/* ══════════════════════════════════════════════════════
+   PROFILE PAGE
+══════════════════════════════════════════════════════ */
 .d-profile-card {
   background: #fff; border-radius: var(--radius-lg);
-  border: 1px solid var(--slate-200); padding: 1.75rem;
-  max-width: 520px;
+  border: 1px solid var(--slate-200); box-shadow: var(--shadow-sm);
+  padding: 1.75rem; max-width: 540px;
 }
 .d-profile-header {
-  display: flex; align-items: center; gap: 1.25rem; margin-bottom: 1.5rem;
+  display: flex; align-items: center; gap: 1.25rem;
+  margin-bottom: 1.5rem;
 }
 .d-profile-avatar {
-  width: 60px; height: 60px; border-radius: 50%;
+  width: 58px; height: 58px; border-radius: 50%;
   background: var(--teal-600); color: #fff;
-  font-size: 1.25rem; font-weight: 600;
+  font-size: 1.2rem; font-weight: 600;
   display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
 }
-.d-profile-name { font-size: 1.1rem; font-weight: 600; color: var(--slate-800); }
-.d-profile-spec { font-size: 0.82rem; color: var(--teal-600); margin-top: 2px; }
-.d-profile-hospital { font-size: 0.8rem; color: var(--slate-400); margin-top: 1px; }
+.d-profile-name { font-size: 1.05rem; font-weight: 600; color: var(--slate-800); }
+.d-profile-spec { font-size: 0.82rem; color: var(--teal-600); margin-top: 2px; font-weight: 500; }
+.d-profile-hospital { font-size: 0.79rem; color: var(--slate-400); margin-top: 1px; }
 
-/* ── Tablet responsive (sidebar collapses, no mobile) ─── */
-@media (max-width: 900px) {
-  .d-sidebar { width: 60px; }
-  .d-sidebar__name,
-  .d-sidebar__role-tag,
-  .d-sidebar__section-label,
-  .d-sidebar__doctor-name,
-  .d-sidebar__doctor-spec,
-  .d-sidebar__nav a span { display: none; }
-  .d-sidebar__brand { justify-content: center; padding: 1.1rem 0.75rem; }
-  .d-sidebar__nav a { justify-content: center; padding: 10px; }
-  .d-sidebar__footer { padding: 0.5rem; }
-  .d-sidebar__doctor-info { justify-content: center; padding: 6px; }
-  .d-logout-btn { text-align: center; font-size: 0.65rem; }
-  .d-main { margin-left: 60px; }
+
+/* ══════════════════════════════════════════════════════
+   EMPTY STATE
+══════════════════════════════════════════════════════ */
+.d-empty-state {
+  display: flex; flex-direction: column;
+  align-items: center; text-align: center;
+  padding: 3.5rem 2rem; gap: 0.75rem;
+}
+.d-empty-icon {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: var(--slate-100); color: var(--slate-300);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 0.25rem;
+}
+.d-empty-icon svg { width: 24px; height: 24px; }
+.d-empty-state h2 { font-size: 1rem; font-weight: 600; color: var(--slate-700); }
+.d-empty-state p  { font-size: 0.875rem; color: var(--slate-400); line-height: 1.6; max-width: 300px; }
+
+
+/* ══════════════════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
   .d-stat-grid { grid-template-columns: repeat(2, 1fr); }
-  .d-two-col { grid-template-columns: 1fr; }
   .d-rotterdam-grid { grid-template-columns: 1fr; }
-  .d-content { padding: 1.25rem 1.25rem; }
+}
+
+@media (max-width: 860px) {
+  /* Auto-collapse sidebar on smaller screens */
+  .doctor-shell { }
+  .d-sidebar { width: 60px; }
+  .d-sidebar__brand-text,
+  .d-sidebar__section-label,
+  .d-sidebar__doctor-text,
+  .d-nav-link span,
+  .d-logout-btn span {
+    opacity: 0; pointer-events: none; width: 0; overflow: hidden;
+  }
+  .d-sidebar__brand { justify-content: center; padding: 1.1rem 0; }
+  .d-nav-link { justify-content: center; padding: 10px; }
+  .d-sidebar__doctor-info { justify-content: center; }
+  .d-logout-btn { justify-content: center; padding: 8px; }
+  .d-main { margin-left: 60px; }
+  .d-two-col { grid-template-columns: 1fr; }
+  .d-stage3-form { grid-template-columns: 1fr; }
+  .d-content { padding: 1.25rem 1.1rem; }
+}
+
+@media (max-width: 640px) {
+  .d-stat-grid { grid-template-columns: 1fr 1fr; }
+  .d-patient-header { flex-direction: column; align-items: flex-start; gap: 0.85rem; }
+  .d-topbar { padding: 0 1rem; }
+  .d-content { padding: 1rem 0.85rem; }
 }

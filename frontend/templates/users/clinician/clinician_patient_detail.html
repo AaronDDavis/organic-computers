@@ -1,0 +1,33 @@
+{% extends 'users/clinician/clinician_base.html' %}
+
+{% block page_title %}{{ patient.user.get_full_name }}{% endblock %}
+
+{% block breadcrumb %}
+  <div class="c-breadcrumb">
+    <span class="c-breadcrumb__sep">/</span>
+    <a href="{% url 'clinician_patient_list' %}">Patient Queue</a>
+    <span class="c-breadcrumb__sep">/</span>
+    <span class="c-breadcrumb__current">{{ patient.user.get_full_name }}</span>
+  </div>
+{% endblock %}
+
+{% block content %}
+<div class="animate-fade">
+
+  <a href="{% url 'clinician_patient_list' %}" class="c-back-btn">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M10 12L6 8l4-4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    Back to queue
+  </a>
+
+  {% include 'users/clinician/partials/_patient_header.html' %}
+
+  {% include 'users/clinician/partials/_stage1card.html' %}
+
+  {% include 'users/clinician/partials/_stage2card.html' %}
+
+  {% include 'users/clinician/partials/_stage3card.html' %}
+
+</div>
+{% endblock content %}
