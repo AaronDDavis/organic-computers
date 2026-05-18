@@ -1,0 +1,38 @@
+{% if stage1_rows %}
+<div class="c-two-col" style="margin-bottom:1.1rem;">
+  <div class="c-detail-card" style="margin-bottom:0;">
+    <h3>Symptoms &amp; Lifestyle</h3>
+    <div class="c-kv-list">
+      {% for label, value, css in stage1_rows %}
+      <div class="c-kv">
+        <span class="k">{{ label }}</span>
+        <span class="v {% if css %}{{ css }}{% endif %}">{{ value }}</span>
+      </div>
+      {% endfor %}
+      {% if stage1_result %}
+      <div class="divider"></div>
+      <div class="c-kv">
+        <span class="k">Stage 1 Score</span>
+        <span class="v {% if stage1_result.score > 0.65 %}flagged{% elif stage1_result.score > 0.45 %}elevated{% endif %}">
+          {{ stage1_result.score|floatformat:4 }}
+        </span>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% else %}
+<div class="c-detail-card" style="margin-bottom:1.1rem;">
+  <div class="c-empty-state" style="padding:2rem 1rem;">
+    <div class="c-empty-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M12 8v4M12 16h.01" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <p style="font-size:0.82rem; color:var(--slate-400); text-align:center; line-height:1.6; max-width:260px;">
+      Patient has not completed Stage 1 yet.
+    </p>
+  </div>
+</div>
+{% endif %}

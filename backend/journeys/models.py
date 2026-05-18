@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 from patients.models import PatientProfile
 from doctors.models import DoctorProfile
-
+from clinics.models import Clinic
 
 class DiagnosticJourney(models.Model):
     class Status(models.TextChoices):
@@ -11,6 +11,7 @@ class DiagnosticJourney(models.Model):
         COMPLETED = 'COMP', _('Completed')
     
     patient = models.ForeignKey(PatientProfile, on_delete = models.CASCADE, related_name = 'journeys')
+    clinic = models.ForeignKey(Clinic, null = True, on_delete = models.SET_NULL, related_name = 'journeys')
     doctor = models.ForeignKey(DoctorProfile, null = True, on_delete = models.SET_NULL, related_name = 'journeys')
     number = models.PositiveSmallIntegerField(editable = False)
     status = models.CharField(max_length = 4, choices = Status.choices, default = Status.IN_PROGRESS)

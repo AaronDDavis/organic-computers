@@ -1,0 +1,40 @@
+<div class="d-detail-card">
+  <h3>Rotterdam Criteria Alignment</h3>
+  <div class="d-rotterdam-grid">
+    <div class="d-rotterdam-item {% if rotterdam.oligo_anovulation %}met{% else %}unmet{% endif %}">
+      <div class="criterion">Oligo-anovulation</div>
+      <div class="criterion-val">{{ rotterdam.oligo_detail }}</div>
+    </div>
+    <div class="d-rotterdam-item {% if rotterdam.hyperandrogenism %}met{% else %}unmet{% endif %}">
+      <div class="criterion">Hyperandrogenism</div>
+      <div class="criterion-val">{{ rotterdam.hyperandro_detail }}</div>
+    </div>
+    <div class="d-rotterdam-item {% if rotterdam.polycystic_morphology %}met{% else %}unmet{% endif %}">
+      <div class="criterion">Polycystic Morphology</div>
+      <div class="criterion-val">{{ rotterdam.morphology_detail|default:"Awaiting ultrasound" }}</div>
+    </div>
+  </div>
+</div>
+
+<!-- Phenotype Subtype Labeling (Optional Activation Block) -->
+{% if phenotype_subtype %}
+<div class="d-detail-card" style="margin-top:1.1rem;">
+  <h3>PCOS Phenotype Subtype</h3>
+  <div style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+    <div style="font-size:2rem; font-weight:700; color:var(--teal-500); letter-spacing:-0.03em;">
+      Phenotype {{ phenotype_subtype }}
+    </div>
+    <div>
+      <div style="font-size:0.88rem; font-weight:500; color:var(--slate-700);">
+        {{ phenotype_label }}
+      </div>
+      <div style="font-size:0.78rem; color:var(--slate-400); margin-top:2px;">
+        {{ phenotype_criteria_met }}
+      </div>
+    </div>
+  </div>
+  <p style="font-size:0.82rem; color:var(--slate-500); margin-top:0.85rem; line-height:1.6;">
+    {{ phenotype_description }}
+  </p>
+</div>
+{% endif %}

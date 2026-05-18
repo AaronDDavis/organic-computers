@@ -1,91 +1,86 @@
-{% extends 'doctor_base.html' %}
+{% extends 'users/doctor/doctor_base.html' %}
+
+{% block page_title %}Dashboard{% endblock %}
 
 {% block content %}
-<!-- ── Doctor Dashboard ── -->
-<section id="dsec-dashboard">
-    <div class="d-stat-grid">
-        <div class="d-stat-card">
-        <div class="d-stat-label">Total Patients</div>
-        <div class="d-stat-value">12</div>
-        <div class="d-stat-sub">In your queue</div>
-        </div>
-        <div class="d-stat-card accent-high">
-        <div class="d-stat-label">High Risk</div>
-        <div class="d-stat-value">4</div>
-        <div class="d-stat-sub">Require attention</div>
-        </div>
-        <div class="d-stat-card">
-        <div class="d-stat-label">Awaiting Stage 3</div>
-        <div class="d-stat-value">5</div>
-        <div class="d-stat-sub">Imaging pending</div>
-        </div>
-        <div class="d-stat-card accent-teal">
-        <div class="d-stat-label">Delayed Diagnosis</div>
-        <div class="d-stat-value">2</div>
-        <div class="d-stat-sub">Flag: &gt;60 days</div>
-        </div>
-    </div>
+<div class="animate-fade">
 
-    <div class="d-section-header">
-        <span class="d-section-title">Priority Patient Queue</span>
-        <button class="d-btn d-btn-ghost d-btn-sm" onclick="dNav('patients')">View all</button>
+  <!-- ── Stat grid ───────────────────────────────────── -->
+  <div class="d-stat-grid">
+    <div class="d-stat-card">
+      <div class="d-stat-label">Total Patients</div>
+      <div class="d-stat-value">{{ request.user.profile.patients }}</div>
+      <div class="d-stat-sub">In your queue</div>
     </div>
+    <div class="d-stat-card accent-high">
+      <div class="d-stat-label">High Risk</div>
+      <div class="d-stat-value">{{ high_risk_count }}</div>
+      <div class="d-stat-sub">Require attention</div>
+    </div>
+    <div class="d-stat-card accent-med">
+      <div class="d-stat-label">Awaiting Stage 3</div>
+      <div class="d-stat-value">{{ stage3_wait_count }}</div>
+      <div class="d-stat-sub">Imaging pending</div>
+    </div>
+    <!--
+    <div class="d-stat-card accent-teal">
+      <div class="d-stat-label">Delayed Diagnosis</div>
+      <div class="d-stat-value">{{ delayed_count }}</div>
+      <div class="d-stat-sub">Flag: &gt;60 days</div>
+    </div>
+    -->
+  </div>
 
-    <div class="d-table-wrap">
-        <table class="d-table">
-        <thead>
-            <tr>
-            <th>Patient</th>
-            <th>Stage</th>
-            <th>Risk</th>
-            <th>Score</th>
-            <th>Last Updated</th>
-            <th>Flag</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr onclick="dNav('patient-detail')">
-            <td class="patient-name">Sarah Patel</td>
-            <td><div class="d-stage-pip"><span class="done"></span><span class="done"></span><span></span></div></td>
-            <td><span class="badge-risk high">High</span></td>
-            <td>0.8340</td>
-            <td class="muted">3 days ago</td>
-            <td></td>
-            </tr>
-            <tr>
-            <td class="patient-name">Priya Nair</td>
-            <td><div class="d-stage-pip"><span class="done"></span><span class="done"></span><span class="done"></span></div></td>
-            <td><span class="badge-risk high">High</span></td>
-            <td>0.8120</td>
-            <td class="muted">1 day ago</td>
-            <td><span class="d-flag-badge">⚑ Delayed</span></td>
-            </tr>
-            <tr>
-            <td class="patient-name">Meera Iyer</td>
-            <td><div class="d-stage-pip"><span class="done"></span><span class="done"></span><span></span></div></td>
-            <td><span class="badge-risk medium">Medium</span></td>
-            <td>0.6250</td>
-            <td class="muted">1 week ago</td>
-            <td></td>
-            </tr>
-            <tr>
-            <td class="patient-name">Ling Xiao</td>
-            <td><div class="d-stage-pip"><span class="done"></span><span></span><span></span></div></td>
-            <td><span class="badge-risk medium">Medium</span></td>
-            <td>0.5490</td>
-            <td class="muted">5 days ago</td>
-            <td></td>
-            </tr>
-            <tr>
-            <td class="patient-name">Fatimah Aziz</td>
-            <td><div class="d-stage-pip"><span class="done"></span><span class="done"></span><span></span></div></td>
-            <td><span class="badge-risk low">Low</span></td>
-            <td>0.2310</td>
-            <td class="muted">2 weeks ago</td>
-            <td></td>
-            </tr>
-        </tbody>
-        </table>
-    </div>
-</section>
+  <!-- ── Priority queue ─────────────────────────────── -->
+  <div class="d-section-header">
+    <span class="d-section-title">Priority Patient Queue</span>
+    <a href="{% url 'patient_list' %}" class="d-btn d-btn-ghost d-btn-sm">View all</a>
+  </div>
+
+  <div class="d-table-wrap">
+    <table class="d-table">
+      <thead>
+        <tr>
+          <th>Patient</th>
+          <th>Stage</th>
+          <th>Risk</th>
+          <th>Score</th>
+          <th>Last Updated</th>
+          <th>Flag</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for journey in priority_queue %}
+        <tr data-href="{% url 'patient_detail' journey.patient.id %}"
+            data-patient="{{ journey.patient.user.get_full_name }}"
+            data-risk="{{ journey.risk_label|lower }}">
+          <td class="d-td-name">{{ journey.patient.user.get_full_name }}</td>
+          <td>
+            <div class="d-stage-pip" title="Stage {{ journey.current_stage }} of 3">
+              <span class="{% if journey.current_stage >= 1 %}done{% endif %}"></span>
+              <span class="{% if journey.current_stage >= 2 %}done{% endif %}"></span>
+              <span class="{% if journey.current_stage >= 3 %}done{% endif %}"></span>
+            </div>
+          </td>
+          <td><span class="badge-risk {{ journey.risk_label|lower }}">{{ journey.risk_label }}</span></td>
+          <td>{{ journey.latest_score|floatformat:4 }}</td>
+          <td class="d-td-muted">{{ journey.updated_at|timesince }} ago</td>
+          <td>
+            {% if journey.is_delayed %}
+              <span class="d-flag-badge">⚑ Delayed</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6" style="text-align:center; padding:2.5rem; color:var(--slate-400); font-size:0.84rem;">
+            No patients in your queue yet.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</div>
 {% endblock content %}

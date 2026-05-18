@@ -1,106 +1,55 @@
-{% extends 'doctor_base.html' %}
+{% extends 'users/doctor/doctor_base.html' %}
+
+{% block page_title %}{{ patient.user.get_full_name }}{% endblock %}
+
+{% block breadcrumb %}
+  <div class="d-breadcrumb">
+    <span class="d-breadcrumb__sep">/</span>
+    <a href="{% url 'patient_list' %}">Patient Queue</a>
+    <span class="d-breadcrumb__sep">/</span>
+    <span class="d-breadcrumb__current">{{ patient.user.get_full_name }}</span>
+  </div>
+{% endblock %}
 
 {% block content %}
-<!-- ── Patient detail ── -->
-<section id="dsec-patient-detail" style="display:none;">
-    <button class="d-back-btn" onclick="dNav('patients')">← Back to queue</button>
+<div class="animate-fade">
 
-    <div class="d-patient-header">
-        <div class="d-patient-avatar">SP</div>
-        <div style="flex:1;">
-        <div class="d-patient-name">Sarah Patel</div>
-        <div class="d-patient-meta">DOB: 14 Jun 1998 · B+ · sarah_p</div>
-        <div class="d-patient-header__badges">
-            <span class="badge-risk high">High Risk</span>
-            <span class="badge-status in-progress">In Progress</span>
-            <span class="text-xs text-muted">Stage 2 of 3 complete · Journey #2</span>
-        </div>
-        </div>
-    </div>
+  <!-- Back link -->
+  <a href="{% url 'patient_list' %}" class="d-back-btn">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M10 12L6 8l4-4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    Back to queue
+  </a>
 
-    <div class="d-two-col">
-        <!-- Hormonal values -->
-        <div class="d-detail-card">
-        <h3>Clinical Values — Stage 2</h3>
-        <div class="d-kv-list">
-            <div class="d-kv"><span class="k">FSH</span><span class="v">4.2 mIU/mL</span></div>
-            <div class="d-kv"><span class="k">LH</span><span class="v flagged">11.8 mIU/mL ↑</span></div>
-            <div class="d-kv"><span class="k">AMH</span><span class="v flagged">8.6 ng/mL ↑</span></div>
-            <div class="d-kv"><span class="k">LH/FSH Ratio</span><span class="v flagged">2.81 ↑</span></div>
-            <div class="d-kv"><span class="k">TSH</span><span class="v">2.1 mIU/L</span></div>
-            <div class="d-kv"><span class="k">Prolactin</span><span class="v">18.3 ng/mL</span></div>
-            <div class="d-kv"><span class="k">RBS</span><span class="v elevated">114 mg/dL ~</span></div>
-            <div class="d-kv"><span class="k">Vitamin D3</span><span class="v elevated">22.0 ng/mL ↓</span></div>
-        </div>
-        </div>
+  <!-- Patient header banner -->
+  {% include 'users/doctor/partials/_patient_header.html' %}
 
-        <!-- Symptomatic -->
-        <div class="d-detail-card">
-        <h3>Symptomatic Values — Stage 1</h3>
-        <div class="d-kv-list">
-            <div class="d-kv"><span class="k">Cycle</span><span class="v flagged">Irregular</span></div>
-            <div class="d-kv"><span class="k">Cycle Length</span><span class="v flagged">38 days ↑</span></div>
-            <div class="d-kv"><span class="k">BMI</span><span class="v elevated">28.4</span></div>
-            <div class="d-kv"><span class="k">Hirsutism</span><span class="v">Yes</span></div>
-            <div class="d-kv"><span class="k">Skin Darkening</span><span class="v">Yes</span></div>
-            <div class="d-kv"><span class="k">Acne</span><span class="v">Yes</span></div>
-            <div class="d-kv"><span class="k">Hair Loss</span><span class="v">No</span></div>
-            <div class="d-kv"><span class="k">Regular Exercise</span><span class="v">No</span></div>
-        </div>
-        </div>
-    </div>
+  <!-- STAGE 1 — Symptomatic values (read-only) -->
+  {% if stage1_data %}
+    {% include 'users/doctor/partials/_stage1_card.html' %}
+  {% endif %}
 
-    <!-- Rotterdam criteria -->
-    <div class="d-detail-card" style="margin-bottom:1.25rem;">
-        <h3>Rotterdam Criteria Alignment</h3>
-        <div class="d-rotterdam-grid">
-        <div class="d-rotterdam-item met">
-            <div class="criterion">Oligo-anovulation</div>
-            <div class="criterion-val">Cycle 38 days, irregular</div>
-        </div>
-        <div class="d-rotterdam-item met">
-            <div class="criterion">Hyperandrogenism</div>
-            <div class="criterion-val">LH/FSH 2.81, hirsutism</div>
-        </div>
-        <div class="d-rotterdam-item unmet">
-            <div class="criterion">Polycystic Morphology</div>
-            <div class="criterion-val">Awaiting ultrasound</div>
-        </div>
-        </div>
-    </div>
+  <!-- STAGE 2 — Hormonal / lab values (read-only) -->
+  {% if stage2_data %}
+    {% include 'users/doctor/partials/_stage2_card.html' %}
+  {% endif %}
 
-    <!-- Model output -->
-    <div class="d-two-col">
-        <div class="d-detail-card">
-        <h3>Model Assessment</h3>
-        <div class="d-kv-list">
-            <div class="d-kv"><span class="k">Stage 1 Score</span><span class="v">0.6720</span></div>
-            <div class="d-kv"><span class="k">Stage 2 Score</span><span class="v flagged">0.8340 ↑</span></div>
-            <div class="d-kv"><span class="k">Risk Label</span><span class="v"><span class="badge-risk high">High</span></span></div>
-            <div class="d-kv"><span class="k">Specialist</span><span class="v">Endocrinologist</span></div>
-            <div class="d-kv"><span class="k">Endo Differential</span><span class="v">0.09 (Low)</span></div>
-        </div>
-        </div>
-        <div class="d-detail-card">
-        <h3>Top Predictive Factors</h3>
-        <div class="d-kv-list">
-            <div class="d-kv"><span class="k">1. AMH</span><span class="v flagged">8.6 ng/mL</span></div>
-            <div class="d-kv"><span class="k">2. LH/FSH Ratio</span><span class="v flagged">2.81</span></div>
-            <div class="d-kv"><span class="k">3. Cycle Irregularity</span><span class="v">38 days</span></div>
-            <div class="d-kv"><span class="k">4. RBS</span><span class="v elevated">114 mg/dL</span></div>
-            <div class="d-kv"><span class="k">5. BMI</span><span class="v elevated">28.4</span></div>
-        </div>
-        </div>
-    </div>
+  <!-- ROTTERDAM CRITERIA & PHENOTYPES -->
+  {% if rotterdam %}
+    {% include 'users/doctor/partials/_rotterdam_criteria.html' %}
+  {% endif %}
 
-    <!-- Doctor note -->
-    <div class="d-detail-card">
-        <h3>Your Clinical Note</h3>
-        <textarea class="d-note-area" placeholder="Add your clinical observations, recommended next steps, or suggested tests for this patient...">Based on the Stage 2 results — particularly the elevated AMH of 8.6 ng/mL, LH/FSH ratio of 2.81, and borderline fasting glucose — I recommend proceeding with a formal OGTT and pelvic ultrasound. A 3-month lifestyle modification trial is advisable before initiating metformin.</textarea>
-        <div style="display:flex; gap:0.75rem; margin-top:0.75rem;">
-        <button class="d-btn d-btn-primary">Save Note</button>
-        <button class="d-btn d-btn-ghost">Clear</button>
-        </div>
-    </div>
-</section>
+  <!-- MODEL ASSESSMENT + TOP 3 PREDICTIVE FACTORS -->
+  {% if stage2_result or stage3_result %}
+    {% include 'users/doctor/partials/_model_assessment.html' %}
+  {% endif %}
+
+  <!-- STAGE 3 — Ultrasound input form (doctor only) -->
+  {% include 'users/doctor/partials/_stage3_ultrasound.html' %}
+
+  <!-- CLINICAL NOTES (doctor's own observations) -->
+  {% include 'users/doctor/partials/_clinical_notes.html' %}
+
+</div><!-- end animate-fade -->
 {% endblock content %}

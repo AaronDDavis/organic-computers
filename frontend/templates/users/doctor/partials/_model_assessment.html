@@ -1,0 +1,63 @@
+<div class="d-section-header" style="margin-top:1.25rem;">
+  <span class="d-section-title">Model Assessment</span>
+</div>
+<div class="d-two-col" style="margin-bottom:1.1rem;">
+  <div class="d-detail-card" style="margin-bottom:0;">
+    <h3>Assessment Summary</h3>
+    <div class="d-kv-list">
+      {% if stage1_result %}
+      <div class="d-kv">
+        <span class="k">Stage 1 Score</span>
+        <span class="v">{{ stage1_result.score|floatformat:4 }}</span>
+      </div>
+      {% endif %}
+      {% if stage2_result %}
+      <div class="d-kv">
+        <span class="k">Stage 2 Score</span>
+        <span class="v {% if stage2_result.score > 0.65 %}flagged{% elif stage2_result.score > 0.45 %}elevated{% endif %}">
+          {{ stage2_result.score|floatformat:4 }}
+          {% if stage2_result.score > 0.65 %} ↑{% endif %}
+        </span>
+      </div>
+      {% endif %}
+      {% if stage3_result %}
+      <div class="d-kv">
+        <span class="k">Stage 3 Score</span>
+        <span class="v {% if stage3_result.score > 0.65 %}flagged{% elif stage3_result.score > 0.45 %}elevated{% endif %}">
+          {{ stage3_result.score|floatformat:4 }}
+          {% if stage3_result.score > 0.65 %} ↑{% endif %}
+        </span>
+      </div>
+      {% endif %}
+      <div class="d-kv">
+        <span class="k">Risk Label</span>
+        <span class="v">
+          <span class="badge-risk {{ journey.risk_label|lower }}">{{ journey.risk_label }}</span>
+        </span>
+      </div>
+      {% if stage3_result and stage3_result.specialist %}
+      <div class="d-kv">
+        <span class="k">Specialist Type</span>
+        <span class="v">{{ stage3_result.specialist }}</span>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Top 3 predictive factors only -->
+  {% if top_factors %}
+  <div class="d-detail-card" style="margin-bottom:0;">
+    <h3>Top 3 Predictive Factors</h3>
+    <div class="d-kv-list">
+      {% for factor in top_factors|slice:":3" %}
+      <div class="d-kv">
+        <span class="k">{{ forloop.counter }}. {{ factor.name }}</span>
+        <span class="v {% if factor.flagged %}flagged{% elif factor.elevated %}elevated{% endif %}">
+          {{ factor.value }}
+        </span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</div>

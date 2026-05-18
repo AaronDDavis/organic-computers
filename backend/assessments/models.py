@@ -26,7 +26,7 @@ class Assessment(models.Model):
 class AssessmentResult(models.Model):
     class RiskLabel(models.TextChoices):
         HIGH = 'HIGH', _('High')
-        MEDIUM = 'MED', _('Medium')
+        MODERATE = 'MOD', _('Moderate')
         LOW = 'LOW', _('Low')
     
     assessment = models.OneToOneField(Assessment, on_delete = models.CASCADE, related_name = 'result')

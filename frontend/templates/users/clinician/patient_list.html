@@ -1,0 +1,97 @@
+{% extends 'users/clinician/clinician_base.html' %}
+
+{% block content %}
+<div class="animate-fade">
+
+  <div class="c-page-header">
+    <h1>Patient Queue</h1>
+    <p>All patients assigned to {{ request.user.profile.clinic.name }}</p>
+  </div>
+
+  <div class="c-table-wrap">
+
+    <!-- Search & filter toolbar -->
+    <div class="c-table-toolbar">
+      <input
+        type="search"
+        id="c-patient-search"
+        class="c-search-input"
+        placeholder="Search by patient name…"
+        autocomplete="off"
+      />
+      <select id="c-stage-filter" class="c-filter-select">
+        <option value="">All patients</option>
+        <option value="2">Awaiting Stage 2</option>
+        <option value="3">Awaiting Stage 3</option>
+        <option value="complete">Complete</option>
+      </select>
+    </div>
+
+    <table class="c-table c-patient-table">
+      <thead>
+        <tr>
+          <th>Patient</th>
+          <th>Stage 1</th>
+          <th>Stage 2</th>
+          <th>Stage 3</th>
+          <th>Risk</th>
+          <th>Doctor</th>
+          <th>Last Updated</th>
+          <th>Action Needed</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for journey in journeys %}
+        <tr data-href="{% url 'clinician_patient_detail' journey.patient.id %}"
+            data-patient="{{ journey.patient.user.get_full_name|lower }}"
+            data-pending="{% if not journey.stage2_complete and journey.stage1_complete %}2{% elif not journey.stage3_complete and journey.stage2_complete %}3{% else %}complete{% endif %}">
+          <td class="c-td-name">{{ journey.patient.user.get_full_name }}</td>
+          <td>
+            <div class="c-stage-pip">
+              <span class="{% if journey.stage1_complete %}done{% endif %}"></span>
+            </div>
+          </td>
+          <td>
+            <div class="c-stage-pip">
+              <span class="{% if journey.stage2_complete %}done{% elif journey.stage1_complete %}pending{% endif %}"></span>
+            </div>
+          </td>
+          <td>
+            <div class="c-stage-pip">
+              <span class="{% if journey.stage3_complete %}done{% elif journey.stage2_complete %}pending{% endif %}"></span>
+            </div>
+          </td>
+          <td>
+              <span class="badge-risk {{ journey.latest_assessment.result.get_risk_display |lower }}">{{ journey.latest_assessment.result.get_risk_display  }}</span>
+          </td>
+          <td class="c-td-muted">
+            {% if journey.doctor %}
+              Dr. {{ journey.doctor.user.get_full_name }}
+            {% else %}
+              <span style="color:var(--slate-300);">Not assigned</span>
+            {% endif %}
+          </td>
+          <td class="c-td-muted">{{ journey.updated_on|timesince }} ago</td>
+          <td>
+            {% if not journey.stage2_complete and journey.stage1_complete %}
+              <span class="c-pending-badge">Enter Stage 2</span>
+            {% elif not journey.stage3_complete and journey.stage2_complete %}
+              <span class="c-pending-badge">Enter Stage 3</span>
+            {% else %}
+              <span class="text-xs text-muted">—</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="8" style="text-align:center; padding:2.5rem; color:var(--slate-400); font-size:0.84rem;">
+            No patients assigned to your clinic yet.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</div>
+{% endblock content %}

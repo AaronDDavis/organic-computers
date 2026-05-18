@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/clinician.css' %}" />
+{% endblock %}
+
+{% block main_content %}
+<!-- ═══════════════════════════════════════════════════════
+     CLINICIAN SHELL
+═══════════════════════════════════════════════════════ -->
+<div id="page-clinician" class="clinician-shell">
+
+  <!-- Sidebar -->
+  <aside class="c-sidebar" id="c-sidebar">
+    <div class="c-sidebar__brand">
+      <div class="c-sidebar__logo">PS</div>
+      <div class="c-sidebar__brand-text">
+        <div class="c-sidebar__name">PCOSense</div>
+        <span class="c-sidebar__role-tag">Clinician Portal</span>
+      </div>
+    </div>
+
+    <nav class="c-sidebar__nav">
+      <span class="c-sidebar__section-label">Main</span>
+      <a href="{% url 'clinician_dashboard' %}"
+         class="c-nav-link {% if active_tab == 'dashboard' %}active{% endif %}"
+         data-tooltip="Dashboard">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+          <rect x="1" y="1" width="6" height="6" rx="1.5"/>
+          <rect x="9" y="1" width="6" height="6" rx="1.5"/>
+          <rect x="1" y="9" width="6" height="6" rx="1.5"/>
+          <rect x="9" y="9" width="6" height="6" rx="1.5"/>
+        </svg>
+        <span>Dashboard</span>
+      </a>
+      <a href="{% url 'clinician_patient_list' %}"
+         class="c-nav-link {% if active_tab == 'patients' %}active{% endif %}"
+         data-tooltip="Patient Queue">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+          <circle cx="6" cy="5" r="2.5"/>
+          <path d="M1 13c0-2.8 2.2-5 5-5s5 2.2 5 5"/>
+          <path d="M11 3.5a2.5 2.5 0 0 1 0 5M13 13a4 4 0 0 0-2-3.5" stroke-linecap="round"/>
+        </svg>
+        <span>Patient Queue</span>
+      </a>
+    </nav>
+
+    <nav class="c-sidebar__nav" style="flex:0;">
+      <span class="c-sidebar__section-label">Account</span>
+      <a href="{% url 'clinician_profile' %}"
+         class="c-nav-link {% if active_tab == 'profile' %}active{% endif %}"
+         data-tooltip="My Profile">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+          <circle cx="8" cy="6" r="3"/>
+          <path d="M2 14c0-2.8 2.7-5 6-5s6 2.2 6 5"/>
+        </svg>
+        <span>My Profile</span>
+      </a>
+    </nav>
+
+    <div class="c-sidebar__footer">
+      <div class="c-sidebar__clinician-info" data-tooltip="{{ request.user.get_full_name }}">
+        <div class="c-sidebar__avatar">
+          {{ request.user.first_name.0 }}{{ request.user.last_name.0 }}
+        </div>
+        <div class="c-sidebar__clinician-text">
+          <div class="c-sidebar__clinician-name">
+            {{ request.user.get_full_name }}
+          </div>
+          <div class="c-sidebar__clinic-name">
+            {% if request.user.profile.clinic %}
+              {{ request.user.profile.clinic.name }}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="c-logout-btn">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M6 2H3a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3M11 11l3-3-3-3M14 8H6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>Sign out</span>
+        </button>
+      </form>
+    </div>
+  </aside>
+
+  <!-- Main area -->
+  <div class="c-main" id="c-main">
+
+    <!-- Top bar -->
+    <header class="c-topbar">
+      <div class="c-topbar__left">
+        <button class="c-sidebar-toggle" id="c-sidebar-toggle" aria-label="Toggle sidebar">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M2 4h12M2 8h12M2 12h12" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <span class="c-topbar__title">
+          {% block page_title %}Dashboard{% endblock %}
+        </span>
+        {% block breadcrumb %}{% endblock %}
+      </div>
+      <div class="c-topbar__right">
+        <span class="c-topbar__clinic text-xs text-muted">
+          {% if request.user.profile.clinic %}
+            {{ request.user.profile.clinic.name }}
+          {% endif %}
+        </span>
+        <span class="c-topbar__date text-xs text-muted" id="c-today-date"></span>
+        <div class="c-topbar__avatar" title="{{ request.user.get_full_name }}">
+          {{ request.user.first_name.0 }}{{ request.user.last_name.0 }}
+        </div>
+      </div>
+    </header>
+
+    <!-- Page content -->
+    <div class="c-content">
+      {% block content %}{% endblock %}
+    </div>
+
+  </div><!-- end c-main -->
+</div><!-- end clinician-shell -->
+{% endblock main_content %}
+
+{% block extra_js %}
+<script src="{% static 'js/clinician.js' %}"></script>
+{% endblock %}

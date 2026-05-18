@@ -3,7 +3,6 @@ from django.utils.translation import gettext_lazy as _
 
 from users.models import User
 
-
 class PatientProfile(models.Model):
     class BloodGroup(models.TextChoices):
         A_POS = 'A+', _('A+')
@@ -17,3 +16,4 @@ class PatientProfile(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE, primary_key = True, related_name = 'profile')
     dob = models.DateField(null = True, blank = True)
     blood_group = models.CharField(max_length = 3, choices = BloodGroup.choices, null = True, blank = True)
+

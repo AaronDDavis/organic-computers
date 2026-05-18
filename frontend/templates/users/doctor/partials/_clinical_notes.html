@@ -1,0 +1,40 @@
+<div class="d-section-header" style="margin-top:0.25rem;">
+  <span class="d-section-title">Clinical Notes</span>
+</div>
+
+<div class="d-detail-card">
+  <h3>Your Observations</h3>
+  <p style="font-size:0.8rem; color:var(--slate-400); margin-bottom:0.85rem; line-height:1.5;">
+    Personal clinical notes, observations, and next steps you intend to take. Not shared with the patient.
+  </p>
+  <form method="post" action="{% url 'save_clinical_note' journey.id %}">
+    {% csrf_token %}
+    <textarea id="d-clinical-note" name="clinical_note" class="d-note-area" placeholder="Add your clinical observations..." rows="5">{{ clinical_note.content|default:'' }}</textarea>
+    <div class="d-note-meta">
+      {% if clinical_note.updated_at %}
+        <span>Last saved {{ clinical_note.updated_at|timesince }} ago</span>
+      {% else %}
+        <span>No notes saved yet</span>
+      {% endif %}
+      <span id="d-note-char-count" style="color:var(--slate-300);"></span>
+    </div>
+    <div class="d-form-actions" style="margin-top:0.85rem;">
+      <button type="submit" id="d-save-note" class="d-btn d-btn-primary">Save Note</button>
+      <button type="reset" class="d-btn d-btn-ghost">Discard</button>
+    </div>
+  </form>
+</div>
+
+<script>
+  (function () {
+    const ta = document.getElementById('d-clinical-note');
+    const counter = document.getElementById('d-note-char-count');
+    if (!ta || !counter) return;
+    function update() {
+      const len = ta.value.length;
+      counter.textContent = len > 0 ? len + ' chars' : '';
+    }
+    ta.addEventListener('input', update);
+    update();
+  })();
+</script>

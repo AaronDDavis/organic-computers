@@ -1,0 +1,27 @@
+<!-- partials/clinician/_patient_header.html -->
+<div class="c-patient-header">
+  <div class="c-patient-avatar">
+    {{ patient.user.first_name.0 }}{{ patient.user.last_name.0 }}
+  </div>
+  <div style="flex:1;">
+    <div class="c-patient-name">{{ patient.user.get_full_name }}</div>
+    <div class="c-patient-meta">
+      {% if patient.dob %}DOB: {{ patient.dob|date:"d M Y" }} · {% endif %}
+      {{ patient.user.username }}
+    </div>
+    <div class="c-patient-header__badges">
+        <span class="badge-risk {{ journey.latest_assessment.result.get_risk_display|lower }}">{{ journey.latest_assessment.result.get_risk_display }} Risk</span>
+      <span class="text-xs text-muted">
+        {{ journey.latest_assessment.get_stage_display }} complete
+      </span>
+      {% if not journey.stage2_complete and journey.stage1_complete %}
+        <span class="c-pending-badge">Stage 2 pending</span>
+      {% elif not journey.stage3_complete and journey.stage2_complete %}
+        <span class="c-pending-badge">Stage 3 pending</span>
+      {% endif %}
+      {% if journey.doctor %}
+        <span class="text-xs text-muted">Dr. {{ journey.doctor.user.get_full_name }}</span>
+      {% endif %}
+    </div>
+  </div>
+</div>

@@ -2,12 +2,12 @@ from django.views.generic import FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
 
-import requests
-
 from .models import Assessment, AssessmentResult
 from journeys.models import DiagnosticJourney
 from . import forms
 from .utils import map_to_backend
+from api.utils import run_prediction
+from api.loader import stage1_model, stage2_model
 
 
 class AssessmentCreateView(LoginRequiredMixin, FormView):
@@ -23,7 +23,7 @@ class AssessmentCreateView(LoginRequiredMixin, FormView):
         return super().dispatch(request, *args, **kwargs)
     
     def get_form_class(self):
-        return forms.StageOneForm if self.stage == 'Stage_1' else forms.StageTwoForm
+        return forms.StageOneForm if self.stage == 'stage1' else forms.StageTwoForm
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -33,7 +33,7 @@ class AssessmentCreateView(LoginRequiredMixin, FormView):
 
     def form_valid(self, form):
         cleaned_data = map_to_backend(form.cleaned_data)
-        stage = Assessment.Stage.STAGE_1 if self.stage == 'Stage_1' else Assessment.Stage.STAGE_2
+        stage = Assessment.Stage.STAGE_1 if self.stage == 'stage1' else Assessment.Stage.STAGE_2
         
         assessment = Assessment.objects.create(
             journey = self.journey,
@@ -42,27 +42,8 @@ class AssessmentCreateView(LoginRequiredMixin, FormView):
         )
         # Auto_add_now automatically adds the created_on date
         
-        BASE_URL = 'http://127.0.0.1:8000'  # Add url once done
-        endpoint = f"{BASE_URL}/predict/stage1" if self.stage == 'Stage_1' else f"{BASE_URL}/predict/stage2"
-
-        try:
-            response = requests.post(
-                url = endpoint,
-                json = cleaned_data,
-                timeout = 10
-            )
-            response.raise_for_status()
-            result = response.json()
-        except:
-            result = {
-                'risk': 'Low',
-                'confidence': 0.0,
-                'top_factors': [],
-                'specialist': 'Gynecologist',
-                'clinical_focus': 'Reproductive Health',
-                'next_step': 'API unavailable. Please try again later.',
-                'recommendation_text': '',
-            }
+        model = stage1_model if self.stage == 'Stage_1' else stage2_model
+        result = run_prediction(model, cleaned_data, self.stage)
 
         AssessmentResult.objects.create(
             assessment = assessment,
@@ -76,3 +57,4 @@ class AssessmentCreateView(LoginRequiredMixin, FormView):
         )
         
         return redirect('journey_detail', pk = self.journey.pk)
+

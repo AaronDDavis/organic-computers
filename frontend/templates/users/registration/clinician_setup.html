@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/registration.css' %}" />
+{% endblock %}
+
+{% block main_content %}
+<div class="setup-shell">
+  <div class="setup-card">
+
+    <div class="setup-brand">
+      <div class="login-logo">PS</div>
+      <div>
+        <div class="login-brand-name">PCOSense</div>
+      </div>
+    </div>
+
+    <div class="setup-header">
+      <h1>Set up your clinician profile</h1>
+      <p>Select the clinic you are based at. Patients who visit your clinic will be linked to you for data entry.</p>
+    </div>
+
+    <form method="post">
+      {% csrf_token %}
+
+      {% if form.non_field_errors %}
+      <div class="login-error">{{ form.non_field_errors.0 }}</div>
+      {% endif %}
+
+      <div class="login-field">
+        <label for="id_clinic">Clinic</label>
+        {{ form.clinic|add_class:"login-form-control setup-select"|attr:"id:id_clinic" }}
+        {% if form.clinic.errors %}<div class="field-error">{{ form.clinic.errors.0 }}</div>{% endif %}
+      </div>
+
+      <button type="submit" class="login-submit" style="margin-top:0.5rem;">Continue to dashboard</button>
+    </form>
+
+  </div>
+</div>
+{% endblock main_content %}

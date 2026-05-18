@@ -1,61 +1,123 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/doctor.css' %}" />
+{% endblock %}
 
 {% block main_content %}
-<!-- ═══════════════════════════════════════════════════════
-     DOCTOR SHELL
-═══════════════════════════════════════════════════════ -->
+<!-- DOCTOR SHEL -->
 <div id="page-doctor" class="doctor-shell">
 
   <!-- Sidebar -->
-  <aside class="d-sidebar">
+  <aside class="d-sidebar" id="d-sidebar">
     <div class="d-sidebar__brand">
       <div class="d-sidebar__logo">PS</div>
-      <div>
+      <div class="d-sidebar__brand-text">
         <div class="d-sidebar__name">PCOSense</div>
         <span class="d-sidebar__role-tag">Clinical Portal</span>
       </div>
     </div>
+
     <nav class="d-sidebar__nav">
       <span class="d-sidebar__section-label">Main</span>
-      <a href="#" id="dnav-dashboard" class="active" onclick="dNav('dashboard'); return false;">
-        <svg viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
+      <a href="{% url 'doctor_dashboard' %}"
+         class="d-nav-link {% if active_tab == 'dashboard' %}active{% endif %}"
+         data-tooltip="Dashboard">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+          <rect x="1" y="1" width="6" height="6" rx="1.5"/>
+          <rect x="9" y="1" width="6" height="6" rx="1.5"/>
+          <rect x="1" y="9" width="6" height="6" rx="1.5"/>
+          <rect x="9" y="9" width="6" height="6" rx="1.5"/>
+        </svg>
         <span>Dashboard</span>
       </a>
-      <a href="#" id="dnav-patients" onclick="dNav('patients'); return false;">
-        <svg viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+      <a href="{% url 'patient_list' %}"
+         class="d-nav-link {% if active_tab == 'patients' %}active{% endif %}"
+         data-tooltip="Patient Queue">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+          <circle cx="6" cy="5" r="2.5"/>
+          <path d="M1 13c0-2.8 2.2-5 5-5s5 2.2 5 5"/>
+          <path d="M11 3.5a2.5 2.5 0 0 1 0 5M13 13a4 4 0 0 0-2-3.5" stroke-linecap="round"/>
+        </svg>
         <span>Patient Queue</span>
       </a>
+    </nav>
+
+    <nav class="d-sidebar__nav" style="flex:0;">
       <span class="d-sidebar__section-label">Account</span>
-      <a href="#" id="dnav-profile" onclick="dNav('d-profile'); return false;">
-        <svg viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="6" r="3.5"/><path d="M1 14c0-3 3-5.5 7-5.5s7 2.5 7 5.5"/></svg>
+      <a href="{% url 'doctor_profile' %}"
+         class="d-nav-link {% if active_tab == 'profile' %}active{% endif %}"
+         data-tooltip="My Profile">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+          <circle cx="8" cy="6" r="3"/>
+          <path d="M2 14c0-2.8 2.7-5 6-5s6 2.2 6 5"/>
+        </svg>
         <span>My Profile</span>
       </a>
     </nav>
+
     <div class="d-sidebar__footer">
-      <div class="d-sidebar__doctor-info">
-        <div class="d-sidebar__avatar">WC</div>
-        <div>
-          <div class="d-sidebar__doctor-name">Dr. Wei Chen</div>
-          <div class="d-sidebar__doctor-spec">Endocrinology</div>
+      <div class="d-sidebar__doctor-info" data-tooltip="{{ request.user.get_full_name }}">
+        <div class="d-sidebar__avatar">
+          {{ request.user.first_name.0 }}{{ request.user.last_name.0 }}
+        </div>
+        <div class="d-sidebar__doctor-text">
+          <div class="d-sidebar__doctor-name">
+            Dr. {{ request.user.get_full_name }}
+          </div>
+          <div class="d-sidebar__doctor-spec">
+            {% if request.user.doctor_profile %}
+              {{ request.user.doctor_profile.specialization }}
+            {% endif %}
+          </div>
         </div>
       </div>
-      <button class="d-logout-btn" onclick="handleLogout()">Sign out</button>
+      <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="d-logout-btn">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M6 2H3a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3M11 11l3-3-3-3M14 8H6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>Sign out</span>
+        </button>
+      </form>
     </div>
   </aside>
 
   <!-- Main area -->
-  <div class="d-main">
+  <div class="d-main" id="d-main">
+
+    <!-- Top bar -->
     <header class="d-topbar">
-      <span class="d-topbar__title" id="d-topbar-title">Dashboard</span>
-      <div class="d-topbar__actions">
-        <span class="text-xs text-muted">Thu, 14 May 2026</span>
+      <div class="d-topbar__left">
+        <button class="d-sidebar-toggle" id="d-sidebar-toggle" aria-label="Toggle sidebar">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M2 4h12M2 8h12M2 12h12" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <span class="d-topbar__title" id="d-topbar-title">
+          {% block page_title %}Dashboard{% endblock %}
+        </span>
+        {% block breadcrumb %}{% endblock %}
+      </div>
+      <div class="d-topbar__right">
+        <span class="d-topbar__date text-xs text-muted" id="d-today-date"></span>
+        <div class="d-topbar__avatar" title="Dr. {{ request.user.get_full_name }}">
+          {{ request.user.first_name.0 }}{{ request.user.last_name.0 }}
+        </div>
       </div>
     </header>
 
+    <!-- Page content -->
     <div class="d-content">
-      {% block content %}
-      {% endblock %}
-    </div><!-- end d-content -->
+      {% block content %}{% endblock %}
+    </div>
+
   </div><!-- end d-main -->
 </div><!-- end doctor-shell -->
 {% endblock main_content %}
+
+{% block extra_js %}
+<script src="{% static 'js/doctor.js' %}"></script>
+{% endblock %}
