@@ -5,6 +5,7 @@
 
 
 {% block extra_css %}
+{{ block.super }}
 <link rel="stylesheet" href="{% static 'css/patient/profile.css' %}" />
 {% endblock %}
 
@@ -15,7 +16,7 @@
         {% include 'users/patient/dashboard/partials/stage_progress.html' %}
         {% include 'users/patient/dashboard/partials/recommendation_card.html' %}
     {% else %}
-        {% include 'users/patient/partials/empty_state.html' %}
+        {% include 'users/patient/dashboard/partials/empty_state.html' %}
     {% endif %}
 {% endblock content %}
 

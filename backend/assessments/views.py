@@ -6,8 +6,8 @@ from .models import Assessment, AssessmentResult
 from journeys.models import DiagnosticJourney
 from . import forms
 from .utils import map_to_backend
-from ..api.utils import run_prediction
-from ..api.loader import stage1_model, stage2_model
+from api.utils import run_prediction
+from api.loader import stage1_model, stage2_model
 
 
 class AssessmentCreateView(LoginRequiredMixin, FormView):

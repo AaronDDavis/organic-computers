@@ -10,7 +10,7 @@
     <div class="c-stat-card accent-indigo">
       <div class="c-stat-label">Clinic Patients</div>
       <div class="c-stat-value">{{ total_patients }}</div>
-      <div class="c-stat-sub">Assigned to {{ request.user.profile.clinic.name }}</div>
+      <div class="c-stat-sub">Assigned to {{ request.user.clinician_profile.clinic.name }}</div>
     </div>
     <div class="c-stat-card accent-med">
       <div class="c-stat-label">Awaiting Stage 2</div>
@@ -70,11 +70,7 @@
             </div>
           </td>
           <td>
-            {% if journey.risk_label %}
-              <span class="badge-risk {{ journey.risk_label|lower }}">{{ journey.risk_label }}</span>
-            {% else %}
-              <span class="text-xs text-muted">—</span>
-            {% endif %}
+              <span class="badge-risk {{ journey.latest_assessment.result.get_risk_display|lower }}">{{ journey.latest_assessment.result.get_risk_display }}</span>
           </td>
           <td class="c-td-muted">{{ journey.updated_at|timesince }} ago</td>
           <td>

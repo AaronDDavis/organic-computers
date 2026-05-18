@@ -1,6 +1,5 @@
 from django.views.generic.edit import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 from django.urls import reverse_lazy
 

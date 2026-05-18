@@ -1,7 +1,5 @@
 {% extends 'users/clinician/clinician_base.html' %}
 
-{% block page_title %}My Profile{% endblock %}
-
 {% block content %}
 <div class="animate-fade">
 
@@ -17,14 +15,10 @@
       </div>
       <div>
         <div class="c-profile-name">{{ request.user.get_full_name }}</div>
-        {% if request.user.profile.clinic %}
-          <div class="c-profile-clinic">{{ request.user.profile.clinic.name }}</div>
-          {% if request.user.profile.clinic.city %}
-            <div class="c-profile-address">
-              {{ request.user.profile.clinic.address }}{% if request.user.profile.clinic.address %}, {% endif %}{{ request.user.profile.clinic.city }}
-            </div>
-          {% endif %}
-        {% endif %}
+        <div class="c-profile-clinic">{{ request.user.clinician_profile.clinic.name }}</div>
+        <div class="c-profile-address">
+          {{ request.user.clinician_profile.clinic.address }}, {{ request.user.clinician_profile.clinic.city }}
+        </div>
       </div>
     </div>
 
@@ -46,7 +40,6 @@
       </div>
     </div>
 
-    {% if request.user.profile.clinic %}
     <div class="divider"></div>
 
     <!-- Clinic details -->
@@ -54,36 +47,32 @@
     <div class="c-kv-list">
       <div class="c-kv">
         <span class="k">Name</span>
-        <span class="v">{{ request.user.profile.clinic.name }}</span>
+        <span class="v">{{ request.user.clinician_profile.clinic.name }}</span>
       </div>
-      {% if request.user.profile.clinic.address %}
       <div class="c-kv">
         <span class="k">Address</span>
-        <span class="v">{{ request.user.profile.clinic.address }}</span>
+        <span class="v">{{ request.user.clinician_profile.clinic.address }}</span>
       </div>
-      {% endif %}
-      {% if request.user.profile.clinic.city %}
       <div class="c-kv">
         <span class="k">City</span>
-        <span class="v">{{ request.user.profile.clinic.city }}</span>
+        <span class="v">{{ request.user.clinician_profile.clinic.city }}</span>
       </div>
-      {% endif %}
-      {# Phone — uncomment when Clinic.phone is implemented
-      {% if request.user.profile.clinic.phone %}
+      {# Phone — uncomment when Clinic.phone is implemented #}
+      <!--
       <div class="c-kv">
         <span class="k">Phone</span>
-        <span class="v">{{ request.user.profile.clinic.phone }}</span>
+        <span class="v">{{ request.user.clinician_profile.clinic.phone }}</span>
       </div>
-      {% endif %}
-      #}
+      -->
     </div>
-    {% endif %}
 
     <div class="divider"></div>
 
+    <!--
     <div style="display:flex; gap:0.65rem;">
       <a href="{% url 'clinician_profile_edit' %}" class="c-btn c-btn-ghost c-btn-sm">Edit Profile</a>
     </div>
+    -->
   </div>
 
 </div>

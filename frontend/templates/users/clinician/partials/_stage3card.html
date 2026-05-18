@@ -1,11 +1,8 @@
-<!-- partials/clinician/_stage3card.html -->
-<!-- Stage 3 ultrasound data is entered by the clinician. -->
-
 <div class="c-section-header" style="margin-top:0.25rem;">
   <span class="c-section-title">Stage 3 — Ultrasound Findings</span>
-  {% if stage3_data %}
-    <span class="text-xs text-muted">Submitted {{ stage3_data.submitted_at|timesince }} ago</span>
-  {% elif not stage2_data %}
+  {% if stage3_rows %}
+    <span class="text-xs text-muted">Submitted {{ stage3_assessment.created_on|timesince }} ago</span>
+  {% elif not stage2_rows %}
     <span class="text-xs text-muted" style="color:var(--slate-300);">Awaiting Stage 2 completion</span>
   {% else %}
     <span class="text-xs" style="color:var(--risk-med); font-weight:500;">Pending entry</span>
@@ -15,89 +12,37 @@
 <div class="c-detail-card">
   <h3>Pelvic Ultrasound Data</h3>
 
-  {% if stage3_data %}
-  <!-- ── Read-only view ──────────────────────────── -->
+  {% if stage3_rows %}
   <div class="c-kv-list" style="margin-bottom:1rem;">
+    {% for label, value, css in stage3_rows %}
     <div class="c-kv">
-      <span class="k">Left Ovary — Follicle Count</span>
-      <span class="v {% if stage3_data.follicle_no_l >= 12 %}flagged{% endif %}">
-        {{ stage3_data.follicle_no_l }}{% if stage3_data.follicle_no_l >= 12 %} ↑{% endif %}
-      </span>
+      <span class="k">{{ label }}</span>
+      <span class="v {% if css %}{{ css }}{% endif %}">{{ value }}</span>
     </div>
-    <div class="c-kv">
-      <span class="k">Right Ovary — Follicle Count</span>
-      <span class="v {% if stage3_data.follicle_no_r >= 12 %}flagged{% endif %}">
-        {{ stage3_data.follicle_no_r }}{% if stage3_data.follicle_no_r >= 12 %} ↑{% endif %}
-      </span>
-    </div>
-    <div class="c-kv">
-      <span class="k">Left Ovary — Avg. Follicle Size</span>
-      <span class="v">{{ stage3_data.avg_f_size_l }} mm</span>
-    </div>
-    <div class="c-kv">
-      <span class="k">Right Ovary — Avg. Follicle Size</span>
-      <span class="v">{{ stage3_data.avg_f_size_r }} mm</span>
-    </div>
-    <div class="c-kv">
-      <span class="k">Endometrial Thickness</span>
-      <span class="v {% if stage3_data.endometrium < 7 or stage3_data.endometrium > 14 %}elevated{% endif %}">
-        {{ stage3_data.endometrium }} mm
-      </span>
-    </div>
+    {% endfor %}
   </div>
+  <!--
   <div style="display:flex; gap:0.65rem;">
     <a href="{% url 'clinician_stage3_edit' journey.id %}" class="c-btn c-btn-ghost c-btn-sm">Edit values</a>
   </div>
+  -->
 
-  {% elif stage2_data %}
-  <!-- ── Entry form ──────────────────────────────── -->
+  {% elif stage2_rows %}
   <p style="font-size:0.82rem; color:var(--slate-400); margin-bottom:1.1rem; line-height:1.6;">
     Enter the pelvic ultrasound findings below. This will trigger the Stage 3 model prediction.
   </p>
   <form method="post" action="{% url 'clinician_stage3_submit' journey.id %}" id="c-stage3-form">
     {% csrf_token %}
     <div class="c-form-grid">
+      {% for field in stage3_form %}
       <div class="c-form-group">
-        <label class="c-form-label" for="follicle_no_l">
-          Left Ovary — Follicle Count
-        </label>
-        <input type="number" id="follicle_no_l" name="follicle_no_l"
-               class="c-form-input" placeholder="e.g. 14"
-               min="0" max="50" step="1" required />
+        <label class="c-form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}
+          <span class="c-form-error">{{ field.errors.0 }}</span>
+        {% endif %}
       </div>
-      <div class="c-form-group">
-        <label class="c-form-label" for="follicle_no_r">
-          Right Ovary — Follicle Count
-        </label>
-        <input type="number" id="follicle_no_r" name="follicle_no_r"
-               class="c-form-input" placeholder="e.g. 16"
-               min="0" max="50" step="1" required />
-      </div>
-      <div class="c-form-group">
-        <label class="c-form-label" for="avg_f_size_l">
-          Left Ovary — Avg. Follicle Size <span class="c-unit">mm</span>
-        </label>
-        <input type="number" id="avg_f_size_l" name="avg_f_size_l"
-               class="c-form-input" placeholder="e.g. 6.2"
-               min="0" max="30" step="0.1" required />
-      </div>
-      <div class="c-form-group">
-        <label class="c-form-label" for="avg_f_size_r">
-          Right Ovary — Avg. Follicle Size <span class="c-unit">mm</span>
-        </label>
-        <input type="number" id="avg_f_size_r" name="avg_f_size_r"
-               class="c-form-input" placeholder="e.g. 6.8"
-               min="0" max="30" step="0.1" required />
-      </div>
-      <div class="c-form-group" style="grid-column: span 2;">
-        <label class="c-form-label" for="endometrium">
-          Endometrial Thickness <span class="c-unit">mm</span>
-        </label>
-        <input type="number" id="endometrium" name="endometrium"
-               class="c-form-input" placeholder="e.g. 8.5"
-               min="0" max="50" step="0.1" required
-               style="max-width:220px;" />
-      </div>
+      {% endfor %}
     </div>
     <div class="c-form-actions">
       <button type="submit" class="c-btn c-btn-primary">
@@ -111,7 +56,6 @@
   </form>
 
   {% else %}
-  <!-- Stage 2 not done yet -->
   <div class="c-empty-state" style="padding:2rem 1rem;">
     <div class="c-empty-icon">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -123,5 +67,4 @@
     </p>
   </div>
   {% endif %}
-
 </div>

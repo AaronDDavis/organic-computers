@@ -1,5 +1,20 @@
+import os
+import sys
+from pathlib import Path
+from dotenv import load_dotenv
+
+CURRENT_DIR = Path(__file__).resolve().parent.parent
+ENV_PATH = CURRENT_DIR / ".env"
+
+load_dotenv(dotenv_path=ENV_PATH)
+
+if "PYTHONPATH" in os.environ:
+    root_dir = (CURRENT_DIR / os.environ["PYTHONPATH"]).resolve()
+    if str(root_dir) not in sys.path:
+        sys.path.insert(0, str(root_dir))
+
 import pandas as pd
-from ...ml.utils import get_recommendation
+from ml.utils import get_recommendation
 from .constants import FEATURE_LABELS_BY_STAGE
 
 

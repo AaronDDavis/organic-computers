@@ -23,10 +23,12 @@ class SignupView(CreateView):
 
 @login_required
 def setup_redirect(request):
-    if request.user.role == User.Role.DOCTOR:
-        return redirect('setup_doctor')
-    elif request.user.role == User.Role.PATIENT:
+    if request.user.role == User.Role.PATIENT:
         return redirect('setup_patient')
+    elif request.user.role == User.Role.DOCTOR:
+        return redirect('setup_doctor')
+    else:
+        return redirect('setup_clinician')
 
 
 class CustomLoginView(LoginView):
@@ -38,8 +40,10 @@ class CustomLoginView(LoginView):
 def dashboard_redirect(request):
     if request.user.role == User.Role.PATIENT:
         return redirect('dashboard_patient')
-    else:
+    elif request.user.role == User.Role.DOCTOR:
         return redirect('dashboard_doctor')
+    else:
+        return redirect('dashboard_clinician')
 
 
 @login_required
@@ -48,3 +52,5 @@ def profile_redirect(request):
         return redirect('profile_patient')
     elif request.user.role == User.Role.DOCTOR:
         return redirect('profile_doctor')
+    else:
+        return redirect('profile_clinician')

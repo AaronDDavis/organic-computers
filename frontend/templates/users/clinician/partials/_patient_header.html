@@ -6,15 +6,13 @@
   <div style="flex:1;">
     <div class="c-patient-name">{{ patient.user.get_full_name }}</div>
     <div class="c-patient-meta">
-      {% if patient.date_of_birth %}DOB: {{ patient.date_of_birth|date:"d M Y" }} · {% endif %}
+      {% if patient.dob %}DOB: {{ patient.dob|date:"d M Y" }} · {% endif %}
       {{ patient.user.username }}
     </div>
     <div class="c-patient-header__badges">
-      {% if journey.risk_label %}
-        <span class="badge-risk {{ journey.risk_label|lower }}">{{ journey.risk_label }} Risk</span>
-      {% endif %}
+        <span class="badge-risk {{ journey.latest_assessment.result.get_risk_display|lower }}">{{ journey.latest_assessment.result.get_risk_display }} Risk</span>
       <span class="text-xs text-muted">
-        Stage {{ journey.current_stage }} of 3 complete
+        {{ journey.latest_assessment.get_stage_display }} complete
       </span>
       {% if not journey.stage2_complete and journey.stage1_complete %}
         <span class="c-pending-badge">Stage 2 pending</span>

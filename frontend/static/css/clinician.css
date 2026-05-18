@@ -474,6 +474,7 @@
 .c-empty-state h2 { font-size: 1rem; font-weight: 600; color: var(--slate-700); }
 .c-empty-state p  { font-size: 0.875rem; color: var(--slate-400); line-height: 1.6; max-width: 300px; }
 
+.c-form-error{ font-size: 0.75rem; color: var(--risk-high); margin-top: 0.25rem; }
 
 /* ══════════════════════════════════════════════════════
    RESPONSIVE
