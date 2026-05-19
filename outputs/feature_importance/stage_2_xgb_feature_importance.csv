@@ -1,0 +1,26 @@
+feature,plain_english,importance
+Weight gain(Y/N),recent weight gain,0.14416414
+hair growth(Y/N),excess hair growth,0.10327924
+Skin darkening (Y/N),skin darkening,0.095162466
+Fast food (Y/N),frequent fast food intake,0.07134787
+Cycle length(days),cycle length,0.04824757
+AMH(ng/mL),AMH level,0.04526736
+Cycle(R/I),menstrual cycle irregularity,0.044783175
+Pimples(Y/N),acne or pimples,0.03793448
+Hip(inch),hip circumference,0.03038532
+Waist(inch),waist circumference,0.029821286
+BP _Diastolic (mmHg),diastolic blood pressure,0.02689756
+Age (yrs),age,0.026463315
+PRL(ng/mL),prolactin level,0.025885966
+LH(mIU/mL),LH level,0.025113968
+Reg.Exercise(Y/N),regular exercise,0.024977012
+BMI,body mass index,0.024316248
+Weight (Kg),weight,0.023994764
+Waist:Hip Ratio,waist-to-hip ratio,0.023687579
+Hair loss(Y/N),hair loss,0.02354153
+FSH/LH,FSH-to-LH ratio,0.023093808
+Vit D3 (ng/mL),vitamin D3 level,0.022958932
+FSH(mIU/mL),FSH level,0.021314418
+TSH (mIU/L),thyroid-stimulating hormone,0.021240328
+Hb(g/dl),hemoglobin,0.018394759
+PRG(ng/mL),progesterone level,0.01772684

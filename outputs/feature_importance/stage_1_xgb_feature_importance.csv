@@ -1,0 +1,15 @@
+feature,plain_english,importance
+Weight gain(Y/N),recent weight gain,0.1960778
+hair growth(Y/N),excess hair growth,0.1456952
+Skin darkening (Y/N),skin darkening,0.13138805
+Fast food (Y/N),frequent fast food intake,0.101529285
+Cycle(R/I),menstrual cycle irregularity,0.06640285
+Cycle length(days),cycle length,0.061361864
+Pimples(Y/N),acne or pimples,0.05267857
+Hip(inch),hip circumference,0.04267618
+Age (yrs),age,0.039657705
+Height(Cm),height,0.03699403
+Waist(inch),waist circumference,0.03417813
+Weight (Kg),weight,0.033039138
+Waist:Hip Ratio,waist-to-hip ratio,0.029553756
+BMI,body mass index,0.028767353

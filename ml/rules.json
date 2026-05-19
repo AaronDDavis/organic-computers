@@ -1,20 +1,23 @@
 {
-    "risk_bands": {
-        "High": {
-            "criteria": "Rotterdam >= 2",
-            "action": "Immediate Specialist Referral"
-        },
-        "Moderate": {
-            "criteria": "Rotterdam == 1 OR BMI > 25",
-            "action": "Primary Care Follow-up"
-        },
-        "Low": {
-            "criteria": "Default",
-            "action": "Routine Monitoring"
-        }
+  "risk_thresholds": {
+    "low": 0.35,
+    "moderate": 0.65
+  },
+  "stage_next_steps": {
+    "stage1": {
+      "low": "Current symptom pattern suggests lower PCOS risk. Continue tracking cycle regularity and metabolic symptoms; reassess if symptoms persist or worsen.",
+      "moderate": "Symptoms suggest possible PCOS risk. Recommended next step: bloodwork including AMH, LH, FSH, TSH, prolactin, and random blood sugar.",
+      "high": "Symptoms suggest elevated PCOS risk. Recommended next step: prompt clinical review and bloodwork including AMH, LH, FSH, TSH, prolactin, and glucose markers."
     },
-    "referral_logic": {
-        "Endocrinologist": "Metabolic Score > Reproductive Score (Indicators: BMI, RBS, Acanthosis)",
-        "Gynecologist": "Reproductive Score >= Metabolic Score (Indicators: Cycles, Follicles, AMH)"
+    "stage2": {
+      "low": "Clinical markers currently suggest lower PCOS risk. If symptoms persist, consider alternative diagnoses and continued cycle tracking.",
+      "moderate": "Bloodwork and symptoms suggest possible PCOS risk. Recommended next step: ultrasound assessment and specialist review.",
+      "high": "Bloodwork and symptoms suggest elevated PCOS risk. Recommended next step: specialist referral and pelvic ultrasound to assess follicle pattern."
+    },
+    "stage3": {
+      "low": "Available symptom, laboratory, and imaging findings suggest lower PCOS risk. Consider differential diagnoses if symptoms remain clinically significant.",
+      "moderate": "Combined findings suggest possible PCOS risk. Clinical confirmation against Rotterdam criteria and exclusion of overlapping conditions is recommended.",
+      "high": "Combined findings suggest elevated PCOS risk. Clinical confirmation, metabolic risk assessment, and management planning are recommended."
     }
+  }
 }

@@ -1,0 +1,26 @@
+feature,plain_english,importance
+Follicle No. (R),right ovarian follicle count,0.14925611
+Weight gain(Y/N),recent weight gain,0.09742
+Follicle No. (L),left ovarian follicle count,0.084045924
+hair growth(Y/N),excess hair growth,0.08275277
+Fast food (Y/N),frequent fast food intake,0.06428306
+AMH(ng/mL),AMH level,0.050173573
+Cycle length(days),cycle length,0.049985453
+Skin darkening (Y/N),skin darkening,0.048301242
+Cycle(R/I),menstrual cycle irregularity,0.038723808
+Endometrium (mm),endometrial thickness,0.025222657
+FSH/LH,FSH-to-LH ratio,0.02377613
+Waist:Hip Ratio,waist-to-hip ratio,0.023348046
+BMI,body mass index,0.02332956
+Age (yrs),age,0.023201508
+Weight (Kg),weight,0.02231051
+LH(mIU/mL),LH level,0.022178305
+TSH (mIU/L),thyroid-stimulating hormone,0.021270795
+Waist(inch),waist circumference,0.020682923
+PRL(ng/mL),prolactin level,0.020662272
+Vit D3 (ng/mL),vitamin D3 level,0.020182159
+FSH(mIU/mL),FSH level,0.019874167
+Hip(inch),hip circumference,0.018486382
+PRG(ng/mL),progesterone level,0.018215304
+Hb(g/dl),hemoglobin,0.016452895
+Hair loss(Y/N),hair loss,0.015864404

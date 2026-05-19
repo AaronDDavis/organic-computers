@@ -1,7 +1,7 @@
 {
   "stage1": {
     "endpoint": "/predict/stage1",
-    "num_features": 11,
+    "num_features": 14,
     "purpose": "Symptom and lifestyle screening before clinical tests are available.",
     "features": [
       {
@@ -17,6 +17,36 @@
         "example": 27.4
       },
       {
+        "name": "Height(Cm)",
+        "frontend_label": "Height (cm)",
+        "type": "number",
+        "example": 162.0
+      },
+      {
+        "name": "Weight (Kg)",
+        "frontend_label": "Weight (kg)",
+        "type": "number",
+        "example": 72.0
+      },
+      {
+        "name": "Waist(inch)",
+        "frontend_label": "Waist circumference (inches)",
+        "type": "number",
+        "example": 34.0
+      },
+      {
+        "name": "Hip(inch)",
+        "frontend_label": "Hip circumference (inches)",
+        "type": "number",
+        "example": 40.0
+      },
+      {
+        "name": "Waist:Hip Ratio",
+        "frontend_label": "Waist-to-Hip Ratio",
+        "type": "number",
+        "example": 0.85
+      },
+      {
         "name": "Cycle(R/I)",
         "frontend_label": "Cycle regularity",
         "type": "number",
@@ -63,16 +93,6 @@
         "example": 0
       },
       {
-        "name": "Hair loss(Y/N)",
-        "frontend_label": "Hair loss",
-        "type": "binary",
-        "allowed_values": {
-          "0": "No",
-          "1": "Yes"
-        },
-        "example": 0
-      },
-      {
         "name": "Pimples(Y/N)",
         "frontend_label": "Acne / pimples",
         "type": "binary",
@@ -91,22 +111,12 @@
           "1": "Yes"
         },
         "example": 1
-      },
-      {
-        "name": "Reg.Exercise(Y/N)",
-        "frontend_label": "Regular exercise",
-        "type": "binary",
-        "allowed_values": {
-          "0": "No",
-          "1": "Yes"
-        },
-        "example": 0
       }
     ]
   },
   "stage2": {
     "endpoint": "/predict/stage2",
-    "num_features": 22,
+    "num_features": 25,
     "purpose": "Stage 1 plus clinical and lab markers after GP/basic clinical evaluation.",
     "features": [
       {
@@ -122,6 +132,30 @@
         "example": 27.4
       },
       {
+        "name": "Weight (Kg)",
+        "frontend_label": "Weight (kg)",
+        "type": "number",
+        "example": 72.0
+      },
+      {
+        "name": "Waist(inch)",
+        "frontend_label": "Waist circumference (inches)",
+        "type": "number",
+        "example": 34.0
+      },
+      {
+        "name": "Hip(inch)",
+        "frontend_label": "Hip circumference (inches)",
+        "type": "number",
+        "example": 40.0
+      },
+      {
+        "name": "Waist:Hip Ratio",
+        "frontend_label": "Waist-to-Hip Ratio",
+        "type": "number",
+        "example": 0.85
+      },
+      {
         "name": "Cycle(R/I)",
         "frontend_label": "Cycle regularity",
         "type": "number",
@@ -244,28 +278,22 @@
         "example": 18.0
       },
       {
+        "name": "PRG(ng/mL)",
+        "frontend_label": "Progesterone level",
+        "type": "number",
+        "example": 0.65
+      },
+      {
         "name": "Vit D3 (ng/mL)",
         "frontend_label": "Vitamin D3 level",
         "type": "number",
         "example": 21.5
       },
       {
-        "name": "RBS(mg/dl)",
-        "frontend_label": "Random blood sugar",
-        "type": "number",
-        "example": 135
-      },
-      {
         "name": "Hb(g/dl)",
         "frontend_label": "Hemoglobin level",
         "type": "number",
         "example": 12.8
-      },
-      {
-        "name": "BP _Systolic (mmHg)",
-        "frontend_label": "Systolic blood pressure",
-        "type": "number",
-        "example": 118
       },
       {
         "name": "BP _Diastolic (mmHg)",
@@ -277,7 +305,7 @@
   },
   "stage3": {
     "endpoint": "/predict/stage3",
-    "num_features": 27,
+    "num_features": 25,
     "purpose": "Stage 2 plus imaging/ultrasound markers after specialist assessment.",
     "features": [
       {
@@ -293,6 +321,30 @@
         "example": 27.4
       },
       {
+        "name": "Weight (Kg)",
+        "frontend_label": "Weight (kg)",
+        "type": "number",
+        "example": 72.0
+      },
+      {
+        "name": "Waist(inch)",
+        "frontend_label": "Waist circumference (inches)",
+        "type": "number",
+        "example": 34.0
+      },
+      {
+        "name": "Hip(inch)",
+        "frontend_label": "Hip circumference (inches)",
+        "type": "number",
+        "example": 40.0
+      },
+      {
+        "name": "Waist:Hip Ratio",
+        "frontend_label": "Waist-to-Hip Ratio",
+        "type": "number",
+        "example": 0.85
+      },
+      {
         "name": "Cycle(R/I)",
         "frontend_label": "Cycle regularity",
         "type": "number",
@@ -349,16 +401,6 @@
         "example": 0
       },
       {
-        "name": "Pimples(Y/N)",
-        "frontend_label": "Acne / pimples",
-        "type": "binary",
-        "allowed_values": {
-          "0": "No",
-          "1": "Yes"
-        },
-        "example": 1
-      },
-      {
         "name": "Fast food (Y/N)",
         "frontend_label": "Regular fast food intake",
         "type": "binary",
@@ -367,16 +409,6 @@
           "1": "Yes"
         },
         "example": 1
-      },
-      {
-        "name": "Reg.Exercise(Y/N)",
-        "frontend_label": "Regular exercise",
-        "type": "binary",
-        "allowed_values": {
-          "0": "No",
-          "1": "Yes"
-        },
-        "example": 0
       },
       {
         "name": "FSH(mIU/mL)",
@@ -415,34 +447,22 @@
         "example": 18.0
       },
       {
+        "name": "PRG(ng/mL)",
+        "frontend_label": "Progesterone level",
+        "type": "number",
+        "example": 0.65
+      },
+      {
         "name": "Vit D3 (ng/mL)",
         "frontend_label": "Vitamin D3 level",
         "type": "number",
         "example": 21.5
       },
       {
-        "name": "RBS(mg/dl)",
-        "frontend_label": "Random blood sugar",
-        "type": "number",
-        "example": 135
-      },
-      {
         "name": "Hb(g/dl)",
         "frontend_label": "Hemoglobin level",
         "type": "number",
         "example": 12.8
-      },
-      {
-        "name": "BP _Systolic (mmHg)",
-        "frontend_label": "Systolic blood pressure",
-        "type": "number",
-        "example": 118
-      },
-      {
-        "name": "BP _Diastolic (mmHg)",
-        "frontend_label": "Diastolic blood pressure",
-        "type": "number",
-        "example": 76
       },
       {
         "name": "Follicle No. (L)",
@@ -455,18 +475,6 @@
         "frontend_label": "Right ovary follicle count",
         "type": "number",
         "example": 16
-      },
-      {
-        "name": "Avg. F size (L) (mm)",
-        "frontend_label": "Average left follicle size",
-        "type": "number",
-        "example": 6.2
-      },
-      {
-        "name": "Avg. F size (R) (mm)",
-        "frontend_label": "Average right follicle size",
-        "type": "number",
-        "example": 6.8
       },
       {
         "name": "Endometrium (mm)",

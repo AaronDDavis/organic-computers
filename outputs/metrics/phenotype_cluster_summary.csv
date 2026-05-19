@@ -1,0 +1,4 @@
+cluster,phenotype_label,BMI,Waist:Hip Ratio,RBS(mg/dl),Skin darkening (Y/N),Weight gain(Y/N),Cycle(R/I),AMH(ng/mL),LH(mIU/mL),FSH/LH,hair growth(Y/N),Pimples(Y/N),Follicle No. (L),Follicle No. (R)
+0,metabolic profile,28.413,0.892,107.021,0.737,0.982,3.333,8.021,1.806,5.21,0.86,0.737,12.772,12.456
+1,reproductive/ovarian profile,21.814,0.9,96.549,0.51,0.0,2.68,7.608,2.539,3.907,0.471,0.549,9.686,11.471
+2,metabolic profile,25.743,0.888,99.667,0.609,0.942,3.13,7.874,4.367,1.767,0.406,0.768,7.391,8.841
