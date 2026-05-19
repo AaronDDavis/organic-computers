@@ -10,6 +10,7 @@ from . import forms
 from assessments.models import Assessment, AssessmentResult, ClinicalNote
 from journeys.models import DiagnosticJourney
 from patients.models import PatientProfile
+from api.utils import get_phenotype
 
 # Need to add user passes test mixin: to ensure only patients call views like patientprofileview and similarly for doctors
 
@@ -134,12 +135,26 @@ class DoctorPatientDetailView(LoginRequiredMixin, DetailView):
             'avg_follicle_size_right': data3.get('Avg. F size (R) (mm)'),
             'endometrium': data3.get('Endometrium (mm)'),
         }
+
+        descriptions = {
+            0: "Characterized by classical ovulatory dysfunction combined with clinical or biochemical hyperandrogenism.",
+            1: "Predominantly reproductive variant showing marked alterations in LH/FSH ratios and follicle counts.",
+            2: "Associated with insulin resistance metabolic risk factors, elevated BMI, higher waist-hip ratio, and metabolic markers."
+        }
+        
+        criteria = {
+            0: "Hyperandrogenism + Ovulatory Dysfunction",
+            1: "Ovulatory Dysfunction + Polycystic Ovaries",
+            2: "Weight Gain/BMI + Hyperandrogenism Symptoms + Metabolic Markers"
+        }
+
+        phenotype_subtype = get_phenotype({**(s1.data), **(s2.data), **(s3.data)})
+        phenotype_subtype['description'] = descriptions.get(phenotype_subtype['cluster'])
+        phenotype_subtype['criteria'] = criteria.get(phenotype_subtype['cluster'])
+        context['phenotype_subtype'] = phenotype_subtype
         context['journey'] = journey
         return context
 
-
-class DoctorSaveNoteView(LoginRequiredMixin, CreateView):
-    model = ClinicalNote
 
 
 class DoctorSaveNoteView(LoginRequiredMixin, View):

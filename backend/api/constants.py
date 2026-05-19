@@ -116,3 +116,20 @@ STAGE_EXPECTED_FEATURES = {
             ],
 }
 
+
+PHENOTYPE_EXPECTED_FEATURES = [
+    "BMI",
+    "Waist:Hip Ratio",
+    "RBS(mg/dl)",
+    "Skin darkening (Y/N)",
+    "Weight gain(Y/N)",
+    "Cycle(R/I)",
+    "AMH(ng/mL)",
+    "LH(mIU/mL)",
+    "FSH(mIU/mL)",
+    "hair growth(Y/N)",
+    "Pimples(Y/N)",
+    "Follicle No. (L)",
+    "Follicle No. (R)",
+    "FSH/LH",
+]

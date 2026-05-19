@@ -36,10 +36,8 @@
   {% endif %}
 
   <!-- ROTTERDAM CRITERIA & PHENOTYPES -->
-  {% if rotterdam %}
-    {% include 'users/doctor/partials/_rotterdam_criteria.html' %}
-  {% endif %}
-
+  {% include 'users/doctor/partials/_rotterdam_criteria.html' %}
+  
   <!-- MODEL ASSESSMENT + TOP 3 PREDICTIVE FACTORS -->
   {% if stage2_result or stage3_result %}
     {% include 'users/doctor/partials/_model_assessment.html' %}

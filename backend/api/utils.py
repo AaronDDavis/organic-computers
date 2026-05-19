@@ -16,7 +16,8 @@ if "PYTHONPATH" in os.environ:
 
 import pandas as pd
 from ml.utils import get_recommendation
-from .constants import FEATURE_LABELS_BY_STAGE, STAGE_EXPECTED_FEATURES
+from .constants import FEATURE_LABELS_BY_STAGE, STAGE_EXPECTED_FEATURES, PHENOTYPE_EXPECTED_FEATURES
+from .loader import phenotype_model_artifact
 
 
 def run_prediction(model, data, stage):
@@ -47,3 +48,22 @@ def run_prediction(model, data, stage):
 def get_top_factors(model, stage):    
     return list(FEATURE_LABELS_BY_STAGE[stage].values())[:3]
 
+
+def get_phenotype(data):
+    pipeline = phenotype_model_artifact['pipeline']
+    required_features = phenotype_model_artifact["features"]
+    label_map = phenotype_model_artifact["label_map"]
+    model_input_data = {
+        feature: data.get(feature) for feature in PHENOTYPE_EXPECTED_FEATURES
+    }
+
+    df = pd.DataFrame([model_input_data], columns=PHENOTYPE_EXPECTED_FEATURES)
+
+    predicted_cluster = pipeline.predict(df[required_features])[0]
+
+    phenotype_text = label_map[predicted_cluster]
+
+    return {
+        'cluster': predicted_cluster,
+        'text': phenotype_text
+        }

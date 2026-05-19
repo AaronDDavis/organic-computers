@@ -9,13 +9,13 @@
       {{ patient.user.username }}
     </div>
     <div class="d-patient-header__badges">
-      {% if journey.risk_label %}
-        <span class="badge-risk {{ journey.risk_label|lower }}">{{ journey.risk_label }} Risk</span>
+      {% if journey.latest_assessment.result.get_risk_display %}
+        <span class="badge-risk {{ journey.latest_assessment.result.get_risk_display|lower }}">{{ journey.latest_assessment.result.get_risk_display }} Risk</span>
       {% endif %}
       {% if journey.status %}
         <span class="badge-status {{ journey.status|lower|cut:' ' }}">{{ journey.status }}</span>
       {% endif %}
-      <span class="text-xs text-muted">Stage {{ journey.current_stage }} of 3 complete</span>
+      <span class="text-xs text-muted">{{ journey.latest_assessment.get_stage_display }} of 3 complete</span>
       {% if journey.is_delayed %}
         <span class="d-flag-badge">⚑ Delayed &gt;60 days</span>
       {% endif %}
