@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404, redirect
 from .models import DiagnosticJourney
 from assessments.models import Assessment
 from doctors.models import DoctorProfile
+from clinics.models import Clinic
 from .utils import build_stage_context
 
 class JourneyDetailView(LoginRequiredMixin, DetailView):
@@ -20,7 +21,8 @@ class JourneyDetailView(LoginRequiredMixin, DetailView):
 
         context['stages'] = build_stage_context(journey)
         context['num_completed_stages'] = journey.assessments.count()
-        context['assigned_doctor'] = None  # TODO: wire up recommendation logic
+        context['assigned_clinic'] = None
+        context['assigned_doctor'] = DoctorProfile.objects.first()  # TODO: wire up recommendation logic
 
         return context
 
@@ -45,7 +47,7 @@ class JourneyCreateView(LoginRequiredMixin, View):
             patient = request.user.profile,
             number = request.user.profile.journeys.count() + 1
         )
-        return redirect(reverse('create_assessment', args=[journey.pk, 'Stage_1']))
+        return redirect(reverse('create_assessment', args=[journey.pk, 'stage1']))
     
 
 
@@ -55,7 +57,7 @@ class DoctorConfirmView(LoginRequiredMixin, View):
         doctor_id = request.POST.get('doctor_id')
         journey.doctor = get_object_or_404(DoctorProfile, user__pk = doctor_id)
         journey.save()
-        return redirect('journey_details', pk=journey.pk)
+        return redirect('journey_detail', pk=journey.pk)
 
 
 class DoctorSearchView(LoginRequiredMixin, ListView):
@@ -63,10 +65,31 @@ class DoctorSearchView(LoginRequiredMixin, ListView):
     template_name = 'journeys/doctor_search.html'
 
     def get_queryset(self):
-        self.assessment = get_object_or_404(Assessment, journey__pk = self.kwargs['pk'], journey__patient = self.request.user.profile, stage = Assessment.Stage.STAGE_2)
+        self.assessment = get_object_or_404(DiagnosticJourney, pk = self.kwargs['pk'], patient = self.request.user.profile).latest_assessment
         return DoctorProfile.objects.filter(specialty = self.assessment.result.specialist)
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['journey'] = self.assessment.journey
+        return context
+
+
+class ClinicConfirmView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        journey = get_object_or_404(DiagnosticJourney, pk = pk, patient__user = request.user)
+        clinic_id = request.POST.get('clinic_id')
+        journey.clinic = get_object_or_404(Clinic, pk = clinic_id)
+        journey.save()
+        return redirect('journey_detail', pk=journey.pk)
+
+
+class ClinicSearchView(LoginRequiredMixin, ListView):
+    model = Clinic
+    template_name = 'journeys/clinic_search.html'
+
+    # Later filter queryset based on clinic country and user country
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['journey'] = get_object_or_404(DiagnosticJourney, pk = self.kwargs['pk'], patient__user = self.request.user)
         return context

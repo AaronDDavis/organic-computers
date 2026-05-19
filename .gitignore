@@ -221,4 +221,4 @@ __marimo__/
 
 .DS_Store
 .zip
-project_context.zip
+staticfiles/

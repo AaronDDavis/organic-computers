@@ -69,6 +69,16 @@
                   <span class="signup-role-card__sub">Manage &amp; prioritise patients</span>
                 </div>
               </label>
+              <label class="signup-role-card" id="role-card-clinician">
+                <input type="radio" name="{{ form.role.html_name }}" value="CL" id="role-CL" class="signup-role-radio">
+                <div class="signup-role-card__icon">
+                  <svg viewBox="0 0 20 20" fill="currentColor"><rect x="8" y="2" width="4" height="7" rx="1"/><rect x="2" y="8" width="7" height="4" rx="1"/><rect x="11" y="8" width="7" height="4" rx="1"/><rect x="8" y="11" width="4" height="7" rx="1"/></svg>
+                </div>
+                <div class="signup-role-card__text">
+                  <span class="signup-role-card__title">Clinician</span>
+                  <span class="signup-role-card__sub">Manage &amp; prioritise patients</span>
+                </div>
+              </label>
             </div>
             {% if form.role.errors %}<div class="login-error" style="margin-top:0.5rem;">{{ form.role.errors.0 }}</div>{% endif %}
           </div>

@@ -1,9 +1,19 @@
 from django import forms
-from .utils import yes_no_field, float_field
+from .utils import yes_no_field
 
 class StageOneForm(forms.Form):
     age = forms.IntegerField(
         label = 'Age',
+        widget = forms.NumberInput()
+    )
+
+    weight = forms.IntegerField(
+        label = 'Weight',
+        widget = forms.NumberInput()
+    )
+
+    height = forms.IntegerField(
+        label = 'Height',
         widget = forms.NumberInput()
     )
 
@@ -23,6 +33,21 @@ class StageOneForm(forms.Form):
         widget = forms.NumberInput()
     )
 
+    waist = forms.IntegerField(
+        label = 'Waist length',
+        widget = forms.NumberInput()
+    )
+
+    hip = forms.IntegerField(
+        label = 'Hip length',
+        widget = forms.NumberInput()
+    )
+
+    waist_hip_ratio = forms.IntegerField(
+        label = 'Waist:Hip Ratio',
+        widget = forms.NumberInput()
+    )
+
     weight_gain     = yes_no_field('Weight gain')
     hair_growth     = yes_no_field('Excess hair growth')
     skin_darkening  = yes_no_field('Skin darkening')
@@ -32,6 +57,7 @@ class StageOneForm(forms.Form):
     exercise        = yes_no_field('Regular exercise')
 
 
+'''
 class StageTwoForm(StageOneForm):
     fsh = float_field('FSH level (mIU/mL)', placeholder='5.8')
     lh = float_field('LH level (mIU/mL)', placeholder='11.2')
@@ -47,4 +73,4 @@ class StageTwoForm(StageOneForm):
 
     bp_systolic = float_field('Systolic blood pressure (mmHg)', placeholder='118')
     bp_diastolic = float_field('Diastolic blood pressure (mmHg)', placeholder='76')
-
+'''

@@ -9,7 +9,7 @@
   <div class="d-stat-grid">
     <div class="d-stat-card">
       <div class="d-stat-label">Total Patients</div>
-      <div class="d-stat-value">{{ request.user.profile.patients }}</div>
+      <div class="d-stat-value">{{ request.user.doctor_profile }}</div>
       <div class="d-stat-sub">In your queue</div>
     </div>
     <div class="d-stat-card accent-high">
@@ -34,7 +34,7 @@
   <!-- ── Priority queue ─────────────────────────────── -->
   <div class="d-section-header">
     <span class="d-section-title">Priority Patient Queue</span>
-    <a href="{% url 'patient_list' %}" class="d-btn d-btn-ghost d-btn-sm">View all</a>
+    <a href="{% url 'doctor_patient_list' %}" class="d-btn d-btn-ghost d-btn-sm">View all</a>
   </div>
 
   <div class="d-table-wrap">

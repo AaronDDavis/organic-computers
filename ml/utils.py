@@ -1,6 +1,6 @@
 RISK_THRESHOLDS = {
     'High': 0.65,
-    'Moderate': 0.40,
+    'Moderate': 0.35,
 }
 
 # EDIT THRESHOLD once received
@@ -8,7 +8,7 @@ RISK_THRESHOLDS = {
 def score_to_risk(score):
     return (
         'High' if score > RISK_THRESHOLDS['High']
-        else 'Moderate' if score > RISK_THRESHOLDS['Moderate']
+        else 'Moderate' if score >= RISK_THRESHOLDS['Moderate']
         else 'Low'
     )
 
@@ -94,5 +94,5 @@ def get_recommendation(data: dict, model_score: float) -> dict:
         'specialist': specialist,
         'focus': focus,
         'next_step': next_step,
-        'recommendation': text
+        'recommendation_text': text
     }

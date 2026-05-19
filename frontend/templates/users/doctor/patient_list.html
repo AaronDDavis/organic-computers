@@ -1,4 +1,5 @@
 {% extends 'users/doctor/doctor_base.html' %}
+{% load mathfilters %}
 
 {% block page_title %}Patient Queue{% endblock %}
 
@@ -7,7 +8,7 @@
 
   <div class="d-page-header">
     <h1>All Patients</h1>
-    <p>{{ patients.count }} patient{{ patients.count|pluralize }} in your queue</p>
+    <p>{{ journeys.count }} patient{{ journeys.count|pluralize }} in your queue</p>
   </div>
 
   <div class="d-table-wrap">
@@ -38,31 +39,33 @@
           <th>Score</th>
           <th>Journey Status</th>
           <th>Last Updated</th>
-          <th>Flag</th>
+          <!-- <th>Flag</th> -->
         </tr>
       </thead>
       <tbody>
         {% for journey in journeys %}
-        <tr data-href="{% url 'patient_detail' journey.patient.id %}"
+        <tr data-href="{% url 'doctor_patient_detail' user_id=journey.patient.user_id %}"
             data-patient="{{ journey.patient.user.get_full_name|lower }}"
-            data-risk="{{ journey.risk_label|lower }}">
+            data-risk="{{ journey.latest_assessment.result.risk_label|lower }}">
           <td class="d-td-name">{{ journey.patient.user.get_full_name }}</td>
           <td>
-            <div class="d-stage-pip" title="Stage {{ journey.current_stage }} of 3">
-              <span class="{% if journey.current_stage >= 1 %}done{% endif %}"></span>
-              <span class="{% if journey.current_stage >= 2 %}done{% endif %}"></span>
-              <span class="{% if journey.current_stage >= 3 %}done{% endif %}"></span>
+            <div class="d-stage-pip" title="{{ journey.latest_assessment.get_stage_display }} of 3">
+              <span class="{% if journey.latest_assessment %}done{% endif %}"></span>
+              <span class="{% if journey.latest_assessment %}done{% endif %}"></span>
+              <span class="{% if journey.latest_assessment %}done{% endif %}"></span>
             </div>
           </td>
-          <td><span class="badge-risk {{ journey.risk_label|lower }}">{{ journey.risk_label }}</span></td>
-          <td>{{ journey.latest_score|floatformat:4 }}</td>
-          <td><span class="badge-status {{ journey.status|lower|cut:' ' }}">{{ journey.status }}</span></td>
-          <td class="d-td-muted">{{ journey.updated_at|timesince }} ago</td>
+          <td><span class="badge-risk {{ journey.latest_assessment.result.get_risk_display|lower }}">{{ journey.latest_assessment.result.get_risk_display }}</span></td>
+          <td>{{ journey.latest_assessment.result.score|mul:100|floatformat:2 }}</td>
+          <td><span class="badge-status {{ journey.status|lower|cut:' ' }}">{{ journey.get_status_display }}</span></td>
+          <td class="d-td-muted">{{ journey.updated_on|timesince }} ago</td>
+          <!--
           <td>
             {% if journey.is_delayed %}
               <span class="d-flag-badge">⚑ Delayed</span>
             {% endif %}
           </td>
+          -->
         </tr>
         {% empty %}
         <tr>

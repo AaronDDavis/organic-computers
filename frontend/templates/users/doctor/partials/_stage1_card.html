@@ -10,7 +10,7 @@
         <span class="v {% if stage1_data.cycle_irregular %}flagged{% endif %}">{{ stage1_data.cycle_regularity_display }}</span>
       </div>
       <div class="d-kv"><span class="k">Cycle Length</span>
-        <span class="v {% if stage1_data.cycle_length > 35 %}flagged{% elif stage1_data.cycle_length > 30 %}elevated{% endif %}">{{ stage1_data.cycle_length }} days</span>
+        <span class="v {% if 21 > stage1_data.cycle_length or stage1_data.cycle_length > 35 %}flagged{% elif stage1_data.cycle_length > 30 %}elevated{% endif %}">{{ stage1_data.cycle_length }} days</span>
       </div>
       <div class="d-kv"><span class="k">BMI</span>
         <span class="v {% if stage1_data.bmi > 30 %}flagged{% elif stage1_data.bmi > 25 %}elevated{% endif %}">{{ stage1_data.bmi }}</span>

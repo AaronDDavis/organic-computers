@@ -4,29 +4,37 @@
 <div class="p-timeline-item">
 
   <!-- Dot -->
-  <div class="p-timeline-dot {% if not assessment %}locked{% endif %}">
+  <div class="p-timeline-dot {% if not assessment and not stage.prev_done %}locked{% endif %}">
     {% if assessment %}
     <svg viewBox="0 0 10 10"><polyline points="1,5 4,8 9,2" stroke="#fff" stroke-width="1.8" fill="none"/></svg>
     {% endif %}
   </div>
 
   <!-- Card -->
-  <div class="card p-timeline-card {% if not assessment %}locked{% endif %}">
-    <div class="p-stage-label {% if not assessment %}locked{% endif %}">Stage {{ forloop_counter }} — {{ stage.label }}</div>
+  <div class="card p-timeline-card {% if not assessment and not stage.prev_done %}locked{% endif %}">
+    <div class="p-stage-label {% if not assessment and not stage.prev_done %}locked{% endif %}">Stage {{ forloop_counter }} — {{ stage.label }}</div>
     <div class="p-stage-title">{{ stage.label }} Assessment</div>
 
     {% if assessment %}
       <div class="p-stage-grid">
         {% for key, value in assessment.data.items %}
         <div class="p-stage-field">
-          <label>{{ key|title }}</label>
-          <span>{{ value }}</span>
+          <label>{{ key|title|cut:"(Y/N)" }}</label>
+          <span>
+            {% if value == 1 %}Yes
+            {% elif value == 0 %}No
+            {% elif value == 2 %}Regular
+            {% elif value == 4 %}Irregular
+            {% else %} {{ value }}
+            {% endif %}
+          </span>
         </div>
         {% endfor %}
       </div>
 
       {% include "journeys/partials/stage_result.html" %}
       {% include "journeys/partials/stage_notes.html" %}
+      {% include "journeys/partials/stage_clinic_confirm.html" %}
       {% include "journeys/partials/stage_doctor_confirm.html" %}
     {% else %}
       

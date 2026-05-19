@@ -1,6 +1,7 @@
 # from django.shortcuts import render
 from django.views.generic.edit import CreateView
 from django.contrib.auth.views import LoginView
+from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
@@ -8,6 +9,15 @@ from django.contrib.auth import login
 
 from . import forms
 from .models import User
+
+
+class LandingView(TemplateView):
+    template_name = 'landing.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['symptoms'] = "Irregular or absent menstrual cycles,Excess facial or body hair (hirsutism),Persistent acne or oily skin,Unexplained weight gain,Hair thinning or scalp hair loss,Difficulty conceiving,Pelvic discomfort or bloating,Fatigue and mood changes".split(',')
+        return context
 
 
 class SignupView(CreateView):

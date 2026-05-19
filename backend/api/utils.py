@@ -13,14 +13,20 @@ if "PYTHONPATH" in os.environ:
     if str(root_dir) not in sys.path:
         sys.path.insert(0, str(root_dir))
 
+
 import pandas as pd
 from ml.utils import get_recommendation
-from .constants import FEATURE_LABELS_BY_STAGE
+from .constants import FEATURE_LABELS_BY_STAGE, STAGE_EXPECTED_FEATURES
 
 
 def run_prediction(model, data, stage):
-    df = pd.DataFrame([data])
-    score = float(model.predict_proba(df)[0][1])
+    expected_features = STAGE_EXPECTED_FEATURES.get(stage)
+    model_input_data = {
+        feature: data.get(feature) for feature in expected_features
+    }
+
+    df = pd.DataFrame([model_input_data], columns=expected_features)
+    score = float(model.predict_proba(df)[0, 1])
     recommendation = get_recommendation(data, score)
     top_factors = get_top_factors(model, stage)
 
@@ -38,11 +44,6 @@ def run_prediction(model, data, stage):
     }
 
 
-def get_top_factors(model, stage):
-    FEATURE_LABELS = FEATURE_LABELS_BY_STAGE[stage]
-    
-    feature_names = model.feature_names_in_
-    top_indices = model.feature_importances_.argsort()[::-1][:3]
-    
-    return [FEATURE_LABELS.get(feature_names[i], feature_names[i]) for i in top_indices]
+def get_top_factors(model, stage):    
+    return list(FEATURE_LABELS_BY_STAGE[stage].values())[:3]
 

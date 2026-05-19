@@ -1,3 +1,6 @@
+{% load widget_tweaks %}
+{% load mathfilters %}
+
 <div class="c-section-header" style="margin-top:0.25rem;">
   <span class="c-section-title">Stage 2 — Hormonal &amp; Lab Values</span>
   {% if stage2_rows %}
@@ -14,7 +17,7 @@
 
   {% if stage2_rows %}
   <div class="c-kv-list" style="margin-bottom:1rem;">
-    {% for label, value, css in stage2_rows %}
+    {% for label, value in stage2_rows.items %}
     <div class="c-kv">
       <span class="k">{{ label }}</span>
       <span class="v {% if css %}{{ css }}{% endif %}">{{ value }}</span>
@@ -25,7 +28,7 @@
     <div class="c-kv">
       <span class="k">Stage 2 Score</span>
       <span class="v {% if stage2_result.score > 0.65 %}flagged{% elif stage2_result.score > 0.45 %}elevated{% endif %}">
-        {{ stage2_result.score|floatformat:4 }}
+        {{ stage2_result.score|mul:100|floatformat:2 }}
       </span>
     </div>
     {% endif %}
@@ -47,7 +50,7 @@
       {% for field in stage2_form %}
       <div class="c-form-group">
         <label class="c-form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-        {{ field }}
+        {{ field|add_class:"c-form-input" }}
         {% if field.errors %}
           <span class="c-form-error">{{ field.errors.0 }}</span>
         {% endif %}
@@ -61,7 +64,9 @@
         </svg>
         Submit &amp; Run Prediction
       </button>
+      <!--
       <button type="button" class="c-btn c-btn-ghost" data-clear-form="c-stage2-form">Clear</button>
+      -->
     </div>
   </form>
 

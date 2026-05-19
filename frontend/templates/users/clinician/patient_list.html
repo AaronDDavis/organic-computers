@@ -42,7 +42,7 @@
       </thead>
       <tbody>
         {% for journey in journeys %}
-        <tr data-href="{% url 'clinician_patient_detail' journey.patient.id %}"
+        <tr data-href="{% url 'clinician_patient_detail' journey.patient.user_id %}"
             data-patient="{{ journey.patient.user.get_full_name|lower }}"
             data-pending="{% if not journey.stage2_complete and journey.stage1_complete %}2{% elif not journey.stage3_complete and journey.stage2_complete %}3{% else %}complete{% endif %}">
           <td class="c-td-name">{{ journey.patient.user.get_full_name }}</td>

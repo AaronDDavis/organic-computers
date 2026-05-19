@@ -1,5 +1,5 @@
 {# Doctor confirmation panel — shown on Stage 2 before patient confirms their assigned doctor #}
-{% if stage.show_doctor_confirm and assigned_doctor %}
+{% if stage.show_doctor_confirm and not journey.doctor %}
 <div class="p-doctor-confirm-accordion" id="doctor-confirm-accordion">
   <div class="p-doctor-confirm-prompt">
     <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">

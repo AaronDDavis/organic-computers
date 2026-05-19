@@ -1,12 +1,20 @@
+{% load mathfilters %}
 {% if stage1_rows %}
 <div class="c-two-col" style="margin-bottom:1.1rem;">
   <div class="c-detail-card" style="margin-bottom:0;">
     <h3>Symptoms &amp; Lifestyle</h3>
     <div class="c-kv-list">
-      {% for label, value, css in stage1_rows %}
+      {% for key, value in stage1_rows.items %}
       <div class="c-kv">
-        <span class="k">{{ label }}</span>
-        <span class="v {% if css %}{{ css }}{% endif %}">{{ value }}</span>
+        <span class="k">{{ key|title|cut:"(Y/N)" }}</span>
+        <span class="v">
+            {% if value == 1 %}Yes
+            {% elif value == 0 %}No
+            {% elif value == 2 %}Regular
+            {% elif value == 4 %}Irregular
+            {% else %} {{ value }}
+            {% endif %}
+          </span>
       </div>
       {% endfor %}
       {% if stage1_result %}
@@ -14,7 +22,7 @@
       <div class="c-kv">
         <span class="k">Stage 1 Score</span>
         <span class="v {% if stage1_result.score > 0.65 %}flagged{% elif stage1_result.score > 0.45 %}elevated{% endif %}">
-          {{ stage1_result.score|floatformat:4 }}
+          {{ stage1_result.score|mul:100|floatformat:2 }}
         </span>
       </div>
       {% endif %}

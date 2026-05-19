@@ -27,6 +27,7 @@ def build_stage_context(journey):
             'assessment':         s1,
             'prev_done':          True,
             'show_doctor_confirm': False,
+            'show_clinic_confirm': True,
             'begin_url':          reverse('create_assessment', args=[journey.pk, 'Stage_1']),
             'locked_message':     '',
         },
@@ -36,7 +37,8 @@ def build_stage_context(journey):
             'assessment':         s2,
             'prev_done':          s1 is not None,
             'show_doctor_confirm': not journey.doctor,
-            'begin_url':          reverse('create_assessment', args=[journey.pk, 'Stage_2']),
+            'show_clinic_confirm': False,
+            'begin_url':          None,
             'locked_message':     'Adding bloodwork results will refine your risk profile and unlock specialist matching.',
         },
         {
@@ -45,7 +47,8 @@ def build_stage_context(journey):
             'assessment':         s3,
             'prev_done':          s2 is not None,
             'show_doctor_confirm': False,
-            'begin_url':          reverse('create_assessment', args=[journey.pk, 'Stage_3']),
+            'show_clinic_confirm': False,
+            'begin_url':          None,
             'locked_message':     'Imaging data (ultrasound, follicle counts) will be entered by your assigned specialist after your scan.',
         },
     ]

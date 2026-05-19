@@ -17,14 +17,14 @@
   <div class="d-kv-list">
     <div class="d-kv">
       <span class="k">Left Ovary — Follicle Count</span>
-      <span class="v {% if stage3_data.follicle_no_l >= 12 %}flagged{% endif %}">
-        {{ stage3_data.follicle_no_l }}{% if stage3_data.follicle_no_l >= 12 %} ↑{% endif %}
+      <span class="v {% if stage3_data.follicle_no_left >= 12 %}flagged{% endif %}">
+        {{ stage3_data.follicle_no_left }}{% if stage3_data.follicle_no_left >= 12 %} ↑{% endif %}
       </span>
     </div>
     <div class="d-kv">
       <span class="k">Right Ovary — Follicle Count</span>
-      <span class="v {% if stage3_data.follicle_no_r >= 12 %}flagged{% endif %}">
-        {{ stage3_data.follicle_no_r }}{% if stage3_data.follicle_no_r >= 12 %} ↑{% endif %}
+      <span class="v {% if stage3_data.follicle_no_right >= 12 %}flagged{% endif %}">
+        {{ stage3_data.follicle_no_right }}{% if stage3_data.follicle_no_right >= 12 %} ↑{% endif %}
       </span>
     </div>
     <div class="d-kv">
@@ -33,7 +33,7 @@
     </div>
     <div class="d-kv">
       <span class="k">Right Ovary — Avg. Follicle Size</span>
-      <span class="v">{{ stage3_data.avg_f_size_r }} mm</span>
+      <span class="v">{{ stage3_data.avg_follicle_size_right }} mm</span>
     </div>
     <div class="d-kv">
       <span class="k">Endometrial Thickness</span>

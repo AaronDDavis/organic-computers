@@ -1,0 +1,233 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/landing.css' %}"/>
+{% endblock %}
+
+{% block main_content %}
+<div class="lp">
+  <div class="lp-mesh"></div>
+
+  <!-- ── Nav ─────────────────────────────────────────── -->
+  <nav class="lp-nav">
+    <a class="lp-nav__brand" href="{% url 'landing' %}">
+      <div class="lp-nav__logo">PS</div>
+      <span class="lp-nav__name">PCOSense</span>
+    </a>
+    <div class="lp-nav__right">
+      <a href="{% url 'login' %}" class="lp-btn-ghost">Sign in</a>
+      <a href="{% url 'signup' %}" class="lp-btn-primary">Get started</a>
+    </div>
+  </nav>
+
+  <!-- ── Hero ────────────────────────────────────────── -->
+  <section class="lp-hero">
+    <div class="lp-hero__eyebrow">
+      <span></span>
+      Progressive Diagnostic Triage
+    </div>
+    <h1 class="lp-hero__title">
+      Answers for PCOS,<br>
+      <em>at every stage.</em>
+    </h1>
+    <p class="lp-hero__sub">
+      PCOSense uses a staged assessment model to help patients understand their risk, connect with clinicians for lab work, and reach the right specialist — without the guesswork.
+    </p>
+    <div class="lp-hero__actions">
+      <a href="{% url 'signup' %}" class="lp-hero__cta">
+        Start your journey
+        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M2 7h10M8 3l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+      <a href="#what-is-pcos" class="lp-hero__secondary">Learn about PCOS ↓</a>
+    </div>
+  </section>
+
+  <hr class="lp-divider">
+
+  <!-- ── What is PCOS ─────────────────────────────────── -->
+  <section class="lp-section" id="what-is-pcos">
+    <div class="lp-pcos-grid">
+      <div class="lp-pcos-left">
+        <div class="lp-section__label">Understanding PCOS</div>
+        <h2 class="lp-section__title">A common condition,<br>frequently undiagnosed.</h2>
+        <p class="lp-section__body">
+          Polycystic Ovary Syndrome is a hormonal disorder affecting people with ovaries of reproductive age. It disrupts the normal functioning of the ovaries and can have wide-ranging effects on metabolic, reproductive, and psychological health.
+        </p>
+
+        <div class="lp-pcos-stats" style="margin-top:2.5rem;">
+          <div class="lp-stat-block">
+            <div class="lp-stat-block__num">1 in 10</div>
+            <div class="lp-stat-block__label">people with ovaries are affected worldwide</div>
+          </div>
+          <div class="lp-stat-block">
+            <div class="lp-stat-block__num">70%</div>
+            <div class="lp-stat-block__label">remain undiagnosed at any given time</div>
+          </div>
+          <div class="lp-stat-block">
+            <div class="lp-stat-block__num">2–3 yrs</div>
+            <div class="lp-stat-block__label">average time to receive a diagnosis</div>
+          </div>
+          <div class="lp-stat-block">
+            <div class="lp-stat-block__num">4</div>
+            <div class="lp-stat-block__label">distinct phenotypes under the Rotterdam criteria</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="lp-section__label" style="margin-bottom:1.25rem;">Common symptoms</div>
+        <div class="lp-symptom-list" style="margin-bottom:3rem;">
+          {% for symptom in symptoms %}
+          <div class="lp-symptom-item">
+            <span class="lp-symptom-dot"></span>
+            {{ symptom }}
+          </div>
+          {% endfor %}
+        </div>
+
+        <div class="lp-section__label" style="margin-bottom:1.25rem;">How PCOSense works</div>
+        <div class="lp-stages">
+          <div class="lp-stage-item">
+            <div class="lp-stage-num">01</div>
+            <div class="lp-stage-text">
+              <h4>Symptomatic Assessment</h4>
+              <p>You describe your symptoms and lifestyle. Our model computes an initial risk score.</p>
+            </div>
+          </div>
+          <div class="lp-stage-item">
+            <div class="lp-stage-num">02</div>
+            <div class="lp-stage-text">
+              <h4>Clinical Lab Values</h4>
+              <p>A clinician at your chosen clinic enters your hormone and metabolic panel results.</p>
+            </div>
+          </div>
+          <div class="lp-stage-item">
+            <div class="lp-stage-num">03</div>
+            <div class="lp-stage-text">
+              <h4>Ultrasound Findings</h4>
+              <p>Pelvic imaging data is entered by your clinician, completing the diagnostic picture.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="lp-divider">
+
+  <!-- ── Role cards ───────────────────────────────────── -->
+  <section class="lp-roles" id="get-started">
+    <div class="lp-roles__header">
+      <div class="lp-section__label" style="margin-bottom:0.75rem;">Get started</div>
+      <h2 class="lp-section__title" style="margin-bottom:0.75rem;">Who are you?</h2>
+      <p style="font-size:0.92rem; color:rgba(255,255,255,0.35); font-weight:300;">
+        Each role has its own portal — choose yours to create an account.
+      </p>
+    </div>
+
+    <div class="lp-roles__grid">
+
+      <!-- Patient -->
+      <a href="{% url 'signup' %}" class="lp-role-card card-patient">
+        <div>
+          <div class="lp-role-icon">
+            <svg viewBox="0 0 20 20" fill="currentColor">
+              <circle cx="10" cy="6" r="3.5"/>
+              <path d="M3 18c0-3.9 3.1-7 7-7s7 3.1 7 7"/>
+            </svg>
+          </div>
+          <div class="lp-role-card__tag" style="margin-top:0.85rem;">Patient</div>
+        </div>
+        <div class="lp-role-card__title">I'm here for myself</div>
+        <p class="lp-role-card__desc">
+          Track your symptoms, move through each diagnostic stage, and understand your PCOS risk with clarity.
+        </p>
+        <div class="lp-role-card__cta">
+          Create patient account
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M2 7h10M8 3l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </a>
+
+      <!-- Doctor -->
+      <a href="{% url 'signup' %}" class="lp-role-card card-doctor">
+        <div>
+          <div class="lp-role-icon">
+            <svg viewBox="0 0 20 20" fill="currentColor">
+              <rect x="8" y="2" width="4" height="7" rx="1"/>
+              <rect x="2" y="8" width="7" height="4" rx="1"/>
+              <rect x="11" y="8" width="7" height="4" rx="1"/>
+              <rect x="8" y="11" width="4" height="7" rx="1"/>
+            </svg>
+          </div>
+          <div class="lp-role-card__tag" style="margin-top:0.85rem;">Doctor</div>
+        </div>
+        <div class="lp-role-card__title">I manage patients</div>
+        <p class="lp-role-card__desc">
+          Review patient journeys, monitor risk levels, add clinical notes, and guide patients through their diagnostic path.
+        </p>
+        <div class="lp-role-card__cta">
+          Create doctor account
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M2 7h10M8 3l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </a>
+
+      <!-- Clinician -->
+      <a href="{% url 'signup' %}" class="lp-role-card card-clinician">
+        <div>
+          <div class="lp-role-icon">
+            <svg viewBox="0 0 20 20" fill="currentColor">
+              <path d="M10 2L3 6v2h14V6L10 2zM4 9v7h3v-4h2v4h2v-4h2v4h3V9H4zM3 17h14v2H3z"/>
+            </svg>
+          </div>
+          <div class="lp-role-card__tag" style="margin-top:0.85rem;">Clinician</div>
+        </div>
+        <div class="lp-role-card__title">I work at a clinic</div>
+        <p class="lp-role-card__desc">
+          Enter lab results and ultrasound findings for patients assigned to your clinic, enabling their staged assessments.
+        </p>
+        <div class="lp-role-card__cta">
+          Create clinician account
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M2 7h10M8 3l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!--
+  ═══════════════════════════════════════════════════════
+  GUEST TEST OPTION — uncomment when ready to implement
+  ═══════════════════════════════════════════════════════
+  <div class="lp-guest">
+    <div class="lp-guest__inner">
+      <div class="lp-guest__text">
+        <strong>Not ready to create an account?</strong><br>
+        Take a quick anonymous Stage 1 assessment — no login required.
+      </div>
+      <a href="{% url 'login' %}" class="lp-btn-ghost" style="white-space:nowrap;">
+        Try as guest → guest_assessment
+      </a>
+    </div>
+  </div>
+  ═══════════════════════════════════════════════════════ -->
+
+  <!-- ── Footer ──────────────────────────────────────── -->
+  <footer class="lp-footer">
+    <span class="lp-footer__brand">PCOSense &mdash; Progressive Diagnostic Triage</span>
+    <span class="lp-footer__note">Built for educational and research purposes. Not a substitute for medical advice.</span>
+  </footer>
+
+</div>
+{% endblock main_content %}
