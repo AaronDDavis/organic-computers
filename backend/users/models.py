@@ -7,6 +7,7 @@ class User(AbstractUser):
     class Role(models.TextChoices):
         DOCTOR = 'DR', _('Doctor')
         PATIENT = 'PT', _('Patient')
+        CLINICIAN = 'CL', _('Clinician')
 
     first_name = EncryptedCharField(max_length = 150, blank = True, verbose_name = 'first name')
     last_name = EncryptedCharField(max_length = 150, blank = True, verbose_name = 'last name')

@@ -1,4 +1,5 @@
 {% extends 'users/patient/patient_base.html' %}
+{% load mathfilters %}
 {% load static %}
 {% with active_tab='journeys' %}
 
@@ -18,7 +19,9 @@
     <p style="margin:0;">Started {{ journey.created_on|date:"d M Y" }} &middot; Stage {{ num_completed_stages }} of 3 complete</p>
   </div>
   <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+    {% if not journey.clinic %}
     <span class="badge-status {{ journey.status|lower }}">{{ journey.get_status_display }}</span>
+    {% endif %}
 
     {% if journey.doctor %}
     <span class="p-journey-doctor-tag p-journey-doctor-tag--detail" id="doctor-confirmed-tag">
@@ -27,6 +30,14 @@
         <path d="M1 11c0-2.8 2.2-5 5-5s5 2.2 5 5"/>
       </svg>
       Dr. {{ journey.doctor.user.get_full_name }} &middot; {{ journey.doctor.get_specialty_display }}
+    </span>
+    {% endif %}
+    {% if journey.clinic %}
+    <span class="p-journey-clinic-tag p-journey-clinic-tag--detail">
+      <svg viewBox="0 0 12 12" fill="currentColor" width="10" height="10">
+        <path d="M6 1L1 4v1h10V4L6 1zM2 6v4h2V8h1v2h2V8h1v2h2V6H2zM1 11h10v1H1z"/>
+      </svg>
+      {{ journey.clinic.name }}
     </span>
     {% endif %}
   </div>

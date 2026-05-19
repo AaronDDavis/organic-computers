@@ -11,10 +11,10 @@ FRONTEND_DIR = BASE_DIR.parent / 'frontend'
 SECRET_KEY = os.environ.get('SECRET_KEY')
 FIELD_ENCRYPTION_KEY = os.environ.get('FIELD_ENCRYPTION_KEY', os.getenv('FIELD_ENCRYPTION_KEY'))
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Turn off Debug mode securely by checking for an environment variable
+DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -41,7 +41,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    # 'whitenoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -119,6 +119,9 @@ STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [FRONTEND_DIR/ 'static']
 
+STATIC_ROOT = os.path.join(FRONTEND_DIR, 'staticfiles')
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
@@ -126,7 +129,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.User'
 
-LOGIN_URL = '/user/login/'
 LOGIN_REDIRECT_URL = 'dashboard'
+LOGOUT_REDIRECT_URL = 'login'
 
-LOGOUT_REDIRECT_URL = '/user/login/'

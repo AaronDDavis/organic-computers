@@ -3,7 +3,7 @@ from django.urls import path, include
 from django.views.generic import RedirectView
 
 urlpatterns = [
-    path('', RedirectView.as_view(pattern_name = 'login', permanent = True)),
+    path('', RedirectView.as_view(pattern_name = 'landing')), #, permanent = True)),
     path('user/', include('users.urls')),
     path('patient/', include('patients.urls')),
     path('doctor/', include('doctors.urls')),

@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView, CreateView, ListView, DetailView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.db.models import OuterRef, Subquery, Q, Count, BooleanField, ExpressionWrapper, Prefetch, Exists
+from django.db.models import OuterRef, Subquery, Prefetch, Exists, Sum, Case, When, IntegerField
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 
@@ -9,8 +9,10 @@ from . import forms
 from journeys.models import DiagnosticJourney
 from assessments.models import Assessment, AssessmentResult
 from patients.models import PatientProfile
+from doctors.models import DoctorProfile
+from api.utils import run_prediction
 from api.loader import stage2_model, stage3_model
-
+from assessments.utils import map_to_backend, float_field
 
 class ClinicianProfileView(LoginRequiredMixin, TemplateView):
     template_name = 'users/clinician/profile.html'
@@ -31,11 +33,11 @@ class ClinicianDashboardView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        clinic = self.request.user.profile.clinic
+        clinic = self.request.user.clinician_profile.clinic
 
         # Go through this
 
-        latest_assessment_id_subquery = Assessment.objects.filter(
+        latest_assessment_id_subquery_1 = Assessment.objects.filter(
             journey__patient=OuterRef('patient'),
             journey__clinic=clinic
         ).order_by(
@@ -43,43 +45,73 @@ class ClinicianDashboardView(LoginRequiredMixin, TemplateView):
             '-journey__number',
         ).values('id')[:1]
 
+        latest_assessment_id_subquery_2 = Assessment.objects.filter(
+            journey__patient=OuterRef(OuterRef('patient')),
+            journey__clinic=clinic
+        ).order_by(
+            '-journey__updated_on',
+            '-journey__number',
+        ).values('id')[:1]
+
         latest_stage_subquery = Assessment.objects.filter(
-            id=Subquery(latest_assessment_id_subquery)
+            id=Subquery(latest_assessment_id_subquery_2)
         ).values('stage')[:1]
+
+        stage1_done = Assessment.objects.filter(journey=OuterRef('pk'), stage='S1')
+        stage2_done = Assessment.objects.filter(journey=OuterRef('pk'), stage='S2')
+        stage3_done = Assessment.objects.filter(journey=OuterRef('pk'), stage='S3')
 
         active_journeys = DiagnosticJourney.objects.filter(
             clinic=clinic,
-            assessments__id=Subquery(latest_assessment_id_subquery)
+            assessments__id=Subquery(latest_assessment_id_subquery_1)
         ).annotate(
             latest_stage=Subquery(latest_stage_subquery)
         )
 
-        counts = active_journeys.aggregate(
-            pending_s2=Count('id', filter=Q(latest_stage='S1')),
-            pending_s3=Count('id', filter=Q(latest_stage='S2')),
-            complete=Count('id', filter=Q(latest_stage='S3')),
-        )
-
-        context['pending_stage2_count'] = counts['pending_s2']
-        context['pending_stage3_count'] = counts['pending_s3']
-        context['complete_count'] = counts['complete']
-
-        context['total_patients'] = (
-            counts['pending_s2'] + counts['pending_s3'] + counts['complete']
-        )
-
         context['pending_queue'] = active_journeys.filter(
             latest_stage__in=['S1', 'S2']
-        ).annotate(
-            stage_2_complete=ExpressionWrapper(
-                Q(latest_stage='S2'), 
-                output_field=BooleanField()
-            ),
-            stage_3_complete=ExpressionWrapper(
-                Q(latest_stage='S3'), 
-                output_field=BooleanField()
-            )
+        ).distinct().annotate(
+            stage1_complete=Exists(stage1_done),
+            stage2_complete=Exists(stage2_done),
+            stage3_complete=Exists(stage3_done),
         ).select_related('patient')
+
+        stage1_completed_count = context['pending_queue'].aggregate(
+            total_stage1_complete=Sum(
+                Case(
+                    When(stage1_complete=True, then=1),
+                    default=0,
+                    output_field=IntegerField()
+                )
+            )
+        )['total_stage1_complete'] or 0  # 'or 0' handles the case where the queryset is empty
+
+        stage2_completed_count = context['pending_queue'].aggregate(
+            total_stage2_complete=Sum(
+                Case(
+                    When(stage2_complete=True, then=1),
+                    default=0,
+                    output_field=IntegerField()
+                )
+            )
+        )['total_stage2_complete'] or 0  # 'or 0' handles the case where the queryset is empty
+
+        stage3_completed_count = context['pending_queue'].aggregate(
+            total_stage3_complete=Sum(
+                Case(
+                    When(stage3_complete=True, then=1),
+                    default=0,
+                    output_field=IntegerField()
+                )
+            )
+        )['total_stage3_complete'] or 0  # 'or 0' handles the case where the queryset is empty
+
+        context['pending_stage2_count'] = stage2_completed_count - stage1_completed_count
+        context['pending_stage3_count'] = stage3_completed_count - stage2_completed_count
+        context['complete_count'] = stage3_completed_count
+
+        context['total_patients'] = stage1_completed_count
+
 
         return context
     
@@ -122,104 +154,6 @@ class ClinicianPatientListView(LoginRequiredMixin, ListView):
         return self.journeys
 
 
-def unpack_stage_data(json_data, stage):
-    """
-    Normalises raw JSON assessment data into a simple object
-    the templates can dot-access.
-    """
-    if not json_data:
-        return None
-
-    BOOL_FIELDS = {
-        'weight_gain', 'hair_growth', 'skin_darkening',
-        'hair_loss', 'pimples', 'fast_food', 'exercise',
-    }
-    CYCLE_MAP = {2: 'Regular', 4: 'Irregular'}
-
-    data = dict(json_data)  # copy so we don't mutate the stored JSON
-
-    # Normalise boolean fields (1/0 → True/False for |yesno filter)
-    for field in BOOL_FIELDS:
-        if field in data:
-            data[field] = bool(data[field])
-
-    # Rename exercise → regular_exercise to match template
-    if 'exercise' in data:
-        data['regular_exercise'] = data.pop('exercise')
-
-    # Cycle regularity display
-    if 'cycle_regularity' in data:
-        data['cycle_regularity_display'] = CYCLE_MAP.get(
-            data['cycle_regularity'], str(data['cycle_regularity'])
-        )
-
-    # Normalise hemoglobin key for stage 2
-    if stage == 'S2' and 'hemoglobin' in data:
-        data['hb'] = data.pop('hemoglobin')
-
-    return type('StageData', (), data)()  # dot-accessible object
-
-
-class ClinicianPatientDetailView(LoginRequiredMixin, DetailView):
-    model = PatientProfile
-    template_name = 'users/clinician/patient_detail.html'
-    context_object_name = 'patient'
-    pk_url_kwarg = 'patient_id'
-
-    def get_queryset(self):
-        return PatientProfile.objects.select_related('user')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        patient = self.object
-        clinic = self.request.user.clinician_profile.clinic
-
-        journey = (
-            DiagnosticJourney.objects
-            .filter(patient=patient, clinic=clinic)
-            .prefetch_related(
-                'assessments',
-                'assessments__result',
-            )
-            .select_related('doctor__user')
-            .order_by('-updated_on', '-number')
-            .first()
-        )
-
-        if not journey:
-            context['journey'] = None
-            return context
-
-        # Index assessments by stage
-        assessments = {a.stage: a for a in journey.assessments.all()}
-
-        s1 = assessments.get('S1')
-        s2 = assessments.get('S2')
-        s3 = assessments.get('S3')
-
-        # Stage completion flags (used in template conditionals)
-        journey.stage1_complete = s1 is not None
-        journey.stage2_complete = s2 is not None
-        journey.stage3_complete = s3 is not None
-
-        context['journey']       = journey
-
-        # Stage data objects (dot-accessible) — None if stage not done yet
-        context['stage1_data']   = unpack_stage_data(s1.data if s1 else None, 'S1')
-        context['stage2_data']   = unpack_stage_data(s2.data if s2 else None, 'S2')
-        context['stage3_data']   = unpack_stage_data(s3.data if s3 else None, 'S3')
-
-        # Results — None if no result yet
-        context['stage1_result'] = getattr(s1, 'result', None) if s1 else None
-        context['stage2_result'] = getattr(s2, 'result', None) if s2 else None
-
-        # created_on for submitted_at references in stage 2 & 3 cards
-        context['stage2_assessment'] = s2
-        context['stage3_assessment'] = s3
-
-        return context
-
-
 
 def flag(value, high=None, low=None, elevated_high=None, elevated_low=None):
     """Returns 'flagged', 'elevated', or '' based on thresholds."""
@@ -231,54 +165,11 @@ def flag(value, high=None, low=None, elevated_high=None, elevated_low=None):
     return ''
 
 
-def build_stage1_rows(data):
-    return [
-        ('Age',             f"{data.get('age')} yrs",                          ''),
-        ('BMI',             data.get('bmi'),                                    flag(data.get('bmi', 0), elevated_high=25, high=30)),
-        ('Cycle Regularity',{2: 'Regular', 4: 'Irregular'}.get(data.get('cycle_regularity'), '—'), ''),
-        ('Cycle Length',    f"{data.get('cycle_length')} days",                 flag(data.get('cycle_length', 0), elevated_high=30, high=35)),
-        ('Excess Hair Growth', 'Yes' if data.get('hair_growth') else 'No',     ''),
-        ('Skin Darkening',  'Yes' if data.get('skin_darkening') else 'No',     ''),
-        ('Hair Loss',       'Yes' if data.get('hair_loss') else 'No',          ''),
-        ('Acne / Pimples',  'Yes' if data.get('pimples') else 'No',            ''),
-        ('Weight Gain',     'Yes' if data.get('weight_gain') else 'No',        'elevated' if data.get('weight_gain') else ''),
-        ('Regular Fast Food','Yes' if data.get('fast_food') else 'No',         'elevated' if data.get('fast_food') else ''),
-        ('Regular Exercise','Yes' if data.get('exercise') else 'No',           '' if data.get('exercise') else 'elevated'),
-    ]
-
-
-def build_stage2_rows(data):
-    rows = [
-        ('FSH',              f"{data.get('fsh')} mIU/mL",                      ''),
-        ('LH',               f"{data.get('lh')} mIU/mL",                       flag(data.get('lh', 0), high=10)),
-        ('FSH/LH Ratio',     f"{float(data.get('fsh_lh_ratio', 0)):.2f}",      flag(data.get('fsh_lh_ratio', 1), low=1)),
-        ('AMH',              f"{data.get('amh')} ng/mL",                        flag(data.get('amh', 0), high=4.5)),
-        ('TSH',              f"{data.get('tsh')} mIU/L",                        flag(data.get('tsh', 2), elevated_high=4.5, elevated_low=0.4)),
-        ('Prolactin',        f"{data.get('prolactin')} ng/mL",                  flag(data.get('prolactin', 0), elevated_high=25)),
-        ('Vitamin D3',       f"{data.get('vit_d3')} ng/mL",                    flag(data.get('vit_d3', 30), low=20, elevated_low=30)),
-        ('Random Blood Sugar',f"{data.get('rbs')} mg/dL",                      flag(data.get('rbs', 0), elevated_high=110, high=140)),
-        ('Haemoglobin',      f"{data.get('hemoglobin')} g/dL",                 flag(data.get('hemoglobin', 13), low=11, elevated_low=12)),
-        ('BP Systolic',      f"{data.get('bp_systolic')} mmHg",                flag(data.get('bp_systolic', 0), elevated_high=130)),
-        ('BP Diastolic',     f"{data.get('bp_diastolic')} mmHg",               flag(data.get('bp_diastolic', 0), elevated_high=85)),
-    ]
-    return rows
-
-
-def build_stage3_rows(data):
-    return [
-        ('Left Ovary — Follicle Count',      data.get('follicle_no_l'),         flag(data.get('follicle_no_l', 0), high=11)),
-        ('Right Ovary — Follicle Count',     data.get('follicle_no_r'),         flag(data.get('follicle_no_r', 0), high=11)),
-        ('Left Ovary — Avg. Follicle Size',  f"{data.get('avg_f_size_l')} mm",  ''),
-        ('Right Ovary — Avg. Follicle Size', f"{data.get('avg_f_size_r')} mm",  ''),
-        ('Endometrial Thickness',            f"{data.get('endometrium')} mm",    flag(data.get('endometrium', 10), low=7, elevated_low=14)),
-    ]
-
-
 class ClinicianPatientDetailView(LoginRequiredMixin, DetailView):
     model = PatientProfile
     template_name = 'users/clinician/patient_detail.html'
     context_object_name = 'patient'
-    pk_url_kwarg = 'patient_id'
+    pk_url_kwarg = 'user_id'
 
     def get_queryset(self):
         return PatientProfile.objects.select_related('user')
@@ -317,9 +208,9 @@ class ClinicianPatientDetailView(LoginRequiredMixin, DetailView):
         context['stage2_result']    = getattr(s2, 'result', None) if s2 else None
 
         # Pre-built rows: list of (label, value, css_class)
-        context['stage1_rows']      = build_stage1_rows(s1.data) if s1 else None
-        context['stage2_rows']      = build_stage2_rows(s2.data) if s2 else None
-        context['stage3_rows']      = build_stage3_rows(s3.data) if s3 else None
+        context['stage1_rows']      = s1.data
+        context['stage2_rows']      = s2.data if s2 else None
+        context['stage3_rows']      = s3.data if s3 else None
 
         # Forms (pass back with errors if session has them)
         context['stage2_form']      = forms.Stage2Form()
@@ -339,30 +230,45 @@ class ClinicianStage2SubmitView(LoginRequiredMixin, View):
         if form.is_valid():
             cleaned_data = form.cleaned_data
 
+            '''
+            fsh = cleaned_data.get('fsh')
+            lh = cleaned_data.get('lh')
+
+            cleaned_data['fsh_lh_ratio'] = round(fsh / lh, 2) if fsh is not None and lh else 0
+            '''
+
+            cleaned_data = map_to_backend(cleaned_data)
+
             assessment = Assessment.objects.create(
                 journey=journey,
                 stage=Assessment.Stage.STAGE_2,
                 data=cleaned_data,
             )
 
-            result = run_prediction(stage2_model, cleaned_data, 'stage2')
+            cleaned_data = {**assessment.previous.data, **cleaned_data}
+
+            result = run_prediction(stage2_model, cleaned_data, Assessment.Stage.STAGE_2)
 
             AssessmentResult.objects.create(
                 assessment=assessment,
                 score=result['confidence'],
                 risk=result['risk'],
                 top_factors=result['top_factors'],
-                specialist=result['specialist'],
+                specialist={
+                'Endocrinologist': DoctorProfile.Specialty.ENDOCRINOLOGIST,
+                'Gynecologist': DoctorProfile.Specialty.GYNECOLOGIST,
+                'General Practitioner': DoctorProfile.Specialty.GENERAL,
+                }.get(result['specialist'], DoctorProfile.Specialty.GENERAL),
                 clinical_focus=result['clinical_focus'],
                 next_step=result['next_step'],
                 recommendation=result['recommendation_text']
             )
 
             messages.success(request, 'Stage 2 submitted successfully.')
-            return redirect('clinician_patient_detail', patient_id=journey.patient_id)
+            return redirect('clinician_patient_detail', user_id=journey.patient.user_id)
 
         messages.error(request, 'Please correct the errors below.')
-        return redirect('clinician_patient_detail', patient_id=journey.patient_id)
+        return redirect('clinician_patient_detail', user_id=journey.patient.user_id)
 
 
 class ClinicianStage3SubmitView(LoginRequiredMixin, View):
@@ -374,7 +280,7 @@ class ClinicianStage3SubmitView(LoginRequiredMixin, View):
         )
         form = forms.Stage3Form(request.POST)
         if form.is_valid():
-            cleaned_data = form.cleaned_data
+            cleaned_data = map_to_backend(form.cleaned_data)
 
             assessment = Assessment.objects.create(
                 journey=journey,
@@ -382,24 +288,32 @@ class ClinicianStage3SubmitView(LoginRequiredMixin, View):
                 data=cleaned_data,
             )
 
-            result = run_prediction(stage3_model, cleaned_data, 'stage3')
+            cleaned_data = {**assessment.previous.previous.data, **assessment.previous.data, **cleaned_data}
+
+            result = run_prediction(stage3_model, cleaned_data, Assessment.Stage.STAGE_3)
 
             AssessmentResult.objects.create(
                 assessment=assessment,
                 score=result['confidence'],
                 risk=result['risk'],
                 top_factors=result['top_factors'],
-                specialist=result['specialist'],
+                specialist={
+                'Endocrinologist': DoctorProfile.Specialty.ENDOCRINOLOGIST,
+                'Gynecologist': DoctorProfile.Specialty.GYNECOLOGIST,
+                'General Practitioner': DoctorProfile.Specialty.GENERAL,
+                }.get(result['specialist'], DoctorProfile.Specialty.GENERAL),
                 clinical_focus=result['clinical_focus'],
                 next_step=result['next_step'],
                 recommendation=result['recommendation_text']
             )
 
+            journey.status = DiagnosticJourney.Status.COMPLETED
+
             messages.success(request, 'Stage 3 submitted successfully.')
-            return redirect('clinician_patient_detail', patient_id=journey.patient_id)
+            return redirect('clinician_patient_detail', user_id=journey.patient.user_id)
 
         messages.error(request, 'Please correct the errors below.')
-        return redirect('clinician_patient_detail', patient_id=journey.patient_id)
+        return redirect('clinician_patient_detail', user_id=journey.patient.user_id)
 
 
 class ClinicianStage2EditView(LoginRequiredMixin, View):
@@ -411,14 +325,17 @@ class ClinicianStage2EditView(LoginRequiredMixin, View):
         )
         form = forms.Stage2Form(request.POST)
         if form.is_valid():
+            fsh = cleaned_data.get('fsh')
+            lh = cleaned_data.get('lh')
             cleaned_data = form.cleaned_data
+            cleaned_data['fsh_lh_ratio'] = round(fsh / lh, 2) if fsh is not None and lh else 0
 
             assessment = get_object_or_404(Assessment, journey=journey, stage=Assessment.Stage.STAGE_2)
             assessment.data = cleaned_data
             assessment.save()
 
             # Re-run prediction and overwrite existing result
-            result = run_prediction(stage2_model, cleaned_data, 'stage2')
+            # result = run_prediction(stage2_model, cleaned_data, 'stage2')
             AssessmentResult.objects.update_or_create(
                 assessment=assessment,
                 defaults={

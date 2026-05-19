@@ -27,7 +27,7 @@
 {% if journeys %}
 <div class="p-journey-list">
   {% for journey in journeys %}
-  <a href="{% url 'journey_details' journey.pk %}" class="card p-journey-item" style="text-decoration:none;">
+  <a href="{% url 'journey_detail' journey.pk %}" class="card p-journey-item" style="text-decoration:none;">
     <div class="p-journey-item__left">
       <div class="p-journey-item__date">
         {% if journey.status == 'COMP' %}Completed{% else %}Started{% endif %}

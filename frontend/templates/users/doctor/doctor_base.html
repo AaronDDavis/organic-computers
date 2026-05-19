@@ -21,7 +21,7 @@
 
     <nav class="d-sidebar__nav">
       <span class="d-sidebar__section-label">Main</span>
-      <a href="{% url 'doctor_dashboard' %}"
+      <a href="{% url 'dashboard_doctor' %}"
          class="d-nav-link {% if active_tab == 'dashboard' %}active{% endif %}"
          data-tooltip="Dashboard">
         <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
@@ -32,7 +32,7 @@
         </svg>
         <span>Dashboard</span>
       </a>
-      <a href="{% url 'patient_list' %}"
+      <a href="{% url 'doctor_patient_list' %}"
          class="d-nav-link {% if active_tab == 'patients' %}active{% endif %}"
          data-tooltip="Patient Queue">
         <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
@@ -46,7 +46,7 @@
 
     <nav class="d-sidebar__nav" style="flex:0;">
       <span class="d-sidebar__section-label">Account</span>
-      <a href="{% url 'doctor_profile' %}"
+      <a href="{% url 'profile_doctor' %}"
          class="d-nav-link {% if active_tab == 'profile' %}active{% endif %}"
          data-tooltip="My Profile">
         <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">

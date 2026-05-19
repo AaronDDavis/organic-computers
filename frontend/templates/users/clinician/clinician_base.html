@@ -23,7 +23,7 @@
 
     <nav class="c-sidebar__nav">
       <span class="c-sidebar__section-label">Main</span>
-      <a href="{% url 'clinician_dashboard' %}"
+      <a href="{% url 'dashboard_clinician' %}"
          class="c-nav-link {% if active_tab == 'dashboard' %}active{% endif %}"
          data-tooltip="Dashboard">
         <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
@@ -48,7 +48,7 @@
 
     <nav class="c-sidebar__nav" style="flex:0;">
       <span class="c-sidebar__section-label">Account</span>
-      <a href="{% url 'clinician_profile' %}"
+      <a href="{% url 'profile_clinician' %}"
          class="c-nav-link {% if active_tab == 'profile' %}active{% endif %}"
          data-tooltip="My Profile">
         <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">

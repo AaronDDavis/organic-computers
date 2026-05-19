@@ -21,9 +21,14 @@ FIELD_MAP = {
     'weight_gain':    'Weight gain(Y/N)',
     'hair_growth':    'hair growth(Y/N)',
     'skin_darkening': 'Skin darkening (Y/N)',
-    'hair_loss':      'Hair loss(Y/N)',
     'pimples':        'Pimples(Y/N)',
     'fast_food':      'Fast food (Y/N)',
+    'hip':            'Hip(inch)',
+    'waist':          'Waist(inch)',
+    'waist_hip_ratio':'Waist:Hip Ratio',
+    'weight':         'Weight (Kg)',
+    'height':         'Height(Cm)',
+    'hair_loss':      'Hair loss(Y/N)',
     'exercise':       'Reg.Exercise(Y/N)',
 
     # Stage 2 additions
@@ -38,6 +43,13 @@ FIELD_MAP = {
     'hemoglobin':     'Hb(g/dl)',
     'bp_systolic':    'BP _Systolic (mmHg)',
     'bp_diastolic':   'BP _Diastolic (mmHg)',
+
+    # Stage 3 additions (Ultrasound / Clinical Metrics)
+    'follicle_no_l':  'Follicle No. (L)',
+    'follicle_no_r':  'Follicle No. (R)',
+    'avg_f_size_l':   'Avg. F size (L) (mm)',
+    'avg_f_size_r':   'Avg. F size (R) (mm)',
+    'endometrium':    'Endometrium (mm)',
 }
 
 INT_FIELDS = {

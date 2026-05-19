@@ -9,6 +9,13 @@ class Assessment(models.Model):
         STAGE_1 = 'S1', _('Stage 1')
         STAGE_2 = 'S2', _('Stage 2')
         STAGE_3 = 'S3', _('Stage 3')
+
+        def previous(self):
+            return (
+                self.STAGE_1 if self == self.STAGE_2
+                else self.STAGE_2 if self == self.STAGE_3
+                else None
+            )
         
     journey = models.ForeignKey(DiagnosticJourney, on_delete = models.CASCADE, related_name = 'assessments')
     stage = models.CharField(max_length = 2, choices = Stage.choices, editable = False)
@@ -22,6 +29,10 @@ class Assessment(models.Model):
                 name = 'unique_stage_per_journey'
             )
         ]
+    
+    @property
+    def previous(self):
+        return Assessment.objects.get(journey = self.journey, stage = Assessment.Stage(self.stage).previous())
 
 class AssessmentResult(models.Model):
     class RiskLabel(models.TextChoices):

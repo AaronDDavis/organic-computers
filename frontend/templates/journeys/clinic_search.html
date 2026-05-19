@@ -1,0 +1,62 @@
+{% extends 'users/patient/patient_base.html' %}
+{% load static %}
+
+{% with active_tab='journeys' %}
+
+{% block extra_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/patient/doctor_search.css' %}" />
+{% endblock %}
+
+{% block content %}
+<div class="p-page-header" style="display:flex; align-items:center; gap:1rem;">
+  <a href="{% url 'journey_detail' journey.pk %}" class="p-btn p-btn-ghost p-btn-sm">← Back</a>
+  <div>
+    <h1 style="margin:0;">Find a clinic</h1>
+    <p style="margin:0;">Select a clinic where your Stage 2 lab work and Stage 3 imaging will be conducted.</p>
+  </div>
+</div>
+
+{% if clinic_list %}
+<div class="p-doctor-list">
+  {% for clinic in clinic_list %}
+  <div class="card p-doctor-card">
+    <div class="p-doctor-card__left">
+      <div class="p-doctor-card__avatar" style="background:var(--teal-100); color:var(--teal-700);">
+        {{ clinic.name|slice:":2"|upper }}
+      </div>
+      <div>
+        <div class="p-doctor-card__name">{{ clinic.name }}</div>
+        {% if clinic.address %}
+          <div class="p-doctor-card__spec">{{ clinic.address }}</div>
+        {% endif %}
+        {% if clinic.city %}
+          <div class="p-doctor-card__hospital">{{ clinic.city }}</div>
+        {% endif %}
+      </div>
+    </div>
+    <form method="post" action="{% url 'confirm_clinic' journey.pk %}">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="confirm_clinic">
+      <input type="hidden" name="clinic_id" value="{{ clinic.pk }}">
+      <button type="submit" class="p-btn p-btn-primary p-btn-sm">Select</button>
+    </form>
+  </div>
+  {% endfor %}
+</div>
+
+{% else %}
+<div class="p-empty-state" style="margin-top:2rem;">
+  <div class="p-empty-icon">
+    <svg viewBox="0 0 40 40" fill="none">
+      <circle cx="20" cy="20" r="18" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M20 12v8M20 24v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <h2>No clinics available</h2>
+  <p>No clinics are currently registered on the platform. Please contact support.</p>
+</div>
+{% endif %}
+
+{% endblock content %}
+{% endwith %}

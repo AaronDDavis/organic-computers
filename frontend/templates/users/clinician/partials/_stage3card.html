@@ -1,3 +1,5 @@
+{% load mathfilters %}
+
 <div class="c-section-header" style="margin-top:0.25rem;">
   <span class="c-section-title">Stage 3 — Ultrasound Findings</span>
   {% if stage3_rows %}
@@ -14,10 +16,10 @@
 
   {% if stage3_rows %}
   <div class="c-kv-list" style="margin-bottom:1rem;">
-    {% for label, value, css in stage3_rows %}
+    {% for label, value in stage3_rows.items %}
     <div class="c-kv">
       <span class="k">{{ label }}</span>
-      <span class="v {% if css %}{{ css }}{% endif %}">{{ value }}</span>
+      <span class="v">{{ value }}</span>
     </div>
     {% endfor %}
   </div>

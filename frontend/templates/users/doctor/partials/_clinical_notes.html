@@ -1,13 +1,16 @@
+<!-- Later, add personal/public for doctor alone and for patient to view -->
+
+<!--
 <div class="d-section-header" style="margin-top:0.25rem;">
   <span class="d-section-title">Clinical Notes</span>
 </div>
 
 <div class="d-detail-card">
-  <h3>Your Observations</h3>
+  <h3>Your Recommendations</h3>
   <p style="font-size:0.8rem; color:var(--slate-400); margin-bottom:0.85rem; line-height:1.5;">
-    Personal clinical notes, observations, and next steps you intend to take. Not shared with the patient.
+    Clinical notes, observations, recommendations, and next steps. Shared with the patient.
   </p>
-  <form method="post" action="{% url 'save_clinical_note' journey.id %}">
+  <form method="post" action="{% url 'save_clinical_note' journey_id=journey.id %}">
     {% csrf_token %}
     <textarea id="d-clinical-note" name="clinical_note" class="d-note-area" placeholder="Add your clinical observations..." rows="5">{{ clinical_note.content|default:'' }}</textarea>
     <div class="d-note-meta">
@@ -38,3 +41,4 @@
     update();
   })();
 </script>
+-->

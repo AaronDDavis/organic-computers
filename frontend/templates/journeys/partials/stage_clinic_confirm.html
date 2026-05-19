@@ -1,0 +1,48 @@
+{# Clinic confirmation panel — shown after Stage 1 before patient confirms their assigned clinic #}
+{% if stage.show_clinic_confirm and not journey.clinic %}
+<div class="p-doctor-confirm-accordion" id="clinic-confirm-accordion">
+  <div class="p-doctor-confirm-prompt">
+    <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+      <path d="M8 1L1 5v1h14V5L8 1zM2 7v5h3v-3h2v3h2v-3h2v3h3V7H2zM1 13h14v2H1z"/>
+    </svg>
+    Select a clinic for your next assessment
+  </div>
+  <div class="p-doctor-confirm-panel">
+    {% if assigned_clinic %}
+    <div class="p-doctor-confirm-card">
+      <div class="p-doctor-confirm-avatar">
+        {{ assigned_clinic.name|slice:":2"|upper }}
+      </div>
+      <div>
+        <div class="p-doctor-confirm-name">{{ assigned_clinic.name }}</div>
+        <div class="p-doctor-confirm-spec">
+          {% if assigned_clinic.address %}{{ assigned_clinic.address }}{% endif %}
+          {% if assigned_clinic.city %} &middot; {{ assigned_clinic.city }}{% endif %}
+        </div>
+      </div>
+    </div>
+    <p class="p-doctor-confirm-text">
+      A clinic near you has been suggested based on your location. You can confirm this clinic or search for another.
+    </p>
+    <div class="p-doctor-confirm-actions">
+      <form method="post" action="{% url 'confirm_clinic' journey.pk %}" style="display:inline;">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="confirm_clinic">
+        <input type="hidden" name="clinic_id" value="{{ assigned_clinic.pk }}">
+        <button type="submit" class="p-btn p-btn-primary p-btn-sm">Confirm this clinic</button>
+      </form>
+      <a href="{% url 'search_clinic' journey.pk %}" class="p-btn p-btn-ghost p-btn-sm">Search for another</a>
+    </div>
+
+    {% else %}
+    <p class="p-doctor-confirm-text">
+      Please select a clinic to continue to your Stage 2 assessment. A clinician at your chosen clinic will enter your lab results.
+    </p>
+    <div class="p-doctor-confirm-actions">
+      <a href="{% url 'search_clinic' journey.pk %}" class="p-btn p-btn-primary p-btn-sm">Find a clinic</a>
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+{% endif %}

@@ -5,7 +5,7 @@
 {% block breadcrumb %}
   <div class="d-breadcrumb">
     <span class="d-breadcrumb__sep">/</span>
-    <a href="{% url 'patient_list' %}">Patient Queue</a>
+    <a href="{% url 'doctor_patient_list' %}">Patient Queue</a>
     <span class="d-breadcrumb__sep">/</span>
     <span class="d-breadcrumb__current">{{ patient.user.get_full_name }}</span>
   </div>
@@ -15,7 +15,7 @@
 <div class="animate-fade">
 
   <!-- Back link -->
-  <a href="{% url 'patient_list' %}" class="d-back-btn">
+  <a href="{% url 'doctor_patient_list' %}" class="d-back-btn">
     <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
       <path d="M10 12L6 8l4-4" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>

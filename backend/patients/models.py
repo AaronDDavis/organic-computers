@@ -17,3 +17,6 @@ class PatientProfile(models.Model):
     dob = models.DateField(null = True, blank = True)
     blood_group = models.CharField(max_length = 3, choices = BloodGroup.choices, null = True, blank = True)
 
+    @property
+    def latest_journey(self):
+        return self.journeys.order_by('-updated_on', '-number').first()
