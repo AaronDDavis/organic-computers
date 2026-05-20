@@ -5,7 +5,7 @@
 [![XGBoost](https://img.shields.io/badge/XGBoost-Latest-red?style=flat-square&logo=xgboost)](https://xgboost.readthedocs.io)
 [![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-Latest-orange?style=flat-square&logo=scikit-learn)](https://scikit-learn.org)
 
-🌐 **[Live Demo](https://github.com)**
+🌐 **[Live Demo](https://organic-computers.onrender.com/)**
 
 ---
 
