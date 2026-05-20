@@ -38,13 +38,13 @@
       PCOSense uses a staged assessment model to help patients understand their risk, connect with clinicians for lab work, and reach the right specialist — without the guesswork.
     </p>
     <div class="lp-hero__actions">
-      <a href="{% url 'signup' %}" class="lp-hero__cta">
-        Start your journey
+      <a href="{% url 'guest_assessment' %}" class="lp-hero__cta">
+        Take Free Stage 1 Test
         <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M2 7h10M8 3l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </a>
-      <a href="#what-is-pcos" class="lp-hero__secondary">Learn about PCOS ↓</a>
+      <a href="{% url 'signup' %}" class="lp-hero__secondary"> Or Create Account</a>
     </div>
   </section>
 
@@ -206,22 +206,17 @@
     </div>
   </section>
 
-  <!--
-  ═══════════════════════════════════════════════════════
-  GUEST TEST OPTION — uncomment when ready to implement
-  ═══════════════════════════════════════════════════════
   <div class="lp-guest">
     <div class="lp-guest__inner">
       <div class="lp-guest__text">
         <strong>Not ready to create an account?</strong><br>
         Take a quick anonymous Stage 1 assessment — no login required.
       </div>
-      <a href="{% url 'login' %}" class="lp-btn-ghost" style="white-space:nowrap;">
-        Try as guest → guest_assessment
+      <a href="{% url 'guest_assessment' %}" class="lp-btn-ghost" style="white-space:nowrap;">
+        Try as guest
       </a>
     </div>
   </div>
-  ═══════════════════════════════════════════════════════ -->
 
   <!-- ── Footer ──────────────────────────────────────── -->
   <footer class="lp-footer">

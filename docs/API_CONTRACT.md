@@ -34,15 +34,18 @@ Stage 1 uses patient-reported symptom and lifestyle inputs only. This is intende
 |---|---|---|---|
 | `Age (yrs)` | number | Patient age in years | `28` |
 | `BMI` | number | Body Mass Index | `27.4` |
+| `Height(Cm)` | number | Height in centimetres | `162.0` |
+| `Weight (Kg)` | number | Weight in kilograms | `72.0` |
+| `Waist(inch)` | number | Waist circumference in inches | `34.0` |
+| `Hip(inch)` | number | Hip circumference in inches | `40.0` |
+| `Waist:Hip Ratio` | number | Waist-to-hip ratio | `0.85` |
 | `Cycle(R/I)` | number | Menstrual cycle regularity. Regular = `2`, Irregular = `4` | `4` |
 | `Cycle length(days)` | number | Average cycle length in days | `45` |
 | `Weight gain(Y/N)` | number | Weight gain. Yes = `1`, No = `0` | `1` |
 | `hair growth(Y/N)` | number | Excess hair growth / hirsutism. Yes = `1`, No = `0` | `1` |
 | `Skin darkening (Y/N)` | number | Skin darkening / acanthosis. Yes = `1`, No = `0` | `0` |
-| `Hair loss(Y/N)` | number | Hair loss. Yes = `1`, No = `0` | `0` |
 | `Pimples(Y/N)` | number | Acne / pimples. Yes = `1`, No = `0` | `1` |
 | `Fast food (Y/N)` | number | Regular fast food intake. Yes = `1`, No = `0` | `1` |
-| `Reg.Exercise(Y/N)` | number | Regular exercise. Yes = `1`, No = `0` | `0` |
 
 ### Example Request
 
@@ -50,15 +53,18 @@ Stage 1 uses patient-reported symptom and lifestyle inputs only. This is intende
 {
   "Age (yrs)": 28,
   "BMI": 27.4,
+  "Height(Cm)": 162.0,
+  "Weight (Kg)": 72.0,
+  "Waist(inch)": 34.0,
+  "Hip(inch)": 40.0,
+  "Waist:Hip Ratio": 0.85,
   "Cycle(R/I)": 4,
   "Cycle length(days)": 45,
   "Weight gain(Y/N)": 1,
   "hair growth(Y/N)": 1,
   "Skin darkening (Y/N)": 0,
-  "Hair loss(Y/N)": 0,
   "Pimples(Y/N)": 1,
-  "Fast food (Y/N)": 1,
-  "Reg.Exercise(Y/N)": 0
+  "Fast food (Y/N)": 1
 }
 ```
 
@@ -97,16 +103,17 @@ Stage 2 includes all Stage 1 fields, plus:
 
 | Field | Type | Description | Example |
 |---|---|---|---|
+| `Hair loss(Y/N)` | number | Hair loss. Yes = `1`, No = `0` | `0` |
+| `Reg.Exercise(Y/N)` | number | Regular exercise. Yes = `1`, No = `0` | `0` |
 | `FSH(mIU/mL)` | number | Follicle Stimulating Hormone level | `5.8` |
 | `LH(mIU/mL)` | number | Luteinizing Hormone level | `11.2` |
 | `FSH/LH` | number | Ratio of FSH to LH | `0.52` |
 | `TSH (mIU/L)` | number | Thyroid Stimulating Hormone level | `2.1` |
 | `AMH(ng/mL)` | number | Anti-Müllerian Hormone level | `5.4` |
 | `PRL(ng/mL)` | number | Prolactin level | `18.0` |
+| `PRG(ng/mL)` | number | Progesterone level | `0.65` |
 | `Vit D3 (ng/mL)` | number | Vitamin D3 level | `21.5` |
-| `RBS(mg/dl)` | number | Random blood sugar | `135` |
 | `Hb(g/dl)` | number | Hemoglobin level | `12.8` |
-| `BP _Systolic (mmHg)` | number | Systolic blood pressure | `118` |
 | `BP _Diastolic (mmHg)` | number | Diastolic blood pressure | `76` |
 
 ### Example Request
@@ -115,14 +122,19 @@ Stage 2 includes all Stage 1 fields, plus:
 {
   "Age (yrs)": 28,
   "BMI": 27.4,
+  "Height(Cm)": 162.0,
+  "Weight (Kg)": 72.0,
+  "Waist(inch)": 34.0,
+  "Hip(inch)": 40.0,
+  "Waist:Hip Ratio": 0.85,
   "Cycle(R/I)": 4,
   "Cycle length(days)": 45,
   "Weight gain(Y/N)": 1,
   "hair growth(Y/N)": 1,
   "Skin darkening (Y/N)": 0,
-  "Hair loss(Y/N)": 0,
   "Pimples(Y/N)": 1,
   "Fast food (Y/N)": 1,
+  "Hair loss(Y/N)": 0,
   "Reg.Exercise(Y/N)": 0,
   "FSH(mIU/mL)": 5.8,
   "LH(mIU/mL)": 11.2,
@@ -130,10 +142,9 @@ Stage 2 includes all Stage 1 fields, plus:
   "TSH (mIU/L)": 2.1,
   "AMH(ng/mL)": 5.4,
   "PRL(ng/mL)": 18.0,
+  "PRG(ng/mL)": 0.65,
   "Vit D3 (ng/mL)": 21.5,
-  "RBS(mg/dl)": 135,
   "Hb(g/dl)": 12.8,
-  "BP _Systolic (mmHg)": 118,
   "BP _Diastolic (mmHg)": 76
 }
 ```
@@ -175,8 +186,6 @@ Stage 3 includes all Stage 1 and Stage 2 fields, plus:
 |---|---|---|---|
 | `Follicle No. (L)` | number | Number of follicles in the left ovary | `14` |
 | `Follicle No. (R)` | number | Number of follicles in the right ovary | `16` |
-| `Avg. F size (L) (mm)` | number | Average follicle size in the left ovary | `6.2` |
-| `Avg. F size (R) (mm)` | number | Average follicle size in the right ovary | `6.8` |
 | `Endometrium (mm)` | number | Endometrial thickness | `8.5` |
 
 ### Example Request
@@ -185,14 +194,19 @@ Stage 3 includes all Stage 1 and Stage 2 fields, plus:
 {
   "Age (yrs)": 28,
   "BMI": 27.4,
+  "Height(Cm)": 162.0,
+  "Weight (Kg)": 72.0,
+  "Waist(inch)": 34.0,
+  "Hip(inch)": 40.0,
+  "Waist:Hip Ratio": 0.85,
   "Cycle(R/I)": 4,
   "Cycle length(days)": 45,
   "Weight gain(Y/N)": 1,
   "hair growth(Y/N)": 1,
   "Skin darkening (Y/N)": 0,
-  "Hair loss(Y/N)": 0,
   "Pimples(Y/N)": 1,
   "Fast food (Y/N)": 1,
+  "Hair loss(Y/N)": 0,
   "Reg.Exercise(Y/N)": 0,
   "FSH(mIU/mL)": 5.8,
   "LH(mIU/mL)": 11.2,
@@ -200,15 +214,12 @@ Stage 3 includes all Stage 1 and Stage 2 fields, plus:
   "TSH (mIU/L)": 2.1,
   "AMH(ng/mL)": 5.4,
   "PRL(ng/mL)": 18.0,
+  "PRG(ng/mL)": 0.65,
   "Vit D3 (ng/mL)": 21.5,
-  "RBS(mg/dl)": 135,
   "Hb(g/dl)": 12.8,
-  "BP _Systolic (mmHg)": 118,
   "BP _Diastolic (mmHg)": 76,
   "Follicle No. (L)": 14,
   "Follicle No. (R)": 16,
-  "Avg. F size (L) (mm)": 6.2,
-  "Avg. F size (R) (mm)": 6.8,
   "Endometrium (mm)": 8.5
 }
 ```
@@ -230,10 +241,7 @@ Stage 3 includes all Stage 1 and Stage 2 fields, plus:
   "next_step": "Ultrasound and clinical findings suggest elevated PCOS risk with a reproductive focus. Priority consultation with a Gynecologist is recommended.",
   "recommendation_text": "Your profile shows multiple markers associated with PCOS. Given the reproductive focus, we recommend consultation with a Gynecologist.",
   "missing_fields_imputed": [],
-  "differential": {
-    "possible_endometriosis_overlap": null,
-    "note": "Endometriosis differential layer pending integration."
-  }
+  "differential": null
 }
 ```
 
@@ -256,34 +264,7 @@ Stage 3 includes all Stage 1 and Stage 2 fields, plus:
 
 ---
 
-## 5. Doctor Queue Mock
-
-The doctor dashboard can use:
-
-```text
-doctor_queue_mock.csv
-```
-
-### Suggested Display Fields
-
-| Field | Description |
-|---|---|
-| `Sl. No` | Dataset row index |
-| `Patient File No.` | Patient identifier |
-| `Risk_Level` | `1` = Low, `2` = Moderate, `3` = High |
-| `Recommended_Specialist` | Recommended specialist |
-| `Recommendation_Text` | Clinical recommendation |
-| `risk_priority` | Numeric value used for queue sorting |
-
-### Suggested Sorting Logic
-
-1. Sort by `risk_priority` in descending order.
-2. Within the same risk level, group by `Recommended_Specialist`.
-3. Display high-risk patients first.
-
----
-
-## 6. Notes for Web Integration
+## 5. Notes for Web Integration
 
 - Web should send field names exactly as shown in the request examples.
 - The current prototype uses dataset-style column names, including spaces and brackets.
@@ -294,15 +275,14 @@ doctor_queue_mock.csv
 
 ---
 
-## 7. Current Model Metrics
+## 6. Current Model Metrics
 
-| Stage | Number of Features | Accuracy | Sensitivity / Recall | Specificity | Precision | F1 | AUC |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| Stage 1 | 11 | 0.853 | 0.694 | 0.932 | 0.833 | 0.758 | 0.902 |
-| Stage 2 | 22 | 0.872 | 0.722 | 0.945 | 0.867 | 0.788 | 0.899 |
-| Stage 3 | 27 | 0.927 | 0.833 | 0.973 | 0.938 | 0.882 | 0.950 |
+| Stage | Model | Accuracy | Sensitivity / Recall | Specificity | Precision | F1 | AUC | Threshold |
+|---|---|---:|---:|---:|---:|---:|---:|---:|
+| Stage 1 | Calibrated XGBoost | 0.761 | 0.861 | 0.712 | 0.596 | 0.705 | 0.890 | 0.16 |
+| Stage 2 | Calibrated XGBoost | 0.761 | 0.917 | 0.685 | 0.589 | 0.717 | 0.899 | 0.21 |
+| Stage 3 | Calibrated XGBoost | 0.862 | 0.944 | 0.822 | 0.723 | 0.819 | 0.957 | 0.22 |
 
 ### Metrics Interpretation
 
 The staged approach is working as intended. Stage 3 performs best after ultrasound and imaging data are added. This supports the project’s progressive triage narrative: early screening can begin with symptom data, and the assessment becomes more confident as clinical and imaging information becomes available.
-

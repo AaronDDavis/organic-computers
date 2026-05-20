@@ -1,5 +1,5 @@
 from django import forms
-from .utils import yes_no_field
+from .utils import yes_no_field, radio_yes_no_field
 
 class StageOneForm(forms.Form):
     age = forms.IntegerField(
@@ -7,12 +7,12 @@ class StageOneForm(forms.Form):
         widget = forms.NumberInput()
     )
 
-    weight = forms.IntegerField(
+    weight = forms.FloatField(
         label = 'Weight',
         widget = forms.NumberInput()
     )
 
-    height = forms.IntegerField(
+    height = forms.FloatField(
         label = 'Height',
         widget = forms.NumberInput()
     )
@@ -43,7 +43,7 @@ class StageOneForm(forms.Form):
         widget = forms.NumberInput()
     )
 
-    waist_hip_ratio = forms.IntegerField(
+    waist_hip_ratio = forms.FloatField(
         label = 'Waist:Hip Ratio',
         widget = forms.NumberInput()
     )
@@ -55,6 +55,62 @@ class StageOneForm(forms.Form):
     pimples         = yes_no_field('Acne / pimples')
     fast_food       = yes_no_field('Regular fast food intake')
     exercise        = yes_no_field('Regular exercise')
+
+
+class GuestStageOneForm(forms.Form):
+    age = forms.IntegerField(
+        label = 'Age',
+        widget = forms.NumberInput()
+    )
+
+    weight = forms.FloatField(
+        label = 'Weight',
+        widget = forms.NumberInput()
+    )
+
+    height = forms.FloatField(
+        label = 'Height',
+        widget = forms.NumberInput()
+    )
+
+    bmi = forms.FloatField(
+        label = 'BMI',
+        widget = forms.NumberInput()
+    )
+
+    cycle_regularity = forms.ChoiceField(
+        label = 'Cycle regularity',
+        choices = [(2, 'Regular'), (4, 'Irregular')],
+        widget = forms.Select()
+    )
+
+    cycle_length = forms.IntegerField(
+        label = 'Cycle length (days)',
+        widget = forms.NumberInput()
+    )
+
+    waist = forms.IntegerField(
+        label = 'Waist length',
+        widget = forms.NumberInput()
+    )
+
+    hip = forms.IntegerField(
+        label = 'Hip length',
+        widget = forms.NumberInput()
+    )
+
+    waist_hip_ratio = forms.FloatField(
+        label = 'Waist:Hip Ratio',
+        widget = forms.NumberInput()
+    )
+
+    weight_gain     = radio_yes_no_field('Weight gain')
+    hair_growth     = radio_yes_no_field('Excess hair growth')
+    skin_darkening  = radio_yes_no_field('Skin darkening')
+    hair_loss       = radio_yes_no_field('Hair loss')
+    pimples         = radio_yes_no_field('Acne / pimples')
+    fast_food       = radio_yes_no_field('Regular fast food intake')
+    exercise        = radio_yes_no_field('Regular exercise')
 
 
 '''

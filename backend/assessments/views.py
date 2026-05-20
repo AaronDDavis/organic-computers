@@ -1,8 +1,10 @@
+from django.shortcuts import render
+from django.views import View
 from django.views.generic import FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
 
-from .models import Assessment, AssessmentResult
+from .models import Assessment, AssessmentResult, GuestAssessment
 from journeys.models import DiagnosticJourney
 from doctors.models import DoctorProfile
 from . import forms
@@ -60,3 +62,29 @@ class AssessmentCreateView(LoginRequiredMixin, FormView):
         
         return redirect('journey_detail', pk = self.journey.pk)
 
+
+
+class GuestAssessmentView(View):
+    template_name = 'assessments/guest_assessment.html'
+
+    def get(self, request):
+        return render(request, self.template_name, {'form': forms.GuestStageOneForm()})
+
+    def post(self, request):
+        form = forms.GuestStageOneForm(request.POST)
+
+        if not form.is_valid():
+            return render(request, self.template_name, {'form': form})
+
+        data = form.cleaned_data
+
+        model = stage1_model
+        result = run_prediction(model, data, stage='S1')
+
+        # Increment anonymous counter — no PII stored
+        GuestAssessment.objects.create()
+
+        return render(request, 'assessments/guest_results.html', {
+            'result': result,
+            'data':   data,
+        })

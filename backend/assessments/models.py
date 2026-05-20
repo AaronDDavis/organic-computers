@@ -58,3 +58,22 @@ class ClinicalNote(models.Model):
     updated_on = models.DateField(auto_now = True)
 
     content = models.TextField()
+
+
+# ── Guest assessment counter ────────────────────────────────────────────────
+# Add this to the bottom of assessments/models.py
+# No PII is stored — this model exists solely to count free assessments taken.
+
+class GuestAssessment(models.Model):
+    """
+    Anonymous counter record created each time a guest completes a free
+    Stage 1 assessment. Contains no personally identifying information.
+    """
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name        = 'Guest Assessment'
+        verbose_name_plural = 'Guest Assessments'
+
+    def __str__(self):
+        return f'Guest assessment at {self.created_at:%Y-%m-%d %H:%M}'

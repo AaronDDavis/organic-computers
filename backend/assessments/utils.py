@@ -1,10 +1,17 @@
-from django.forms import ChoiceField, Select, FloatField, NumberInput
+from django.forms import ChoiceField, RadioSelect, Select, FloatField, NumberInput
 
 def yes_no_field(label):
     return ChoiceField(
         label = label,
         choices = [(0, 'No'), (1, 'Yes')],
         widget = Select()
+    )
+
+def radio_yes_no_field(label):
+    return ChoiceField(
+        label = label,
+        choices = [(0, 'No'), (1, 'Yes')],
+        widget = RadioSelect()
     )
 
 def float_field(label, **kwargs):

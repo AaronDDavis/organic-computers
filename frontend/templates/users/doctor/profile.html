@@ -35,15 +35,15 @@
       </div>
       <div class="d-kv">
         <span class="k">Specialty</span>
-        <span class="v">{{ request.user.profile.specialty }}</span>
+        <span class="v">{{ request.user.doctor_profile.get_specialty_display }}</span>
       </div>
       <div class="d-kv">
         <span class="k">Hospital / Clinic</span>
-        <span class="v">{{ request.user.profile.hospital }}</span>
+        <span class="v">{{ request.user.doctor_profile.hospital }}</span>
       </div>
       <div class="d-kv">
         <span class="k">Patients Assigned</span>
-        <span class="v">{{ request.user.profile.patients.count }}</span>
+        <span class="v">{{ request.user.doctor_profile.patients.count }}</span>
       </div>
       <div class="d-kv">
         <span class="k">Member Since</span>
@@ -52,12 +52,6 @@
     </div>
 
     <div class="divider"></div>
-
-    <!--
-    <div style="display:flex; gap:0.65rem;">
-      <a href="{% url 'doctor_profile_edit' %}" class="d-btn d-btn-ghost d-btn-sm">Edit Profile</a>
-    </div>
-    -->
   </div>
 
 </div>

@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load mathfilters %}
+
+{% block extra_css %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/guest.css' %}"/>
+{% endblock %}
+
+{% block main_content %}
+<div class="ga-page">
+  <div class="ga-mesh"></div>
+
+  <!-- Nav -->
+  <nav class="ga-nav">
+    <a class="ga-nav__brand" href="{% url 'landing' %}">
+      <div class="ga-nav__logo">PS</div>
+      <span class="ga-nav__name">PCOSense</span>
+    </a>
+    <div class="ga-nav__pill">Your Results</div>
+  </nav>
+
+  <div class="ga-layout">
+
+    <!-- Result hero -->
+    <div class="ga-result-hero">
+      <div class="ga-result-hero__label">Stage 1 — Symptomatic Assessment</div>
+      <h1 class="ga-result-hero__title">Your results are ready.</h1>
+      <div class="ga-risk-badge {{ result.risk|lower }}">
+        {{ result.risk }} risk
+      </div>
+    </div>
+
+    <!-- Ephemeral notice -->
+    <div class="ga-ephemeral">
+      <svg class="ga-ephemeral__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M8 2a6 6 0 100 12A6 6 0 008 2z"/>
+        <path d="M8 5v4l2.5 2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <p class="ga-ephemeral__text">
+        <strong>These results exist only in this tab.</strong>
+        No data has been stored or linked to you. The moment you close or navigate away, your results are gone permanently.
+      </p>
+    </div>
+
+    <!-- Primary result cards -->
+    <div class="ga-result-grid" style="margin-bottom:1rem;">
+
+      <div class="ga-result-card">
+        <div class="ga-result-card__label">Confidence score</div>
+        <div class="ga-result-card__value large">{{ result.confidence | mul:100 }}  /  100</div>
+      </div>
+
+      <div class="ga-result-card">
+        <div class="ga-result-card__label">Recommended specialist</div>
+        <div class="ga-result-card__value">{{ result.specialist }}</div>
+      </div>
+
+    </div>
+
+    <div class="ga-result-grid single" style="margin-bottom:1rem;">
+      <div class="ga-result-card">
+        <div class="ga-result-card__label">Top contributing factors</div>
+        <div class="ga-factors">
+          {% for factor in result.top_factors %}
+          <div class="ga-factor-item">
+            <span class="ga-factor-dot"></span>
+            {{ factor }}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <div class="ga-result-grid single" style="margin-bottom:1rem;">
+      <div class="ga-result-card">
+        <div class="ga-result-card__label">Clinical focus</div>
+        <div class="ga-result-card__value">{{ result.clinical_focus }}</div>
+      </div>
+    </div>
+
+    <div class="ga-result-grid single" style="margin-bottom:1rem;">
+      <div class="ga-result-card">
+        <div class="ga-result-card__label">Recommendation</div>
+        <div class="ga-result-card__value">{{ result.recommendation_text }}</div>
+      </div>
+    </div>
+
+    {% if result.next_step %}
+    <div class="ga-result-grid single" style="margin-bottom:2rem;">
+      <div class="ga-result-card">
+        <div class="ga-result-card__label">Suggested next step</div>
+        <div class="ga-result-card__value">{{ result.next_step }}</div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Input summary -->
+    <div class="ga-summary">
+      <div class="ga-summary__header">Your submitted answers</div>
+
+      <div class="ga-summary__row">
+        <span class="ga-summary__key">Age</span>
+        <span class="ga-summary__val">{{ data.age }}</span>
+      </div>
+      <div class="ga-summary__row">
+        <span class="ga-summary__key">Weight</span>
+        <span class="ga-summary__val">{{ data.weight }}</span>
+      </div>
+      <div class="ga-summary__row">
+        <span class="ga-summary__key">Height</span>
+        <span class="ga-summary__val">{{ data.height }}</span>
+      </div>
+      <div class="ga-summary__row">
+        <span class="ga-summary__key">BMI</span>
+        <span class="ga-summary__val">{{ data.bmi }}</span>
+      </div>
+      <div class="ga-summary__row">
+        <span class="ga-summary__key">Cycle regularity</span>
+        <span class="ga-summary__val">{{ data.cycle_regularity }}</span>
+      </div>
+      <div class="ga-summary__row">
+        <span class="ga-summary__key">Cycle length</span>
+        <span class="ga-summary__val">{{ data.cycle_length }} days</span>
+      </div>
+      <div class="ga-summary__row">
+        <span class="ga-summary__key">Waist</span>
+        <span class="ga-summary__val">{{ data.waist }}</span>
+      </div>
+      <div class="ga-summary__row">
+        <span class="ga-summary__key">Hip</span>
+        <span class="ga-summary__val">{{ data.hip }}</span>
+      </div>
+      <div class="ga-summary__row">
+        <span class="ga-summary__key">Waist:Hip ratio</span>
+        <span class="ga-summary__val">{{ data.waist_hip_ratio }}</span>
+      </div>
+      <div class="ga-summary__row">
+        <span class="ga-summary__key">Weight gain</span>
+        <span class="ga-summary__val">{{ data.weight_gain|yesno:"Yes,No" }}</span>
+      </div>
+      <div class="ga-summary__row">
+        <span class="ga-summary__key">Excess hair growth</span>
+        <span class="ga-summary__val">{{ data.hair_growth|yesno:"Yes,No" }}</span>
+      </div>
+      <div class="ga-summary__row">
+        <span class="ga-summary__key">Skin darkening</span>
+        <span class="ga-summary__val">{{ data.skin_darkening|yesno:"Yes,No" }}</span>
+      </div>
+      <div class="ga-summary__row">
+        <span class="ga-summary__key">Hair loss</span>
+        <span class="ga-summary__val">{{ data.hair_loss|yesno:"Yes,No" }}</span>
+      </div>
+      <div class="ga-summary__row">
+        <span class="ga-summary__key">Acne / pimples</span>
+        <span class="ga-summary__val">{{ data.pimples|yesno:"Yes,No" }}</span>
+      </div>
+      <div class="ga-summary__row">
+        <span class="ga-summary__key">Regular fast food</span>
+        <span class="ga-summary__val">{{ data.fast_food|yesno:"Yes,No" }}</span>
+      </div>
+      <div class="ga-summary__row">
+        <span class="ga-summary__key">Regular exercise</span>
+        <span class="ga-summary__val">{{ data.exercise|yesno:"Yes,No" }}</span>
+      </div>
+    </div>
+
+    <!-- Conversion nudge -->
+    <div class="ga-cta-strip">
+      <h2 class="ga-cta-strip__title">Want to go further?</h2>
+      <p class="ga-cta-strip__sub">
+        Create a free account to save your results, proceed to Stage 2 with clinical lab values, and get connected with a specialist.
+      </p>
+      <div class="ga-cta-strip__actions">
+        <a href="{% url 'signup' %}" class="ga-btn-primary">
+          Create an account
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M2 7h10M8 3l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <a href="{% url 'landing' %}" class="ga-btn-ghost">Back to home</a>
+      </div>
+    </div>
+
+  </div><!-- /ga-layout -->
+
+  <footer class="ga-footer">
+    <span class="ga-footer__brand">PCOSense &mdash; Progressive Diagnostic Triage</span>
+    <span class="ga-footer__note">Built for educational and research purposes. Not a substitute for medical advice.</span>
+  </footer>
+
+</div>
+{% endblock main_content %}

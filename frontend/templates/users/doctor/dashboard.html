@@ -9,8 +9,8 @@
   <div class="d-stat-grid">
     <div class="d-stat-card">
       <div class="d-stat-label">Total Patients</div>
-      <div class="d-stat-value">{{ request.user.doctor_profile }}</div>
-      <div class="d-stat-sub">In your queue</div>
+      <div class="d-stat-value">{{ request.user.doctor_profile.patients.count }}</div>
+      <div class="d-stat-sub">Including those not in priority queue</div>
     </div>
     <div class="d-stat-card accent-high">
       <div class="d-stat-label">High Risk</div>

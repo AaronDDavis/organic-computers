@@ -1,0 +1,248 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block extra_css %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/guest.css' %}"/>
+{% endblock %}
+
+{% block main_content %}
+<div class="ga-page">
+  <div class="ga-mesh"></div>
+
+  <!-- Nav -->
+  <nav class="ga-nav">
+    <a class="ga-nav__brand" href="{% url 'landing' %}">
+      <div class="ga-nav__logo">PS</div>
+      <span class="ga-nav__name">PCOSense</span>
+    </a>
+    <div class="ga-nav__pill">Free Assessment</div>
+  </nav>
+
+  <!-- Content -->
+  <div class="ga-layout">
+
+    <!-- Header -->
+    <div class="ga-header">
+      <div class="ga-header__eyebrow">
+        <span></span>
+        Stage 1 — Symptomatic Assessment
+      </div>
+      <h1 class="ga-header__title">
+        Understand your<br><em>PCOS risk</em> — free.
+      </h1>
+      <p class="ga-header__sub">
+        Answer the questions below. Our model will compute an initial risk score based on your symptoms and measurements.
+      </p>
+    </div>
+
+    <!-- Anonymous notice -->
+    <div class="ga-notice">
+      <svg class="ga-notice__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="8" cy="8" r="6.5"/>
+        <path d="M8 7v4M8 5.5v.5" stroke-linecap="round"/>
+      </svg>
+      <p class="ga-notice__text">
+        <strong>No account required.</strong>
+        Your answers are used only to compute your result and are never stored or linked to you in any way.
+      </p>
+    </div>
+
+    <!-- Form card -->
+    <div class="ga-card">
+
+      {% if form.non_field_errors %}
+        <div class="ga-form-error">{{ form.non_field_errors.0 }}</div>
+      {% endif %}
+
+      <form method="post" novalidate>
+        {% csrf_token %}
+
+        <!-- Section: Measurements -->
+        <div class="ga-form-section">
+          <div class="ga-form-section__label">Measurements</div>
+          <div class="ga-form-grid">
+
+            <div class="ga-field">
+              <label for="{{ form.age.id_for_label }}">{{ form.age.label }}</label>
+              {{ form.age|add_class:"" }}
+              {% if form.age.errors %}<div class="ga-field__error">{{ form.age.errors.0 }}</div>{% endif %}
+            </div>
+
+            <div class="ga-field">
+              <label for="{{ form.weight.id_for_label }}">{{ form.weight.label }}</label>
+              {{ form.weight|add_class:"" }}
+              {% if form.weight.errors %}<div class="ga-field__error">{{ form.weight.errors.0 }}</div>{% endif %}
+            </div>
+
+            <div class="ga-field">
+              <label for="{{ form.height.id_for_label }}">{{ form.height.label }}</label>
+              {{ form.height|add_class:"" }}
+              {% if form.height.errors %}<div class="ga-field__error">{{ form.height.errors.0 }}</div>{% endif %}
+            </div>
+
+            <div class="ga-field">
+              <label for="{{ form.bmi.id_for_label }}">{{ form.bmi.label }}</label>
+              {{ form.bmi|add_class:"" }}
+              {% if form.bmi.errors %}<div class="ga-field__error">{{ form.bmi.errors.0 }}</div>{% endif %}
+            </div>
+
+            <div class="ga-field">
+              <label for="{{ form.waist.id_for_label }}">{{ form.waist.label }}</label>
+              {{ form.waist|add_class:"" }}
+              {% if form.waist.errors %}<div class="ga-field__error">{{ form.waist.errors.0 }}</div>{% endif %}
+            </div>
+
+            <div class="ga-field">
+              <label for="{{ form.hip.id_for_label }}">{{ form.hip.label }}</label>
+              {{ form.hip|add_class:"" }}
+              {% if form.hip.errors %}<div class="ga-field__error">{{ form.hip.errors.0 }}</div>{% endif %}
+            </div>
+
+            <div class="ga-field">
+              <label for="{{ form.waist_hip_ratio.id_for_label }}">{{ form.waist_hip_ratio.label }}</label>
+              {{ form.waist_hip_ratio|add_class:"" }}
+              {% if form.waist_hip_ratio.errors %}<div class="ga-field__error">{{ form.waist_hip_ratio.errors.0 }}</div>{% endif %}
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Section: Cycle -->
+        <div class="ga-form-section">
+          <div class="ga-form-section__label">Menstrual Cycle</div>
+          <div class="ga-form-grid">
+
+            <div class="ga-field">
+              <label for="{{ form.cycle_regularity.id_for_label }}">{{ form.cycle_regularity.label }}</label>
+              {{ form.cycle_regularity|add_class:"" }}
+              {% if form.cycle_regularity.errors %}<div class="ga-field__error">{{ form.cycle_regularity.errors.0 }}</div>{% endif %}
+            </div>
+
+            <div class="ga-field">
+              <label for="{{ form.cycle_length.id_for_label }}">{{ form.cycle_length.label }}</label>
+              {{ form.cycle_length|add_class:"" }}
+              {% if form.cycle_length.errors %}<div class="ga-field__error">{{ form.cycle_length.errors.0 }}</div>{% endif %}
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Section: Symptoms -->
+        <div class="ga-form-section">
+          <div class="ga-form-section__label">Symptoms &amp; Lifestyle</div>
+
+          {% for field in form.weight_gain|add_class:"" %}{% endfor %}
+
+          <!-- Weight gain -->
+          <div class="ga-field" style="margin-bottom:0.85rem;">
+            <label>{{ form.weight_gain.label }}</label>
+            <div class="ga-toggle-group">
+              {% for widget in form.weight_gain %}
+                {{ widget.tag }}
+                <label for="{{ widget.id_for_label }}">{{ widget.choice_label }}</label>
+              {% endfor %}
+            </div>
+            {% if form.weight_gain.errors %}<div class="ga-field__error">{{ form.weight_gain.errors.0 }}</div>{% endif %}
+          </div>
+
+          <!-- Hair growth -->
+          <div class="ga-field" style="margin-bottom:0.85rem;">
+            <label>{{ form.hair_growth.label }}</label>
+            <div class="ga-toggle-group">
+              {% for widget in form.hair_growth %}
+                {{ widget.tag }}
+                <label for="{{ widget.id_for_label }}">{{ widget.choice_label }}</label>
+              {% endfor %}
+            </div>
+            {% if form.hair_growth.errors %}<div class="ga-field__error">{{ form.hair_growth.errors.0 }}</div>{% endif %}
+          </div>
+
+          <!-- Skin darkening -->
+          <div class="ga-field" style="margin-bottom:0.85rem;">
+            <label>{{ form.skin_darkening.label }}</label>
+            <div class="ga-toggle-group">
+              {% for widget in form.skin_darkening %}
+                {{ widget.tag }}
+                <label for="{{ widget.id_for_label }}">{{ widget.choice_label }}</label>
+              {% endfor %}
+            </div>
+            {% if form.skin_darkening.errors %}<div class="ga-field__error">{{ form.skin_darkening.errors.0 }}</div>{% endif %}
+          </div>
+
+          <!-- Hair loss -->
+          <div class="ga-field" style="margin-bottom:0.85rem;">
+            <label>{{ form.hair_loss.label }}</label>
+            <div class="ga-toggle-group">
+              {% for widget in form.hair_loss %}
+                {{ widget.tag }}
+                <label for="{{ widget.id_for_label }}">{{ widget.choice_label }}</label>
+              {% endfor %}
+            </div>
+            {% if form.hair_loss.errors %}<div class="ga-field__error">{{ form.hair_loss.errors.0 }}</div>{% endif %}
+          </div>
+
+          <!-- Pimples -->
+          <div class="ga-field" style="margin-bottom:0.85rem;">
+            <label>{{ form.pimples.label }}</label>
+            <div class="ga-toggle-group">
+              {% for widget in form.pimples %}
+                {{ widget.tag }}
+                <label for="{{ widget.id_for_label }}">{{ widget.choice_label }}</label>
+              {% endfor %}
+            </div>
+            {% if form.pimples.errors %}<div class="ga-field__error">{{ form.pimples.errors.0 }}</div>{% endif %}
+          </div>
+
+          <!-- Fast food -->
+          <div class="ga-field" style="margin-bottom:0.85rem;">
+            <label>{{ form.fast_food.label }}</label>
+            <div class="ga-toggle-group">
+              {% for widget in form.fast_food %}
+                {{ widget.tag }}
+                <label for="{{ widget.id_for_label }}">{{ widget.choice_label }}</label>
+              {% endfor %}
+            </div>
+            {% if form.fast_food.errors %}<div class="ga-field__error">{{ form.fast_food.errors.0 }}</div>{% endif %}
+          </div>
+
+          <!-- Exercise -->
+          <div class="ga-field">
+            <label>{{ form.exercise.label }}</label>
+            <div class="ga-toggle-group">
+              {% for widget in form.exercise %}
+                {{ widget.tag }}
+                <label for="{{ widget.id_for_label }}">{{ widget.choice_label }}</label>
+              {% endfor %}
+            </div>
+            {% if form.exercise.errors %}<div class="ga-field__error">{{ form.exercise.errors.0 }}</div>{% endif %}
+          </div>
+
+        </div>
+
+        <!-- Actions -->
+        <div class="ga-form-actions">
+          <button type="submit" class="ga-btn-primary">
+            Get my results
+            <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M2 7h10M8 3l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <a href="{% url 'landing' %}" class="ga-btn-ghost">Cancel</a>
+        </div>
+
+      </form>
+    </div>
+
+  </div><!-- /ga-layout -->
+
+  <footer class="ga-footer">
+    <span class="ga-footer__brand">PCOSense &mdash; Progressive Diagnostic Triage</span>
+    <span class="ga-footer__note">Built for educational and research purposes. Not a substitute for medical advice.</span>
+  </footer>
+
+</div>
+{% endblock main_content %}
